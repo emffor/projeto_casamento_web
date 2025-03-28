@@ -15,12 +15,13 @@ const StyledRoot = styled('div')(({ theme }) => ({
 }));
 
 const ImageContainer = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
-  border: '1px solid #e0e0e0',
+  padding: theme.spacing(1),
   borderRadius: '50%',
   maxWidth: 300,
   margin: theme.spacing(3, 'auto'),
   position: 'relative',
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[4],
 }));
 
 // ----------------------------------------------------------------------
@@ -34,10 +35,6 @@ export default function HomeHero() {
           alignItems="center"
           textAlign="center"
         >
-          <Typography variant="h4" component="h1">
-            Eloan + Bruna
-          </Typography>
-
           <ImageContainer>
             <Image
               alt="Eloan e Bruna"
@@ -50,6 +47,10 @@ export default function HomeHero() {
               }}
             />
           </ImageContainer>
+
+          <Typography variant="h4" component="h1">
+            Eloan + Bruna
+          </Typography>
 
           <Typography variant="body1" sx={{ color: 'text.secondary' }}>
             18 DE JULHO DE 2025
