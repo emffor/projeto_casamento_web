@@ -92,7 +92,8 @@ export default function Header({ headerOnDark }: Props) {
             <Stack spacing={1} direction="row" alignItems="center">
               <Searchbar />
 
-              <SettingsDrawer />
+              {/* Escolher Settings  */}
+              {/* <SettingsDrawer /> */}
             </Stack>
 
             {isMdUp && (

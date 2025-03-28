@@ -56,11 +56,14 @@ export default function SettingsDrawer() {
 
         <Scrollbar>
           <Box sx={{ pb: 10 }}>
-            <ModeOptions />
+            {/* Escolher dark mode */}
+            {/* <ModeOptions /> */}
 
-            <DirectionOptions />
+            {/* Escolher direção */}
+            {/* <DirectionOptions /> */}
 
-            <ColorPresetsOptions />
+            {/* Escolher cores */}
+            {/* <ColorPresetsOptions /> */}
           </Box>
         </Scrollbar>
       </Drawer>
