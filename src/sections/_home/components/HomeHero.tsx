@@ -107,7 +107,7 @@ export default function HomeHero() {
               sx={(theme) => ({
                 fontSize: 50,
                 fontWeight: 400,
-                color: theme.palette.primary.dark,
+                color: theme.palette.primary.light,
                 lineHeight: 1.1,
               })}
               fontWeight={500}
@@ -122,7 +122,7 @@ export default function HomeHero() {
                 color: theme.palette.primary.dark,
                 lineHeight: 1.1,
               })}
-              fontWeight={500}
+              fontWeight={400}
               letterSpacing={1}
             >
               Bruna
@@ -140,11 +140,23 @@ export default function HomeHero() {
                 display: 'block',
               },
             })}
-            fontWeight={500}
+            fontWeight={400}
             letterSpacing={1}
           >
-            Eloan + Bruna
+            Eloan
+            <Box
+              component="span"
+              sx={(theme) => ({
+                color: theme.palette.primary.light,
+                marginX: theme.spacing(2),
+                fontWeight: 400,
+              })}
+            >
+              +
+            </Box>
+            Bruna
           </Typography>
+
           <Typography
             sx={(theme) => ({
               fontSize: { xs: 20, sm: 20, md: 24 },
