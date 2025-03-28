@@ -40,7 +40,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   minHeight: '100vh',
-  background: `${theme.palette.grey[100]}`,
+  background: theme.palette.grey[100],
   padding: theme.spacing(5, 0),
 }));
 
@@ -48,6 +48,9 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),
   borderRadius: '50%',
   maxWidth: 300,
+  [theme.breakpoints.down('sm')]: {
+    maxWidth: 300,
+  },
   margin: theme.spacing(3, 'auto'),
   position: 'relative',
   backgroundColor: theme.palette.background.paper,
@@ -56,7 +59,7 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   opacity: 0,
   animationFillMode: 'forwards',
   transition: 'transform 0.3s ease-in-out',
-  border: `4px solid ${theme.palette.primary.light}`, 
+  border: `4px solid ${theme.palette.primary.light}`,
   '&:hover': {
     transform: 'scale(1.05)',
   },
@@ -67,7 +70,6 @@ export default function HomeHero() {
     <StyledRoot>
       <Container maxWidth="md">
         <Stack spacing={2} alignItems="center" textAlign="center">
-          {/* Imagem */}
           <ImageContainer>
             <Image
               alt="Eloan e Bruna"
@@ -80,36 +82,33 @@ export default function HomeHero() {
               }}
             />
           </ImageContainer>
-
-          {/* Título */}
           <Typography
             sx={(theme) => ({
-              color: theme.palette.primary.dark, 
+              fontSize: { xs: 34, sm: 50, md: 64 },
+              color: theme.palette.primary.dark,
               animation: `${fadeIn} 1s ease-in-out 0.5s, ${slideUp} 1s ease-in-out 0.5s`,
               opacity: 0,
-              animationFillMode: 'forwards', })}
-              fontSize={64} 
-              fontWeight={500}
-              letterSpacing={1}
+              animationFillMode: 'forwards',
+            })}
+            fontWeight={500}
+            letterSpacing={1}
           >
             Eloan + Bruna
           </Typography>
-
-          {/* Data */}
-            <Typography
+          <Typography
             sx={(theme) => ({
+              fontSize: { xs: 18, sm: 22, md: 24 },
               color: theme.palette.grey[600],
               textTransform: 'uppercase',
               animation: `${fadeIn} 1s ease-in-out 1s, ${slideUp} 1s ease-in-out 1s`,
               opacity: 0,
               animationFillMode: 'forwards',
-              fontSize: 24,
               fontWeight: 500,
               letterSpacing: 1,
             })}
-            >
+          >
             15 DE MAIO DE 2025
-            </Typography>
+          </Typography>
         </Stack>
       </Container>
     </StyledRoot>
