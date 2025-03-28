@@ -48,9 +48,6 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),
   borderRadius: '50%',
   maxWidth: 300,
-  [theme.breakpoints.down('sm')]: {
-    maxWidth: 300,
-  },
   margin: theme.spacing(3, 'auto'),
   position: 'relative',
   backgroundColor: theme.palette.background.paper,
@@ -82,13 +79,66 @@ export default function HomeHero() {
               }}
             />
           </ImageContainer>
+          <Stack
+            spacing={0}
+            alignItems="center"
+            sx={(theme) => ({
+              animation: `${fadeIn} 1s ease-in-out 0.5s, ${slideUp} 1s ease-in-out 0.5s`,
+              opacity: 0,
+              animationFillMode: 'forwards',
+              [theme.breakpoints.up('sm')]: {
+                display: 'none',
+              },
+            })}
+          >
+            <Typography
+              sx={(theme) => ({
+                fontSize: 50,
+                fontWeight: 400,
+                color: theme.palette.primary.dark,
+                lineHeight: 1.1,
+              })}
+              fontWeight={500}
+              letterSpacing={1}
+            >
+              Eloan
+            </Typography>
+            <Typography
+              sx={(theme) => ({
+                fontSize: 50,
+                fontWeight: 400,
+                color: theme.palette.primary.dark,
+                lineHeight: 1.1,
+              })}
+              fontWeight={500}
+              letterSpacing={1}
+            >
+              +
+            </Typography>
+            <Typography
+              sx={(theme) => ({
+                fontSize: 50,
+                fontWeight: 400,
+                color: theme.palette.primary.dark,
+                lineHeight: 1.1,
+              })}
+              fontWeight={500}
+              letterSpacing={1}
+            >
+              Bruna
+            </Typography>
+          </Stack>
           <Typography
             sx={(theme) => ({
-              fontSize: { xs: 34, sm: 50, md: 64 },
+              fontSize: { xs: 0, sm: 48, md: 64 },
               color: theme.palette.primary.dark,
               animation: `${fadeIn} 1s ease-in-out 0.5s, ${slideUp} 1s ease-in-out 0.5s`,
               opacity: 0,
               animationFillMode: 'forwards',
+              display: 'none',
+              [theme.breakpoints.up('sm')]: {
+                display: 'block',
+              },
             })}
             fontWeight={500}
             letterSpacing={1}
@@ -97,7 +147,7 @@ export default function HomeHero() {
           </Typography>
           <Typography
             sx={(theme) => ({
-              fontSize: { xs: 18, sm: 22, md: 24 },
+              fontSize: { xs: 20, sm: 20, md: 24 },
               color: theme.palette.grey[600],
               textTransform: 'uppercase',
               animation: `${fadeIn} 1s ease-in-out 1s, ${slideUp} 1s ease-in-out 1s`,
