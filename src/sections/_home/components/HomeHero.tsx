@@ -84,7 +84,7 @@ export default function HomeHero() {
           {/* Título */}
           <Typography
             sx={(theme) => ({
-              color: theme.palette.grey[600], 
+              color: theme.palette.primary.dark, 
               animation: `${fadeIn} 1s ease-in-out 0.5s, ${slideUp} 1s ease-in-out 0.5s`,
               opacity: 0,
               animationFillMode: 'forwards', })}
@@ -108,7 +108,7 @@ export default function HomeHero() {
               letterSpacing: 1,
             })}
             >
-            18 DE JULHO DE 2025
+            15 DE MAIO DE 2025
             </Typography>
         </Stack>
       </Container>

@@ -13,6 +13,7 @@ import {
   HomeAdvertisement,
   HomeFeatureHighlights,
   HomeFlexibleComponents,
+  CountdownTimer,
 } from '../components';
 
 // ----------------------------------------------------------------------
@@ -23,6 +24,8 @@ export default function HomeView() {
       <ScrollProgress />
 
       <HomeHero />
+
+      <CountdownTimer />
 
       <HomeNewStart />
 
