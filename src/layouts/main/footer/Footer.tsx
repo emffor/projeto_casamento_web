@@ -82,8 +82,7 @@ export default function Footer() {
               <Stack alignItems="flex-start" spacing={3}>
                 <Logo />
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  The starting point for your next project based on easy-to-customize Material-UI ©
-                  helps you build apps faster and better.
+                  Casamento de Eloan Ferreira & Bruna Menezes.
                 </Typography>
               </Stack>
 

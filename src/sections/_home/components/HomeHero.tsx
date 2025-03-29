@@ -45,18 +45,13 @@ const StyledRoot = styled('div')(({ theme }) => ({
 }));
 
 const ImageContainer = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(1),
-  borderRadius: '50%',
-  maxWidth: 300,
+  maxWidth: 450,
   margin: theme.spacing(3, 'auto'),
   position: 'relative',
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[2],
   animation: `${fadeIn} 1s ease-in-out, ${scaleUp} 1s ease-in-out`,
   opacity: 0,
   animationFillMode: 'forwards',
   transition: 'transform 0.3s ease-in-out',
-  border: `4px solid ${theme.palette.primary.light}`,
   '&:hover': {
     transform: 'scale(1.05)',
   },
@@ -70,11 +65,10 @@ export default function HomeHero() {
           <ImageContainer>
             <Image
               alt="Eloan e Bruna"
-              src="/assets/casamento/selfie-praia.jpeg"
+              src="/assets/casamento/foto_capa5.png"
               sx={{
                 width: '100%',
                 height: 'auto',
-                borderRadius: '50%',
                 display: 'block',
               }}
             />

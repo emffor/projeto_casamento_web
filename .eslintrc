@@ -12,7 +12,8 @@
     "airbnb",
     "airbnb-typescript",
     "airbnb/hooks",
-    "prettier"
+    "prettier",
+    "eslint:recommended", "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -51,6 +52,7 @@
     "@typescript-eslint/naming-convention": 0,
     "jsx-a11y/control-has-associated-label": 0,
     "@typescript-eslint/no-use-before-define": 0,
+    // "no-irregular-whitespace": "off",
     "react/jsx-no-useless-fragment": [
       1,
       {
