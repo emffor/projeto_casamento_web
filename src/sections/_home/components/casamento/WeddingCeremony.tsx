@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Container, Typography } from '@mui/material';
 import Image from 'src/components/image';
 import { keyframes } from '@emotion/react';
+import GoogleMapReact from 'google-map-react';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -49,16 +50,52 @@ const TextContent = styled(Box)(({ theme }) => ({
   maxWidth: 800,
   margin: '0 auto',
   marginTop: theme.spacing(4),
+  marginBottom: theme.spacing(4),
   '& p': {
     color: theme.palette.text.secondary,
     lineHeight: 1.7,
   },
 }));
 
+// Melhore o MapContainer para responsividade
+const MapContainer = styled(Box)(({ theme }) => ({
+  height: 340,
+  width: '100%',
+  maxWidth: 800, // Consistente com outros elementos
+  margin: '0 auto',
+  borderRadius: theme.shape.borderRadius,
+  overflow: 'hidden',
+  boxShadow: theme.shadows[3],
+  animation: `${fadeIn} 1.2s ease-out forwards`,
+  [theme.breakpoints.down('sm')]: {
+    height: 250, // Menor altura em dispositivos móveis
+  },
+}));
+
+interface MarkerProps {
+  lat: number;
+  lng: number;
+}
+
+const LocationMarker: React.FC<MarkerProps> = () => (
+  <div style={{ color: 'red', fontSize: 32 }}>
+    <span role="img" aria-label="pin">
+      📍
+    </span>
+  </div>
+);
+
 export default function WeddingCeremony() {
+  const defaultProps = {
+    center: {
+      lat: -3.7598224163722693,
+      lng: -38.5225721445037,
+    },
+    zoom: 15,
+  };
   return (
     <StyledRoot>
-      <Container>
+      <Container maxWidth="md">
         <StyledContent>
           <LeafIcon src="/assets/casamento/cerimonia2.png" alt="Decoração" />
           <Title variant="h3">Cerimônia</Title>
@@ -80,6 +117,22 @@ export default function WeddingCeremony() {
               Aeroporto, Fortaleza - CE, 60415-390
             </Typography>
           </TextContent>
+
+          <MapContainer>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: 'AIzaSyDG7uE34LGLsRXS8cQkGILBbumF5sbhSsQ' }}
+              defaultCenter={defaultProps.center}
+              defaultZoom={defaultProps.zoom}
+              options={{
+                fullscreenControl: false,
+                zoomControl: true,
+                mapTypeControl: false,
+                streetViewControl: true,
+              }}
+            >
+              <LocationMarker lat={-3.7598224163722693} lng={-38.5225721445037} />
+            </GoogleMapReact>
+          </MapContainer>
         </StyledContent>
       </Container>
     </StyledRoot>
