@@ -163,7 +163,7 @@ export default function HomeHero() {
               letterSpacing: 1,
             })}
           >
-            15 DE MAIO DE 2025
+            31 DE MAIO DE 2025
           </Typography>
         </Stack>
       </Container>

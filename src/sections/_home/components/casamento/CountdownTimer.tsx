@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Stack, Container, Typography, Paper, Grid } from '@mui/material';
+import { Stack, Container, Typography, Paper, Grid } from '@mui/material';
 
-const WEDDING_DATE = '2025-05-15T00:00:00';
+const WEDDING_DATE = '2025-05-31T00:00:00';
 
 const StyledRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.primary.light,
@@ -22,8 +22,8 @@ const TimeBox = styled(Paper)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   minWidth: 65,
   [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(2),
-      minWidth: 80,
+    padding: theme.spacing(2),
+    minWidth: 80,
   },
 }));
 
@@ -33,7 +33,7 @@ const TimeNumber = styled(Typography)(({ theme }) => ({
   lineHeight: 1.2,
   color: theme.palette.text.primary,
   [theme.breakpoints.up('sm')]: {
-      fontSize: '2.5rem',
+    fontSize: '2.5rem',
   },
 }));
 
@@ -44,8 +44,8 @@ const TimeLabel = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
   letterSpacing: 0.5,
   [theme.breakpoints.up('sm')]: {
-      fontSize: '0.75rem',
-      letterSpacing: 1,
+    fontSize: '0.75rem',
+    letterSpacing: 1,
   },
 }));
 

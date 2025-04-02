@@ -26,8 +26,9 @@ export default function Header({ isOffset }: Props) {
   return (
     <AppBar color="transparent" sx={{ boxShadow: 'none' }}>
       <Toolbar
+        disableGutters
         sx={{
-          justifyContent: 'space-between',
+          backgroundColor: theme.palette.background.default,
           height: {
             xs: HEADER.H_MOBILE,
             md: HEADER.H_MAIN_DESKTOP,
@@ -37,7 +38,8 @@ export default function Header({ isOffset }: Props) {
             duration: theme.transitions.duration.shorter,
           }),
           ...(isOffset && {
-            ...bgBlur({ color: theme.palette.background.default }),
+            ...bgBlur({ color: theme.palette.background.default, opacity: 1 }),
+            color: 'text.primary',
             height: {
               md: HEADER.H_MAIN_DESKTOP - 16,
             },

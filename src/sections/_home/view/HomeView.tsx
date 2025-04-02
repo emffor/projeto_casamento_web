@@ -15,6 +15,8 @@ import {
   HomeFlexibleComponents,
   CountdownTimer,
 } from '../components';
+import WeddingDescription from '../components/casamento/WeddingDescription';
+import WeddingOurHistory from '../components/casamento/WeddingOurHistory';
 
 // ----------------------------------------------------------------------
 
@@ -27,21 +29,25 @@ export default function HomeView() {
 
       <CountdownTimer />
 
-      <HomeNewStart />
+      <WeddingDescription />
 
-      <HomeFlexibleComponents />
+      <WeddingOurHistory />
 
-      <HomeFeatureHighlights />
+      {/* <HomeNewStart /> */}
 
-      <HomeForDesigner />
+      {/* <HomeFlexibleComponents /> */}
 
-      <PricingHome plans={_pricingHome} />
+      {/* <HomeFeatureHighlights /> */}
 
-      <HomeFAQs />
+      {/* <HomeForDesigner /> */}
 
-      <HomeCombination />
+      {/* <PricingHome plans={_pricingHome} /> */}
 
-      <HomeAdvertisement />
+      {/* <HomeFAQs /> */}
+
+      {/* <HomeCombination /> */}
+
+      {/* <HomeAdvertisement /> */}
     </>
   );
 }
