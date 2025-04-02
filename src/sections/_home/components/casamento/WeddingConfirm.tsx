@@ -92,7 +92,7 @@ const ModalTitle = styled(Typography)(({ theme }) => ({
   textAlign: 'center',
 }));
 
-export default function WeddingDescription() {
+export default function WeddingConfirm() {
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
