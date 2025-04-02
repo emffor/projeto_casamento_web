@@ -11,6 +11,8 @@ import {
   Fade,
   useMediaQuery,
   useTheme,
+  Menu,
+  MenuItem,
 } from '@mui/material';
 import Image from 'src/components/image';
 import { keyframes } from '@emotion/react';
@@ -162,9 +164,30 @@ const RotasButton = styled(ActionButton)(({ theme }) => ({
   },
 }));
 
+const LayersButton = styled(IconButton)(({ theme }) => ({
+  position: 'absolute',
+  top: 10,
+  right: 100,
+  zIndex: 10,
+  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.text.primary,
+  boxShadow: theme.shadows[2],
+  '&:hover': {
+    backgroundColor: theme.palette.background.default,
+  },
+}));
+
 interface LocationMarkerProps {
   lat: number;
   lng: number;
+}
+
+type MapTypeId = 'roadmap' | 'satellite' | 'hybrid' | 'terrain';
+
+interface MapTypeOption {
+  id: MapTypeId;
+  label: string;
+  icon: string;
 }
 
 const LocationMarker: React.FC<LocationMarkerProps> = ({ lat, lng }) => {
@@ -191,6 +214,10 @@ export default function WeddingCeremony() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
+  const [mapType, setMapType] = useState<MapTypeId>('roadmap');
+
+  const [layersAnchorEl, setLayersAnchorEl] = useState<null | HTMLElement>(null);
+  const layersMenuOpen = Boolean(layersAnchorEl);
 
   const mapCenter = useMemo(
     () => ({
@@ -200,7 +227,13 @@ export default function WeddingCeremony() {
     []
   );
 
-  // Handlers
+  const mapTypeOptions: MapTypeOption[] = [
+    { id: 'roadmap', label: 'Mapa', icon: 'mdi:map' },
+    { id: 'satellite', label: 'Satélite', icon: 'mdi:satellite' },
+    { id: 'hybrid', label: 'Híbrido', icon: 'mdi:layers' },
+    { id: 'terrain', label: 'Terreno', icon: 'mdi:terrain' },
+  ];
+
   const handleZoomIn = () => {
     setZoom((prev) => Math.min(prev + 1, MAX_ZOOM));
   };
@@ -223,6 +256,19 @@ export default function WeddingCeremony() {
     );
   };
 
+  const handleLayersClick = (event: React.MouseEvent<HTMLElement>) => {
+    setLayersAnchorEl(event.currentTarget);
+  };
+
+  const handleLayersClose = () => {
+    setLayersAnchorEl(null);
+  };
+
+  const handleMapTypeChange = (type: MapTypeId) => {
+    setMapType(type);
+    handleLayersClose();
+  };
+
   return (
     <StyledRoot>
       <Container maxWidth="md">
@@ -230,7 +276,6 @@ export default function WeddingCeremony() {
           <StyledContent>
             <LeafIcon src="/assets/casamento/cerimonia2.png" alt="Decoração" />
             <Title variant="h3">Cerimônia & Recepção</Title>
-
             <Image
               alt="Cerimônia de Casamento"
               src="/assets/casamento/igrejapiamarta.png"
@@ -243,9 +288,15 @@ export default function WeddingCeremony() {
                 '&:hover': {
                   transform: 'scale(1.01)',
                 },
+                [theme.breakpoints.down('sm')]: {
+                  height: '200px',
+                  '& img': {
+                    height: '100%',
+                    objectFit: 'cover',
+                  },
+                },
               }}
             />
-
             <TextContent>
               <Typography variant="body1" paragraph>
                 Gostaríamos muito de contar com a presença de todos vocês no momento em que nossa
@@ -270,26 +321,6 @@ export default function WeddingCeremony() {
                 Fortaleza - CE, 60415-390
               </Typography>
             </TextContent>
-
-            {/* <Box sx={{ mt: 4, mb: 2, display: 'flex', justifyContent: 'center', gap: 2 }}>
-              <ActionButton
-                variant="outlined"
-                color="primary"
-                startIcon={<Icon icon="mdi:map-marker" />}
-                onClick={handleExpandMap}
-              >
-                Ver no Google Maps
-              </ActionButton>
-              <ActionButton
-                variant="contained"
-                color="primary"
-                startIcon={<Icon icon="mdi:directions" />}
-                onClick={handleOpenRoutes}
-              >
-                Como Chegar
-              </ActionButton>
-            </Box> */}
-
             <MapContainer>
               <MapInfoCard elevation={3}>
                 <Typography
@@ -311,6 +342,45 @@ export default function WeddingCeremony() {
                 </Button>
               </MapInfoCard>
 
+              <Tooltip title="Camadas" placement="left">
+                <LayersButton
+                  size="small"
+                  onClick={handleLayersClick}
+                  sx={{
+                    [theme.breakpoints.down('sm')]: {
+                      right: 60,
+                    },
+                  }}
+                >
+                  <Icon icon="mdi:layers" />
+                </LayersButton>
+              </Tooltip>
+
+              <Menu
+                anchorEl={layersAnchorEl}
+                open={layersMenuOpen}
+                onClose={handleLayersClose}
+                PaperProps={{
+                  elevation: 3,
+                  sx: { minWidth: 180 },
+                }}
+              >
+                {mapTypeOptions.map((option) => (
+                  <MenuItem
+                    key={option.id}
+                    selected={mapType === option.id}
+                    onClick={() => handleMapTypeChange(option.id)}
+                    sx={{
+                      gap: 1.5,
+                      py: 1,
+                    }}
+                  >
+                    <Icon icon={option.icon} style={{ fontSize: 20 }} />
+                    <Typography variant="body2">{option.label}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+
               {!isMobile && (
                 <RotasButton
                   size="small"
@@ -320,7 +390,26 @@ export default function WeddingCeremony() {
                   Rotas
                 </RotasButton>
               )}
-
+              {isMobile && (
+                <IconButton
+                  size="small"
+                  onClick={handleOpenRoutes}
+                  sx={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
+                    zIndex: 10,
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.primary.contrastText,
+                    boxShadow: theme.shadows[2],
+                    '&:hover': {
+                      backgroundColor: theme.palette.primary.dark,
+                    },
+                  }}
+                >
+                  <Icon icon="mdi:directions" />
+                </IconButton>
+              )}
               <GoogleMapReact
                 bootstrapURLKeys={{ key: 'AIzaSyDG7uE34LGLsRXS8cQkGILBbumF5sbhSsQ' }}
                 center={mapCenter}
@@ -340,6 +429,7 @@ export default function WeddingCeremony() {
                   clickableIcons: false,
                   gestureHandling: 'none',
                   disableDefaultUI: true,
+                  mapTypeId: mapType,
                   styles: [
                     {
                       featureType: 'poi',
@@ -354,7 +444,6 @@ export default function WeddingCeremony() {
               >
                 <LocationMarker lat={mapCenter.lat} lng={mapCenter.lng} />
               </GoogleMapReact>
-
               <MapControls>
                 <Tooltip title="Aproximar" placement="left">
                   <IconButton size="small" onClick={handleZoomIn} sx={{ borderRadius: 0 }}>
