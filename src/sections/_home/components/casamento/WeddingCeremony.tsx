@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, Button, IconButton } from '@mui/material';
 import Image from 'src/components/image';
 import { keyframes } from '@emotion/react';
 import GoogleMapReact from 'google-map-react';
+import { Icon } from '@iconify/react';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -57,27 +58,76 @@ const TextContent = styled(Box)(({ theme }) => ({
   },
 }));
 
-// Melhore o MapContainer para responsividade
 const MapContainer = styled(Box)(({ theme }) => ({
   height: 340,
   width: '100%',
-  maxWidth: 800, // Consistente com outros elementos
+  maxWidth: 1000,
   margin: '0 auto',
   borderRadius: theme.shape.borderRadius,
   overflow: 'hidden',
   boxShadow: theme.shadows[3],
   animation: `${fadeIn} 1.2s ease-out forwards`,
+  position: 'relative',
   [theme.breakpoints.down('sm')]: {
-    height: 250, // Menor altura em dispositivos móveis
+    height: 250,
   },
 }));
 
-interface MarkerProps {
+const MapInfoCard = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: 10,
+  left: 10,
+  zIndex: 10,
+  backgroundColor: 'white',
+  padding: theme.spacing(1, 2),
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[2],
+  maxWidth: 250,
+  '& p': {
+    margin: 0,
+    fontSize: '0.875rem',
+  },
+}));
+
+const MapControls = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  bottom: 10,
+  right: 10,
+  zIndex: 10,
+  display: 'flex',
+  flexDirection: 'column',
+  backgroundColor: 'white',
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[2],
+}));
+
+const ExpandButton = styled(Button)(({ theme }) => ({
+  textTransform: 'none',
+  color: theme.palette.primary.main,
+  fontSize: '0.75rem',
+  padding: theme.spacing(0.5, 1),
+}));
+
+const RotasButton = styled(Button)(({ theme }) => ({
+  position: 'absolute',
+  top: 10,
+  right: 10,
+  zIndex: 10,
+  textTransform: 'none',
+  color: theme.palette.primary.main,
+  backgroundColor: 'white',
+  fontSize: '0.75rem',
+  padding: theme.spacing(0.5, 1),
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[2],
+}));
+
+interface LocationMarkerProps {
   lat: number;
   lng: number;
 }
 
-const LocationMarker: React.FC<MarkerProps> = () => (
+const LocationMarker: React.FC<LocationMarkerProps> = () => (
   <div style={{ color: 'red', fontSize: 32 }}>
     <span role="img" aria-label="pin">
       📍
@@ -86,27 +136,50 @@ const LocationMarker: React.FC<MarkerProps> = () => (
 );
 
 export default function WeddingCeremony() {
+  const [zoom, setZoom] = useState(15);
+
   const defaultProps = {
     center: {
       lat: -3.7598224163722693,
       lng: -38.5225721445037,
     },
-    zoom: 15,
+    zoom,
   };
+
+  const handleZoomIn = () => {
+    setZoom((prev) => Math.min(prev + 1, 20));
+  };
+
+  const handleZoomOut = () => {
+    setZoom((prev) => Math.max(prev - 1, 10));
+  };
+
+  const handleExpandMap = () => {
+    window.open(
+      `https://www.google.com/maps/search/?api=1&query=${defaultProps.center.lat},${defaultProps.center.lng}`,
+      '_blank'
+    );
+  };
+
+  const handleOpenRoutes = () => {
+    window.open(
+      `https://www.google.com/maps/dir/?api=1&destination=${defaultProps.center.lat},${defaultProps.center.lng}`,
+      '_blank'
+    );
+  };
+
   return (
     <StyledRoot>
       <Container maxWidth="md">
         <StyledContent>
           <LeafIcon src="/assets/casamento/cerimonia2.png" alt="Decoração" />
           <Title variant="h3">Cerimônia</Title>
-
           <Image
             alt="Cerimônia de Casamento"
             src="/assets/casamento/igrejapiamarta.png"
             ratio="21/9"
             sx={{ borderRadius: 1 }}
           />
-
           <TextContent>
             <Typography variant="body1">
               Gostaríamos muito de contar com a presença de todos vocês no momento em que nossa
@@ -117,21 +190,46 @@ export default function WeddingCeremony() {
               Aeroporto, Fortaleza - CE, 60415-390
             </Typography>
           </TextContent>
-
           <MapContainer>
+            <MapInfoCard>
+              <Typography variant="subtitle2">Centro Educacional Padre João Piamarta</Typography>
+              <Typography variant="body2">
+                Av. Aguanambi, 2479, Aeroporto, Fortaleza - CE, 60415-390
+              </Typography>
+              <ExpandButton onClick={handleExpandMap}>Ver mapa ampliado</ExpandButton>
+            </MapInfoCard>
+
+            <RotasButton onClick={handleOpenRoutes}>Rotas</RotasButton>
+
             <GoogleMapReact
               bootstrapURLKeys={{ key: 'AIzaSyDG7uE34LGLsRXS8cQkGILBbumF5sbhSsQ' }}
-              defaultCenter={defaultProps.center}
-              defaultZoom={defaultProps.zoom}
+              center={defaultProps.center}
+              zoom={zoom}
               options={{
                 fullscreenControl: false,
-                zoomControl: true,
-                mapTypeControl: false,
-                streetViewControl: true,
+                zoomControl: false,
+                mapTypeControl: true,
+                streetViewControl: false,
+                panControl: false,
+                rotateControl: false,
+                scaleControl: false,
+                scrollwheel: true,
+                mapTypeControlOptions: {
+                  position: 0, // POSITION HIDDEN
+                },
               }}
             >
-              <LocationMarker lat={-3.7598224163722693} lng={-38.5225721445037} />
+              <LocationMarker lat={defaultProps.center.lat} lng={defaultProps.center.lng} />
             </GoogleMapReact>
+
+            <MapControls>
+              <IconButton size="small" onClick={handleZoomIn}>
+                <Icon icon="mdi:magnify-plus" fontSize="small" />
+              </IconButton>
+              <IconButton size="small" onClick={handleZoomOut}>
+                <Icon icon="mdi:magnify-minus" fontSize="small" />
+              </IconButton>
+            </MapControls>
           </MapContainer>
         </StyledContent>
       </Container>
