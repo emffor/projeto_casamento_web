@@ -18,6 +18,7 @@ import {
 import WeddingOurHistory from '../components/casamento/WeddingOurHistory';
 import WeddingConfirm from '../components/casamento/WeddingConfirm';
 import WeddingCeremony from '../components/casamento/WeddingCeremony';
+import WeddingGiftList from '../components/casamento/WeddingGiftList';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +36,8 @@ export default function HomeView() {
       <WeddingOurHistory />
 
       <WeddingCeremony />
+
+      <WeddingGiftList />
 
       {/* <HomeNewStart /> */}
 
