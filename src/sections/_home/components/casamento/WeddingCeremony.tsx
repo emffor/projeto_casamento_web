@@ -215,7 +215,7 @@ export default function WeddingCeremony() {
                 scaleControl: false,
                 scrollwheel: true,
                 mapTypeControlOptions: {
-                  position: 0, // POSITION HIDDEN
+                  position: 0,
                 },
               }}
             >
