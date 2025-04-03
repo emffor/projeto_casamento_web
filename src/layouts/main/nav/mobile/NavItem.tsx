@@ -1,23 +1,38 @@
 import { Link as RouterLink } from 'react-router-dom';
-// @mui
+import * as React from 'react';
 import { Link, ListItemText, ListItemIcon } from '@mui/material';
-// components
 import Iconify from 'src/components/iconify';
-//
-import { NavItemProps } from '../types';
 import { StyledNavItem } from './styles';
+import { NavItemProps } from '../types';
 
 // ----------------------------------------------------------------------
 
 export default function NavItem({ item, open, active, isExternalLink, ...other }: NavItemProps) {
   const { title, path, icon, children } = item;
 
+  const handleAnchorClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    if (path.startsWith('#')) {
+      const sectionId = path.substring(1);
+      const element = document.getElementById(sectionId);
+
+      if (element) {
+        const headerHeight = 64;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        });
+      }
+    }
+  };
+
   const renderContent = (
     <StyledNavItem active={active} {...other}>
       <ListItemIcon> {icon} </ListItemIcon>
-
       <ListItemText disableTypography primary={title} />
-
       {!!children && (
         <Iconify
           width={16}
@@ -27,6 +42,15 @@ export default function NavItem({ item, open, active, isExternalLink, ...other }
       )}
     </StyledNavItem>
   );
+
+  // Âncora
+  if (path.startsWith('#')) {
+    return (
+      <Link href={path} underline="none" onClick={handleAnchorClick}>
+        {renderContent}
+      </Link>
+    );
+  }
 
   // ExternalLink
   if (isExternalLink) {

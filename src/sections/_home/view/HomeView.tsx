@@ -26,33 +26,31 @@ export default function HomeView() {
   return (
     <>
       <ScrollProgress />
-
-      <HomeHero />
-
-      <CountdownTimer />
-
-      <WeddingConfirm />
-
-      <WeddingOurHistory />
-
-      <WeddingCeremony />
-
-      <WeddingGiftList />
-
+      <div id="hero">
+        <HomeHero />
+      </div>
+      <div id="contagem">
+        <CountdownTimer />
+      </div>
+      <div id="confirmacao">
+        <WeddingConfirm />
+      </div>
+      <div id="casal">
+        <WeddingOurHistory />
+      </div>
+      <div id="cerimonia">
+        <WeddingCeremony />
+      </div>
+      <div id="presentes">
+        <WeddingGiftList />
+      </div>
       {/* <HomeNewStart /> */}
-
       {/* <HomeFlexibleComponents /> */}
-
       {/* <HomeFeatureHighlights /> */}
-
       {/* <HomeForDesigner /> */}
-
       {/* <PricingHome plans={_pricingHome} /> */}
-
       {/* <HomeFAQs /> */}
-
       {/* <HomeCombination /> */}
-
       {/* <HomeAdvertisement /> */}
     </>
   );
