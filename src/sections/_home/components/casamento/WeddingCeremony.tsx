@@ -29,7 +29,7 @@ const MAP_CONFIG = {
     name: 'Centro Educacional Padre João Piamarta',
     address: 'Av. Aguanambi, 2479, Aeroporto, Fortaleza - CE, 60415-390',
   },
-  API_KEY: 'AIzaSyDG7uE34LGLsRXS8cQkGILBbumF5sbhSsQ',
+  API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
 };
 
 const fadeIn = keyframes`
@@ -224,8 +224,8 @@ export default function WeddingCeremony() {
   const [zoom, setZoom] = useState(MAP_CONFIG.INITIAL_ZOOM);
   const [mapType, setMapType] = useState<MapTypeId>('roadmap');
   const [layersAnchorEl, setLayersAnchorEl] = useState<null | HTMLElement>(null);
-
   const layersMenuOpen = Boolean(layersAnchorEl);
+
   const mapCenter = useMemo(
     () => ({
       lat: MAP_CONFIG.LOCATION.lat,
@@ -234,7 +234,6 @@ export default function WeddingCeremony() {
     []
   );
 
-  // Handlers encapsulados como useCallback para melhor performance
   const handleZoomIn = useCallback(() => {
     setZoom((prev) => Math.min(prev + 1, MAP_CONFIG.MAX_ZOOM));
   }, []);
@@ -273,7 +272,6 @@ export default function WeddingCeremony() {
     [handleLayersClose]
   );
 
-  // Opções do mapa memoizadas
   const mapOptions = useMemo(
     () => ({
       fullscreenControl: false,
@@ -304,6 +302,9 @@ export default function WeddingCeremony() {
     }),
     [mapType]
   );
+
+  // Verifica se a API KEY está disponível
+  const isGoogleMapsEnabled = Boolean(MAP_CONFIG.API_KEY);
 
   return (
     <StyledRoot>
@@ -347,7 +348,21 @@ export default function WeddingCeremony() {
                 especial.
               </Typography>
               <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
-                31 de maio de 2025, às 19h
+                {new Date(
+                  process.env.REACT_APP_WEDDING_DATE || '2025-05-31T19:00:00'
+                ).toLocaleDateString('pt-BR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+                , às{' '}
+                {new Date(
+                  process.env.REACT_APP_WEDDING_DATE || '2025-05-31T19:00:00'
+                ).toLocaleTimeString('pt-BR', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                })}
               </Typography>
               <Typography variant="body2" sx={{ mt: 1, color: theme.palette.text.secondary }}>
                 Centro Educacional da Juventude Padre João Piamarta
@@ -357,128 +372,155 @@ export default function WeddingCeremony() {
                 Fortaleza - CE, 60415-390
               </Typography>
             </TextContent>
-            <MapContainer>
-              <MapInfoCard elevation={3}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 600, color: theme.palette.primary.main }}
-                >
-                  {MAP_CONFIG.LOCATION.name}
-                </Typography>
-                <Typography variant="body2" sx={{ mt: 0.5 }}>
-                  {MAP_CONFIG.LOCATION.address}
-                </Typography>
-                <Button
-                  size="small"
-                  sx={{ mt: 1 }}
-                  startIcon={<Icon icon="mdi:open-in-new" fontSize="small" />}
-                  onClick={handleExpandMap}
-                >
-                  Mapa ampliado
-                </Button>
-              </MapInfoCard>
 
-              <Tooltip title="Camadas" placement="left">
-                <LayersButton
-                  size="small"
-                  onClick={handleLayersClick}
-                  aria-label="Camadas do mapa"
-                  sx={{
-                    [theme.breakpoints.down('sm')]: {
-                      right: 60,
-                    },
-                  }}
-                >
-                  <Icon icon="mdi:layers" />
-                </LayersButton>
-              </Tooltip>
-
-              <Menu
-                anchorEl={layersAnchorEl}
-                open={layersMenuOpen}
-                onClose={handleLayersClose}
-                PaperProps={{
-                  elevation: 3,
-                  sx: { minWidth: 180 },
-                }}
-              >
-                {MAP_TYPE_OPTIONS.map((option) => (
-                  <MenuItem
-                    key={option.id}
-                    selected={mapType === option.id}
-                    onClick={() => handleMapTypeChange(option.id)}
+            {isGoogleMapsEnabled ? (
+              <MapContainer>
+                <MapInfoCard elevation={3}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 600, color: theme.palette.primary.main }}
+                  >
+                    {MAP_CONFIG.LOCATION.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 0.5 }}>
+                    {MAP_CONFIG.LOCATION.address}
+                  </Typography>
+                  <Button
+                    size="small"
+                    sx={{ mt: 1 }}
+                    startIcon={<Icon icon="mdi:open-in-new" fontSize="small" />}
+                    onClick={handleExpandMap}
+                  >
+                    Mapa ampliado
+                  </Button>
+                </MapInfoCard>
+                <Tooltip title="Camadas" placement="left">
+                  <LayersButton
+                    size="small"
+                    onClick={handleLayersClick}
+                    aria-label="Camadas do mapa"
                     sx={{
-                      gap: 1.5,
-                      py: 1,
+                      [theme.breakpoints.down('sm')]: {
+                        right: 60,
+                      },
                     }}
                   >
-                    <Icon icon={option.icon} style={{ fontSize: 20 }} />
-                    <Typography variant="body2">{option.label}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-
-              {!isMobile && (
-                <RotasButton
-                  size="small"
-                  startIcon={<Icon icon="mdi:directions" />}
-                  onClick={handleOpenRoutes}
-                >
-                  Rotas
-                </RotasButton>
-              )}
-              {isMobile && (
-                <IconButton
-                  size="small"
-                  onClick={handleOpenRoutes}
-                  aria-label="Obter rotas"
-                  sx={{
-                    position: 'absolute',
-                    top: 10,
-                    right: 10,
-                    zIndex: 10,
-                    backgroundColor: theme.palette.primary.main,
-                    color: theme.palette.primary.contrastText,
-                    boxShadow: theme.shadows[2],
-                    '&:hover': {
-                      backgroundColor: theme.palette.primary.dark,
-                    },
+                    <Icon icon="mdi:layers" />
+                  </LayersButton>
+                </Tooltip>
+                <Menu
+                  anchorEl={layersAnchorEl}
+                  open={layersMenuOpen}
+                  onClose={handleLayersClose}
+                  PaperProps={{
+                    elevation: 3,
+                    sx: { minWidth: 180 },
                   }}
                 >
-                  <Icon icon="mdi:directions" />
-                </IconButton>
-              )}
-              <GoogleMapReact
-                bootstrapURLKeys={{ key: MAP_CONFIG.API_KEY }}
-                center={mapCenter}
-                zoom={zoom}
-                options={mapOptions}
+                  {MAP_TYPE_OPTIONS.map((option) => (
+                    <MenuItem
+                      key={option.id}
+                      selected={mapType === option.id}
+                      onClick={() => handleMapTypeChange(option.id)}
+                      sx={{
+                        gap: 1.5,
+                        py: 1,
+                      }}
+                    >
+                      <Icon icon={option.icon} style={{ fontSize: 20 }} />
+                      <Typography variant="body2">{option.label}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+                {!isMobile && (
+                  <RotasButton
+                    size="small"
+                    startIcon={<Icon icon="mdi:directions" />}
+                    onClick={handleOpenRoutes}
+                  >
+                    Rotas
+                  </RotasButton>
+                )}
+                {isMobile && (
+                  <IconButton
+                    size="small"
+                    onClick={handleOpenRoutes}
+                    aria-label="Obter rotas"
+                    sx={{
+                      position: 'absolute',
+                      top: 10,
+                      right: 10,
+                      zIndex: 10,
+                      backgroundColor: theme.palette.primary.main,
+                      color: theme.palette.primary.contrastText,
+                      boxShadow: theme.shadows[2],
+                      '&:hover': {
+                        backgroundColor: theme.palette.primary.dark,
+                      },
+                    }}
+                  >
+                    <Icon icon="mdi:directions" />
+                  </IconButton>
+                )}
+                <GoogleMapReact
+                  bootstrapURLKeys={{ key: MAP_CONFIG.API_KEY }}
+                  center={mapCenter}
+                  zoom={zoom}
+                  options={mapOptions}
+                >
+                  <LocationMarker lat={mapCenter.lat} lng={mapCenter.lng} />
+                </GoogleMapReact>
+                <MapControls>
+                  <Tooltip title="Aproximar" placement="left">
+                    <IconButton
+                      size="small"
+                      onClick={handleZoomIn}
+                      sx={{ borderRadius: 0 }}
+                      aria-label="Aproximar mapa"
+                    >
+                      <Icon icon="mdi:plus" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Afastar" placement="left">
+                    <IconButton
+                      size="small"
+                      onClick={handleZoomOut}
+                      sx={{ borderRadius: 0 }}
+                      aria-label="Afastar mapa"
+                    >
+                      <Icon icon="mdi:minus" />
+                    </IconButton>
+                  </Tooltip>
+                </MapControls>
+              </MapContainer>
+            ) : (
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  mt: 4,
+                  maxWidth: 1000,
+                  margin: '0 auto',
+                  textAlign: 'center',
+                }}
               >
-                <LocationMarker lat={mapCenter.lat} lng={mapCenter.lng} />
-              </GoogleMapReact>
-              <MapControls>
-                <Tooltip title="Aproximar" placement="left">
-                  <IconButton
-                    size="small"
-                    onClick={handleZoomIn}
-                    sx={{ borderRadius: 0 }}
-                    aria-label="Aproximar mapa"
-                  >
-                    <Icon icon="mdi:plus" />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Afastar" placement="left">
-                  <IconButton
-                    size="small"
-                    onClick={handleZoomOut}
-                    sx={{ borderRadius: 0 }}
-                    aria-label="Afastar mapa"
-                  >
-                    <Icon icon="mdi:minus" />
-                  </IconButton>
-                </Tooltip>
-              </MapControls>
-            </MapContainer>
+                <Typography variant="subtitle1" color="error">
+                  Configuração do Google Maps não encontrada.
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  Por favor, verifique a variável REACT_APP_GOOGLE_MAPS_API_KEY no arquivo .env
+                </Typography>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ mt: 2 }}
+                  startIcon={<Icon icon="mdi:map-marker" />}
+                  onClick={handleExpandMap}
+                >
+                  Ver localização no Google Maps
+                </Button>
+              </Paper>
+            )}
           </StyledContent>
         </Fade>
       </Container>
