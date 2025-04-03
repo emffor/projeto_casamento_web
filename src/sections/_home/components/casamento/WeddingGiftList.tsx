@@ -13,7 +13,6 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
-  Divider,
   IconButton,
   Table,
   TableBody,
@@ -109,10 +108,24 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const LoadMoreButton = styled(Button)(({ theme }) => ({
+  margin: theme.spacing(4, 0, 2),
+  padding: theme.spacing(1, 4),
+  borderRadius: '30px',
+  fontWeight: 500,
+  textTransform: 'none',
+  transition: 'all 0.2s',
+  '&:hover': {
+    transform: 'translateY(-2px)',
+  },
+}));
+
 export default function WeddingGiftList() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [openCartModal, setOpenCartModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState('list'); // 'list' or 'cart'
+  const [currentPage, setCurrentPage] = useState('list');
+  const [visibleItems, setVisibleItems] = useState(12);
+  const itemsPerLoad = 12;
 
   const handleAddToCart = (gift: any) => {
     const existingItem = cartItems.find((item) => item.id === gift.id);
@@ -148,9 +161,17 @@ export default function WeddingGiftList() {
     setCurrentPage('cart');
   };
 
+  const handleLoadMore = () => {
+    setVisibleItems((prev) => prev + itemsPerLoad);
+  };
+
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
+
+  // Exibe apenas os itens visíveis
+  const displayedGifts = weddingGifts.slice(0, visibleItems);
+  const hasMoreItems = visibleItems < weddingGifts.length;
 
   return (
     <StyledRoot>
@@ -170,37 +191,52 @@ export default function WeddingGiftList() {
           </Box>
 
           {currentPage === 'list' && (
-            <Grid container spacing={3}>
-              {weddingGifts.map((gift) => (
-                <Grid item key={gift.id} xs={12} sm={6} md={4} lg={3}>
-                  <StyledCard>
-                    <StyledCardMedia image={gift.image} title={gift.name} />
-                    <CardContent sx={{ flexGrow: 1, py: 1.5 }}>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle2"
-                        component="div"
-                        sx={{ height: 40, fontSize: '0.85rem' }}
-                      >
-                        {gift.name}
-                      </Typography>
-                      <Typography variant="body1" color="primary" sx={{ fontWeight: 600 }}>
-                        R$ {gift.price.toFixed(2)}
-                      </Typography>
-                    </CardContent>
-                    <CardActions sx={{ justifyContent: 'center', pb: 1.5, pt: 0 }}>
-                      <StyledButton
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleAddToCart(gift)}
-                      >
-                        Presentear
-                      </StyledButton>
-                    </CardActions>
-                  </StyledCard>
-                </Grid>
-              ))}
-            </Grid>
+            <>
+              <Grid container spacing={3}>
+                {displayedGifts.map((gift) => (
+                  <Grid item key={gift.id} xs={12} sm={6} md={4} lg={3}>
+                    <StyledCard>
+                      <StyledCardMedia image={gift.image} title={gift.name} />
+                      <CardContent sx={{ flexGrow: 1, py: 1.5 }}>
+                        <Typography
+                          gutterBottom
+                          variant="subtitle2"
+                          component="div"
+                          sx={{ height: 40, fontSize: '0.85rem' }}
+                        >
+                          {gift.name}
+                        </Typography>
+                        <Typography variant="body1" color="primary" sx={{ fontWeight: 600 }}>
+                          R$ {gift.price.toFixed(2)}
+                        </Typography>
+                      </CardContent>
+                      <CardActions sx={{ justifyContent: 'center', pb: 1.5, pt: 0 }}>
+                        <StyledButton
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleAddToCart(gift)}
+                        >
+                          Presentear
+                        </StyledButton>
+                      </CardActions>
+                    </StyledCard>
+                  </Grid>
+                ))}
+              </Grid>
+
+              {hasMoreItems && (
+                <Box sx={{ textAlign: 'center' }}>
+                  <LoadMoreButton
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleLoadMore}
+                    startIcon={<Iconify icon="eva:refresh-outline" />}
+                  >
+                    Carregar mais presentes
+                  </LoadMoreButton>
+                </Box>
+              )}
+            </>
           )}
 
           {currentPage === 'cart' && (
