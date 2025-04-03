@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { styled } from '@mui/material/styles';
 import {
   Box,
@@ -11,9 +10,12 @@ import {
   Grid,
   FormControlLabel,
   Checkbox,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
 import Iconify from 'src/components/iconify';
+import { HEADER } from 'src/config-global';
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -93,6 +95,8 @@ const ModalTitle = styled(Typography)(({ theme }) => ({
 }));
 
 export default function WeddingConfirm() {
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -103,7 +107,23 @@ export default function WeddingConfirm() {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleOpenModal = () => setOpenModal(true);
+  const scrollToSection = useCallback(
+    (sectionId: string) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const headerOffset = isMdUp ? HEADER.H_MAIN_DESKTOP : HEADER.H_MOBILE;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        });
+      }
+    },
+    [isMdUp]
+  );
+
   const handleCloseModal = () => {
     setOpenModal(false);
     if (submitted) setSubmitted(false);
@@ -210,7 +230,7 @@ export default function WeddingConfirm() {
             <StyledButton
               variant="contained"
               color="primary"
-              onClick={handleOpenModal}
+              onClick={() => scrollToSection('confirmar-presenca')}
               startIcon={<Iconify icon="eva:people-fill" />}
             >
               Confirmar Presença
@@ -220,6 +240,7 @@ export default function WeddingConfirm() {
               variant="outlined"
               color="primary"
               startIcon={<Iconify icon="eva:gift-fill" />}
+              onClick={() => scrollToSection('presentes')}
             >
               Lista de Presentes
             </StyledButton>
