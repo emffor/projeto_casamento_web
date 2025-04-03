@@ -152,6 +152,8 @@ export default function WeddingGiftList() {
   const [openCartModal, setOpenCartModal] = useState(false);
   const [currentPage, setCurrentPage] = useState('list');
   const [visibleItems, setVisibleItems] = useState(12);
+  const [selectedGift, setSelectedGift] = useState<any>(null);
+  const [openGiftModal, setOpenGiftModal] = useState(false);
   const itemsPerLoad = 12;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -184,10 +186,13 @@ export default function WeddingGiftList() {
   const handleContinueShopping = () => {
     setCurrentPage('list');
     setOpenCartModal(false);
+    setOpenGiftModal(false);
   };
 
   const handleViewCart = () => {
     setCurrentPage('cart');
+    setOpenCartModal(false);
+    setOpenGiftModal(false);
   };
 
   const handleLoadMore = () => {
@@ -198,6 +203,31 @@ export default function WeddingGiftList() {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const handleOpenGiftModal = (gift: any) => {
+    setSelectedGift(gift);
+    setOpenGiftModal(true);
+  };
+
+  const handleCloseGiftModal = () => {
+    setOpenGiftModal(false);
+  };
+
+  const handleAddToCartAndClose = () => {
+    if (selectedGift) {
+      handleAddToCart(selectedGift);
+      setOpenGiftModal(false);
+    }
+  };
+
+  const handleAddToCartAndFinalize = () => {
+    if (selectedGift) {
+      handleAddToCart(selectedGift);
+      setOpenGiftModal(false);
+      setCurrentPage('cart');
+    }
+  };
+
+  // Exibe apenas os itens visíveis
   const displayedGifts = weddingGifts.slice(0, visibleItems);
   const hasMoreItems = visibleItems < weddingGifts.length;
 
@@ -242,7 +272,7 @@ export default function WeddingGiftList() {
                         <StyledButton
                           variant="contained"
                           color="primary"
-                          onClick={() => handleAddToCart(gift)}
+                          onClick={() => handleOpenGiftModal(gift)}
                         >
                           Presentear
                         </StyledButton>
@@ -360,6 +390,50 @@ export default function WeddingGiftList() {
           )}
         </StyledContent>
       </Container>
+
+      <Dialog open={openGiftModal} onClose={handleCloseGiftModal} maxWidth="sm" fullWidth>
+        <DialogContent>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <IconButton onClick={handleCloseGiftModal} edge="end">
+              <Iconify icon="eva:close-fill" />
+            </IconButton>
+          </Box>
+
+          {selectedGift && (
+            <Box sx={{ textAlign: 'center', py: 2 }}>
+              <Box
+                component="img"
+                src={selectedGift.image}
+                alt={selectedGift.name}
+                sx={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain', mb: 3 }}
+              />
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                {selectedGift.name}
+              </Typography>
+              <Typography variant="h6" color="primary" sx={{ mb: 3 }}>
+                R$ {selectedGift.price.toFixed(2)}
+              </Typography>
+
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
+                Você deseja adicionar este presente ao seu carrinho?
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: 'center', px: 3, pb: 3 }}>
+          <StyledButton
+            variant="outlined"
+            color="primary"
+            onClick={handleAddToCartAndClose}
+            sx={{ mr: 2 }}
+          >
+            Continuar comprando
+          </StyledButton>
+          <StyledButton variant="contained" color="primary" onClick={handleAddToCartAndFinalize}>
+            Finalizar compra
+          </StyledButton>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={openCartModal} onClose={handleCloseCart} maxWidth="md" fullWidth>
         <DialogContent>
