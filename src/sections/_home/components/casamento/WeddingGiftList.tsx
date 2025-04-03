@@ -87,7 +87,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
   paddingTop: '100%',
   height: 0,
-  backgroundSize: 'cover',
+  backgroundSize: 'contain',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
   backgroundColor: theme.palette.background.paper,

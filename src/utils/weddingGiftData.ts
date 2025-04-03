@@ -29,13 +29,6 @@ export const weddingGifts = [
     category: 'Lua de Mel',
   },
   {
-    id: 5,
-    name: 'Aparador em Madeira Jequitibá 200 cm',
-    image: '/assets/casamento/presentes/aparador.png',
-    price: 987.41,
-    category: 'Móveis',
-  },
-  {
     id: 6,
     name: 'Aparelho de Fondue Preto',
     image: '/assets/casamento/presentes/fondue.png',
@@ -78,13 +71,6 @@ export const weddingGifts = [
     category: 'Eletrodomésticos',
   },
   {
-    id: 12,
-    name: 'Baú em Madeira Maciça 60x40 cm',
-    image: '/assets/casamento/presentes/bau.png',
-    price: 556.65,
-    category: 'Móveis',
-  },
-  {
     id: 13,
     name: 'Buffet 4 Portas cor Madeira Natural e Azul',
     image: '/assets/casamento/presentes/buffet.png',
@@ -109,21 +95,14 @@ export const weddingGifts = [
     id: 16,
     name: 'Centrifuga de Suco com Jarra',
     image: '/assets/casamento/presentes/centrifuga.png',
-    price: 301.74,
+    price: 220.0,
     category: 'Eletrodomésticos',
   },
   {
     id: 17,
     name: 'Churrasqueira Elétrica',
     image: '/assets/casamento/presentes/churrasqueira.png',
-    price: 322.55,
-    category: 'Eletrodomésticos',
-  },
-  {
-    id: 18,
-    name: 'Coifa de Parede',
-    image: '/assets/casamento/presentes/coifa.png',
-    price: 686.71,
+    price: 222.55,
     category: 'Eletrodomésticos',
   },
   {
@@ -134,17 +113,10 @@ export const weddingGifts = [
     category: 'Móveis',
   },
   {
-    id: 20,
-    name: 'Conjunto de Bowl em Cerâmica - 6 peças',
-    image: '/assets/casamento/presentes/bowl.png',
-    price: 74.91,
-    category: 'Utilidades Domésticas',
-  },
-  {
     id: 21,
     name: 'Conjunto de Mesas Laterais',
     image: '/assets/casamento/presentes/mesas_laterais.png',
-    price: 535.84,
+    price: 335.84,
     category: 'Móveis',
   },
   {
@@ -158,7 +130,7 @@ export const weddingGifts = [
     id: 23,
     name: 'Cortador de Pizza com Cabo de Bambu',
     image: '/assets/casamento/presentes/cortador_pizza.png',
-    price: 64.51,
+    price: 119.1,
     category: 'Utilidades Domésticas',
   },
   {
@@ -172,7 +144,7 @@ export const weddingGifts = [
     id: 25,
     name: 'Cômoda Vermelha com 3 Gavetas',
     image: '/assets/casamento/presentes/comoda.png',
-    price: 1019.66,
+    price: 709.99,
     category: 'Móveis',
   },
   {
@@ -204,13 +176,6 @@ export const weddingGifts = [
     category: 'Decoração',
   },
   {
-    id: 30,
-    name: 'Estante Nichos Branca e Grafite',
-    image: '/assets/casamento/presentes/estante.png',
-    price: 868.8,
-    category: 'Móveis',
-  },
-  {
     id: 31,
     name: 'Faqueiro - 42 Peças',
     image: '/assets/casamento/presentes/faqueiro.png',
@@ -232,17 +197,10 @@ export const weddingGifts = [
     category: 'Eletrodomésticos',
   },
   {
-    id: 34,
-    name: 'Forno Elétrico 46 litros',
-    image: '/assets/casamento/presentes/forno_eletrico.png',
-    price: 290.29,
-    category: 'Eletrodomésticos',
-  },
-  {
     id: 35,
     name: 'Frigideira Antiaderente',
     image: '/assets/casamento/presentes/frigideira.png',
-    price: 92.6,
+    price: 132.6,
     category: 'Utilidades Domésticas',
   },
   {
@@ -254,7 +212,7 @@ export const weddingGifts = [
   },
   {
     id: 37,
-    name: 'Geladeira Frost Free French Door 3 Portas 110V',
+    name: 'Geladeira Frost Free French Door 3 Portas 220V',
     image: '/assets/casamento/presentes/geladeira.png',
     price: 4369.99,
     category: 'Eletrodomésticos',
@@ -270,15 +228,8 @@ export const weddingGifts = [
     id: 39,
     name: 'Jogo de Cama Listrado',
     image: '/assets/casamento/presentes/jogo_cama.png',
-    price: 135.26,
+    price: 412.5,
     category: 'Cama, Mesa e Banho',
-  },
-  {
-    id: 40,
-    name: 'Jogo de Facas - 3 Peças',
-    image: '/assets/casamento/presentes/facas_3.png',
-    price: 46.82,
-    category: 'Utilidades Domésticas',
   },
   {
     id: 41,
@@ -298,14 +249,7 @@ export const weddingGifts = [
     id: 43,
     name: 'Jogo de Taças de Cristal - 6 Peças',
     image: '/assets/casamento/presentes/tacas.png',
-    price: 155.03,
-    category: 'Utilidades Domésticas',
-  },
-  {
-    id: 44,
-    name: 'Jogo de Taças para Sobremesa - 8 peças',
-    image: '/assets/casamento/presentes/tacas_sobremesa.png',
-    price: 242.68,
+    price: 181.3,
     category: 'Utilidades Domésticas',
   },
   {
@@ -326,22 +270,15 @@ export const weddingGifts = [
     id: 47,
     name: 'Jogo Edredom Casal Cinza - 3 Peças',
     image: '/assets/casamento/presentes/edredom.png',
-    price: 468.21,
+    price: 568.21,
     category: 'Cama, Mesa e Banho',
   },
   {
     id: 48,
     name: 'Jogo Toalha de Banho Azul - 4 Peças',
     image: '/assets/casamento/presentes/toalhas.png',
-    price: 114.45,
+    price: 126.45,
     category: 'Cama, Mesa e Banho',
-  },
-  {
-    id: 49,
-    name: 'Kit Colher de Bambu - 3 Peças',
-    image: '/assets/casamento/presentes/colheres_bambu.png',
-    price: 36.42,
-    category: 'Utilidades Domésticas',
   },
   {
     id: 50,
@@ -361,14 +298,14 @@ export const weddingGifts = [
     id: 52,
     name: 'Lixeira Inox 3 litros',
     image: '/assets/casamento/presentes/lixeira.png',
-    price: 52.02,
+    price: 105.0,
     category: 'Utilidades Domésticas',
   },
   {
     id: 53,
     name: 'Manta Tricot Cinza 125cm x 150cm',
     image: '/assets/casamento/presentes/manta.png',
-    price: 306.94,
+    price: 236.94,
     category: 'Cama, Mesa e Banho',
   },
   {
@@ -387,10 +324,17 @@ export const weddingGifts = [
   },
   {
     id: 56,
-    name: 'Mesa de Jantar Redonda',
-    image: '/assets/casamento/presentes/mesa_jantar.png',
-    price: 851.11,
-    category: 'Móveis',
+    name: 'Pipoqueira Elétrica sem Óleo',
+    image: '/assets/casamento/presentes/pipoqueira.png',
+    price: 149.99,
+    category: 'Eletrodomésticos',
+  },
+  {
+    id: 57,
+    name: 'Processador de Alimentos Preto - 800W',
+    image: '/assets/casamento/presentes/processador.png',
+    price: 299.99,
+    category: 'Eletrodomésticos',
   },
 ];
 
