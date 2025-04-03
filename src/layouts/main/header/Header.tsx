@@ -39,6 +39,7 @@ const casamentoNavConfig = [
     title: 'Presentes',
     path: '#presentes',
   },
+  { title: 'Confirme sua Presença', path: '#confirmar-presenca' },
 ];
 
 // ----------------------------------------------------------------------
