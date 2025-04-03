@@ -6,4 +6,4 @@ export { default as HomeForDesigner } from './HomeForDesigner';
 export { default as HomeAdvertisement } from './HomeAdvertisement';
 export { default as HomeFeatureHighlights } from './HomeFeatureHighlights';
 export { default as HomeFlexibleComponents } from './HomeFlexibleComponents';
-export { default as CountdownTimer } from "./casamento/CountdownTimer";
+export { default as CountdownTimer } from './casamento/WeddingCountDownTimer';
