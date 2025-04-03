@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useCallback } from 'react';
 import { styled } from '@mui/material/styles';
 import {
   Box,
@@ -15,19 +15,20 @@ import {
   MenuItem,
   InputLabel,
   SelectChangeEvent,
+  CircularProgress,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
+import { Icon } from '@iconify/react';
 
-// Animations
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 `;
 
-// Styled components
 const StyledRoot = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   position: 'relative',
+  padding: theme.spacing(10, 2),
 }));
 
 const StyledContent = styled(Box)(({ theme }) => ({
@@ -70,6 +71,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
   padding: theme.spacing(1, 4),
+  position: 'relative',
 }));
 
 interface FormData {
@@ -86,6 +88,16 @@ interface AlertState {
   severity: 'success' | 'error' | 'info' | 'warning';
 }
 
+const validateEmail = (email: string): boolean => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+};
+
+const validatePhone = (phone: string): boolean => {
+  const re = /^\(?([0-9]{2})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{4})$/;
+  return re.test(phone);
+};
+
 const WeddingConfirmPresence: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -101,35 +113,78 @@ const WeddingConfirmPresence: React.FC = () => {
     severity: 'success',
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Nome é obrigatório';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email é obrigatório';
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Email inválido';
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Telefone é obrigatório';
+    } else if (!validatePhone(formData.phone)) {
+      newErrors.phone = 'Formato: (11) 98765-4321';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSelectChange = (e: SelectChangeEvent<number>): void => {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+      const { name, value } = e.target;
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+
+      if (errors[name]) {
+        setErrors((prev) => {
+          const updated = { ...prev };
+          delete updated[name];
+          return updated;
+        });
+      }
+    },
+    [errors]
+  );
+
+  const handleSelectChange = useCallback((e: SelectChangeEvent<number>): void => {
     setFormData((prevState) => ({
       ...prevState,
       guests: e.target.value as number,
     }));
-  };
+  }, []);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
-      // Aqui entraria a lógica de envio para API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Aqui entraria a lógica real de envio:
       // const response = await fetch('/api/confirm-presence', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify(formData)
       // });
-
       // if (!response.ok) throw new Error('Falha ao confirmar presença');
 
-      // Simular sucesso
       setAlert({
         open: true,
         message: 'Presença confirmada com sucesso!',
@@ -149,12 +204,14 @@ const WeddingConfirmPresence: React.FC = () => {
         message: 'Erro ao confirmar presença. Tente novamente.',
         severity: 'error',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleCloseAlert = (): void => {
+  const handleCloseAlert = useCallback((): void => {
     setAlert((prev) => ({ ...prev, open: false }));
-  };
+  }, []);
 
   return (
     <StyledRoot>
@@ -162,13 +219,8 @@ const WeddingConfirmPresence: React.FC = () => {
         <StyledContent>
           <Title variant="h3">Confirme sua Presença</Title>
 
-          {/* <Typography variant="body1" sx={{ mb: 4 }}>
-            Confirme sua presença e compartilhe este momento especial conosco. Preencha o formulário
-            abaixo para garantir seu lugar na nossa celebração.
-          </Typography> */}
-
           <StyledForm elevation={3}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
               <StyledTextField
                 fullWidth
                 label="Nome completo"
@@ -177,6 +229,12 @@ const WeddingConfirmPresence: React.FC = () => {
                 onChange={handleChange}
                 required
                 variant="outlined"
+                error={!!errors.name}
+                helperText={errors.name}
+                disabled={isSubmitting}
+                InputProps={{
+                  startAdornment: <Icon icon="mdi:account" style={{ marginRight: 8 }} />,
+                }}
               />
 
               <Grid container spacing={2}>
@@ -190,6 +248,12 @@ const WeddingConfirmPresence: React.FC = () => {
                     onChange={handleChange}
                     required
                     variant="outlined"
+                    error={!!errors.email}
+                    helperText={errors.email}
+                    disabled={isSubmitting}
+                    InputProps={{
+                      startAdornment: <Icon icon="mdi:email" style={{ marginRight: 8 }} />,
+                    }}
                   />
                 </Grid>
 
@@ -202,11 +266,18 @@ const WeddingConfirmPresence: React.FC = () => {
                     onChange={handleChange}
                     required
                     variant="outlined"
+                    placeholder="(00) 00000-0000"
+                    error={!!errors.phone}
+                    helperText={errors.phone}
+                    disabled={isSubmitting}
+                    InputProps={{
+                      startAdornment: <Icon icon="mdi:phone" style={{ marginRight: 8 }} />,
+                    }}
                   />
                 </Grid>
               </Grid>
 
-              <FormControl fullWidth sx={{ mb: 3 }}>
+              <FormControl fullWidth sx={{ mb: 3 }} disabled={isSubmitting}>
                 <InputLabel id="guests-label">Número de convidados</InputLabel>
                 <Select
                   labelId="guests-label"
@@ -215,6 +286,7 @@ const WeddingConfirmPresence: React.FC = () => {
                   onChange={handleSelectChange}
                   label="Número de convidados"
                   required
+                  startAdornment={<Icon icon="mdi:account-group" style={{ marginRight: 8 }} />}
                 >
                   {[1, 2, 3, 4, 5].map((num) => (
                     <MenuItem key={num} value={num}>
@@ -233,6 +305,15 @@ const WeddingConfirmPresence: React.FC = () => {
                 multiline
                 rows={3}
                 variant="outlined"
+                disabled={isSubmitting}
+                InputProps={{
+                  startAdornment: (
+                    <Icon
+                      icon="mdi:message"
+                      style={{ marginRight: 8, alignSelf: 'flex-start', marginTop: 12 }}
+                    />
+                  ),
+                }}
               />
 
               <StyledButton
@@ -241,8 +322,16 @@ const WeddingConfirmPresence: React.FC = () => {
                 color="primary"
                 fullWidth
                 size="large"
+                disabled={isSubmitting}
               >
-                Confirmar Presença
+                {isSubmitting ? (
+                  <>
+                    <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
+                    Enviando...
+                  </>
+                ) : (
+                  'Confirmar Presença'
+                )}
               </StyledButton>
             </form>
           </StyledForm>
@@ -253,7 +342,12 @@ const WeddingConfirmPresence: React.FC = () => {
             onClose={handleCloseAlert}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           >
-            <Alert onClose={handleCloseAlert} severity={alert.severity} variant="filled">
+            <Alert
+              onClose={handleCloseAlert}
+              severity={alert.severity}
+              variant="filled"
+              elevation={6}
+            >
               {alert.message}
             </Alert>
           </Snackbar>

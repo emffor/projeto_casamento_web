@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { styled } from '@mui/material/styles';
 import {
   Box,
@@ -19,14 +19,17 @@ import { keyframes } from '@emotion/react';
 import GoogleMapReact from 'google-map-react';
 import { Icon } from '@iconify/react';
 
-const INITIAL_ZOOM = 15;
-const MAX_ZOOM = 20;
-const MIN_ZOOM = 10;
-const MAP_LOCATION = {
-  lat: -3.759428819872061,
-  lng: -38.52312468872212,
-  name: 'Centro Educacional Padre João Piamarta',
-  address: 'Av. Aguanambi, 2479, Aeroporto, Fortaleza - CE, 60415-390',
+const MAP_CONFIG = {
+  INITIAL_ZOOM: 15,
+  MAX_ZOOM: 20,
+  MIN_ZOOM: 10,
+  LOCATION: {
+    lat: -3.759428819872061,
+    lng: -38.52312468872212,
+    name: 'Centro Educacional Padre João Piamarta',
+    address: 'Av. Aguanambi, 2479, Aeroporto, Fortaleza - CE, 60415-390',
+  },
+  API_KEY: 'AIzaSyDG7uE34LGLsRXS8cQkGILBbumF5sbhSsQ',
 };
 
 const fadeIn = keyframes`
@@ -190,84 +193,117 @@ interface MapTypeOption {
   icon: string;
 }
 
-const LocationMarker: React.FC<LocationMarkerProps> = ({ lat, lng }) => {
-  return (
-    <div
+const MAP_TYPE_OPTIONS: MapTypeOption[] = [
+  { id: 'roadmap', label: 'Mapa', icon: 'mdi:map' },
+  { id: 'satellite', label: 'Satélite', icon: 'mdi:satellite' },
+  { id: 'hybrid', label: 'Híbrido', icon: 'mdi:layers' },
+  { id: 'terrain', label: 'Terreno', icon: 'mdi:terrain' },
+];
+
+const LocationMarker: React.FC<LocationMarkerProps> = () => (
+  <div
+    style={{
+      position: 'absolute',
+      transform: 'translate(-50%, -100%)',
+      animation: `${pulseAnimation} 2s infinite ease-in-out`,
+    }}
+  >
+    <Icon
+      icon="mdi:map-marker"
       style={{
-        position: 'absolute',
-        transform: 'translate(-50%, -100%)',
-        animation: `${pulseAnimation} 2s infinite ease-in-out`,
+        fontSize: 40,
+        color: 'red',
       }}
-    >
-      <Icon
-        icon="mdi:map-marker"
-        style={{
-          fontSize: 40,
-          color: 'red',
-        }}
-      />
-    </div>
-  );
-};
+    />
+  </div>
+);
 
 export default function WeddingCeremony() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [zoom, setZoom] = useState(INITIAL_ZOOM);
+  const [zoom, setZoom] = useState(MAP_CONFIG.INITIAL_ZOOM);
   const [mapType, setMapType] = useState<MapTypeId>('roadmap');
-
   const [layersAnchorEl, setLayersAnchorEl] = useState<null | HTMLElement>(null);
-  const layersMenuOpen = Boolean(layersAnchorEl);
 
+  const layersMenuOpen = Boolean(layersAnchorEl);
   const mapCenter = useMemo(
     () => ({
-      lat: MAP_LOCATION.lat,
-      lng: MAP_LOCATION.lng,
+      lat: MAP_CONFIG.LOCATION.lat,
+      lng: MAP_CONFIG.LOCATION.lng,
     }),
     []
   );
 
-  const mapTypeOptions: MapTypeOption[] = [
-    { id: 'roadmap', label: 'Mapa', icon: 'mdi:map' },
-    { id: 'satellite', label: 'Satélite', icon: 'mdi:satellite' },
-    { id: 'hybrid', label: 'Híbrido', icon: 'mdi:layers' },
-    { id: 'terrain', label: 'Terreno', icon: 'mdi:terrain' },
-  ];
+  // Handlers encapsulados como useCallback para melhor performance
+  const handleZoomIn = useCallback(() => {
+    setZoom((prev) => Math.min(prev + 1, MAP_CONFIG.MAX_ZOOM));
+  }, []);
 
-  const handleZoomIn = () => {
-    setZoom((prev) => Math.min(prev + 1, MAX_ZOOM));
-  };
+  const handleZoomOut = useCallback(() => {
+    setZoom((prev) => Math.max(prev - 1, MAP_CONFIG.MIN_ZOOM));
+  }, []);
 
-  const handleZoomOut = () => {
-    setZoom((prev) => Math.max(prev - 1, MIN_ZOOM));
-  };
-
-  const handleExpandMap = () => {
+  const handleExpandMap = useCallback(() => {
     window.open(
       `https://www.google.com/maps/search/?api=1&query=${mapCenter.lat},${mapCenter.lng}`,
       '_blank'
     );
-  };
+  }, [mapCenter]);
 
-  const handleOpenRoutes = () => {
+  const handleOpenRoutes = useCallback(() => {
     window.open(
       `https://www.google.com/maps/dir/?api=1&destination=${mapCenter.lat},${mapCenter.lng}`,
       '_blank'
     );
-  };
+  }, [mapCenter]);
 
-  const handleLayersClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleLayersClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setLayersAnchorEl(event.currentTarget);
-  };
+  }, []);
 
-  const handleLayersClose = () => {
+  const handleLayersClose = useCallback(() => {
     setLayersAnchorEl(null);
-  };
+  }, []);
 
-  const handleMapTypeChange = (type: MapTypeId) => {
-    setMapType(type);
-    handleLayersClose();
-  };
+  const handleMapTypeChange = useCallback(
+    (type: MapTypeId) => {
+      setMapType(type);
+      handleLayersClose();
+    },
+    [handleLayersClose]
+  );
+
+  // Opções do mapa memoizadas
+  const mapOptions = useMemo(
+    () => ({
+      fullscreenControl: false,
+      zoomControl: false,
+      mapTypeControl: false,
+      streetViewControl: false,
+      panControl: false,
+      rotateControl: false,
+      scaleControl: false,
+      scrollwheel: false,
+      draggable: true,
+      disableDoubleClickZoom: true,
+      keyboardShortcuts: false,
+      clickableIcons: false,
+      gestureHandling: 'cooperative',
+      disableDefaultUI: true,
+      mapTypeId: mapType,
+      styles: [
+        {
+          featureType: 'poi',
+          elementType: 'labels',
+          stylers: [{ visibility: 'on' }],
+        },
+      ],
+      mapTypeControlOptions: {
+        position: 0,
+      },
+    }),
+    [mapType]
+  );
 
   return (
     <StyledRoot>
@@ -286,7 +322,7 @@ export default function WeddingCeremony() {
                 mb: 4,
                 transition: 'transform 0.3s ease',
                 '&:hover': {
-                  transform: 'scale(1.01)',
+                  transform: 'scale(1.02)',
                 },
                 [theme.breakpoints.down('sm')]: {
                   height: '200px',
@@ -327,10 +363,10 @@ export default function WeddingCeremony() {
                   variant="subtitle1"
                   sx={{ fontWeight: 600, color: theme.palette.primary.main }}
                 >
-                  {MAP_LOCATION.name}
+                  {MAP_CONFIG.LOCATION.name}
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 0.5 }}>
-                  {MAP_LOCATION.address}
+                  {MAP_CONFIG.LOCATION.address}
                 </Typography>
                 <Button
                   size="small"
@@ -346,6 +382,7 @@ export default function WeddingCeremony() {
                 <LayersButton
                   size="small"
                   onClick={handleLayersClick}
+                  aria-label="Camadas do mapa"
                   sx={{
                     [theme.breakpoints.down('sm')]: {
                       right: 60,
@@ -365,7 +402,7 @@ export default function WeddingCeremony() {
                   sx: { minWidth: 180 },
                 }}
               >
-                {mapTypeOptions.map((option) => (
+                {MAP_TYPE_OPTIONS.map((option) => (
                   <MenuItem
                     key={option.id}
                     selected={mapType === option.id}
@@ -394,6 +431,7 @@ export default function WeddingCeremony() {
                 <IconButton
                   size="small"
                   onClick={handleOpenRoutes}
+                  aria-label="Obter rotas"
                   sx={{
                     position: 'absolute',
                     top: 10,
@@ -411,47 +449,31 @@ export default function WeddingCeremony() {
                 </IconButton>
               )}
               <GoogleMapReact
-                bootstrapURLKeys={{ key: 'AIzaSyDG7uE34LGLsRXS8cQkGILBbumF5sbhSsQ' }}
+                bootstrapURLKeys={{ key: MAP_CONFIG.API_KEY }}
                 center={mapCenter}
                 zoom={zoom}
-                options={{
-                  fullscreenControl: false,
-                  zoomControl: false,
-                  mapTypeControl: false,
-                  streetViewControl: false,
-                  panControl: false,
-                  rotateControl: false,
-                  scaleControl: false,
-                  scrollwheel: false,
-                  draggable: false,
-                  disableDoubleClickZoom: true,
-                  keyboardShortcuts: false,
-                  clickableIcons: false,
-                  gestureHandling: 'none',
-                  disableDefaultUI: true,
-                  mapTypeId: mapType,
-                  styles: [
-                    {
-                      featureType: 'poi',
-                      elementType: 'labels',
-                      stylers: [{ visibility: 'on' }],
-                    },
-                  ],
-                  mapTypeControlOptions: {
-                    position: 0,
-                  },
-                }}
+                options={mapOptions}
               >
                 <LocationMarker lat={mapCenter.lat} lng={mapCenter.lng} />
               </GoogleMapReact>
               <MapControls>
                 <Tooltip title="Aproximar" placement="left">
-                  <IconButton size="small" onClick={handleZoomIn} sx={{ borderRadius: 0 }}>
+                  <IconButton
+                    size="small"
+                    onClick={handleZoomIn}
+                    sx={{ borderRadius: 0 }}
+                    aria-label="Aproximar mapa"
+                  >
                     <Icon icon="mdi:plus" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Afastar" placement="left">
-                  <IconButton size="small" onClick={handleZoomOut} sx={{ borderRadius: 0 }}>
+                  <IconButton
+                    size="small"
+                    onClick={handleZoomOut}
+                    sx={{ borderRadius: 0 }}
+                    aria-label="Afastar mapa"
+                  >
                     <Icon icon="mdi:minus" />
                   </IconButton>
                 </Tooltip>
