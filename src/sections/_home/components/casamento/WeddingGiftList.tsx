@@ -44,7 +44,6 @@ const StyledRoot = styled('div')(({ theme }) => ({
     top: 0,
     left: 0,
     right: 0,
-    height: '5px',
     background: `linear-gradient(to right, ${theme.palette.primary.light}, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
   },
 }));
@@ -57,7 +56,7 @@ const StyledContent = styled(Box)(({ theme }) => ({
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.primary,
+  color: theme.palette.primary.main,
   marginBottom: theme.spacing(4),
   fontWeight: 500,
   position: 'relative',
