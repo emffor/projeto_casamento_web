@@ -21,6 +21,8 @@ import {
   TableHead,
   TableRow,
   Paper,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
 import Iconify from 'src/components/iconify';
@@ -108,6 +110,31 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const CartButton = styled(Button)(({ theme }) => ({
+  borderRadius: '30px',
+  padding: theme.spacing(0.75, 2),
+  transition: 'all 0.3s',
+  fontWeight: 500,
+  textTransform: 'none',
+  fontSize: '0.9rem',
+  width: 'auto',
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    marginBottom: theme.spacing(3),
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}));
+
+const CartButtonContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  marginBottom: theme.spacing(3),
+  [theme.breakpoints.down('sm')]: {
+    justifyContent: 'center',
+  },
+}));
+
 const LoadMoreButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(4, 0, 2),
   padding: theme.spacing(1, 4),
@@ -126,6 +153,8 @@ export default function WeddingGiftList() {
   const [currentPage, setCurrentPage] = useState('list');
   const [visibleItems, setVisibleItems] = useState(12);
   const itemsPerLoad = 12;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleAddToCart = (gift: any) => {
     const existingItem = cartItems.find((item) => item.id === gift.id);
@@ -169,7 +198,6 @@ export default function WeddingGiftList() {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  // Exibe apenas os itens visíveis
   const displayedGifts = weddingGifts.slice(0, visibleItems);
   const hasMoreItems = visibleItems < weddingGifts.length;
 
@@ -179,16 +207,16 @@ export default function WeddingGiftList() {
         <StyledContent>
           <Title variant="h3">Lista de Presentes</Title>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
-            <Button
+          <CartButtonContainer>
+            <CartButton
               variant="outlined"
               startIcon={<Iconify icon="eva:shopping-cart-fill" />}
               onClick={handleOpenCart}
-              sx={{ mb: 2 }}
+              fullWidth={isMobile}
             >
               Ver carrinho ({cartItems.length})
-            </Button>
-          </Box>
+            </CartButton>
+          </CartButtonContainer>
 
           {currentPage === 'list' && (
             <>
