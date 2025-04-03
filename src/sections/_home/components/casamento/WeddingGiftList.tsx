@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
 import Iconify from 'src/components/iconify';
+import { weddingGifts } from 'src/utils/weddingGiftData';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -84,9 +85,14 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
-  paddingTop: '80%',
-  backgroundSize: 'contain',
+  paddingTop: '100%',
+  height: 0,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
   backgroundColor: theme.palette.background.paper,
+  margin: theme.spacing(2, 2, 0, 2),
+  borderRadius: theme.shape.borderRadius,
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -102,64 +108,6 @@ const StyledButton = styled(Button)(({ theme }) => ({
     boxShadow: '0 6px 15px rgba(0,0,0,0.15)',
   },
 }));
-
-// Mock data for gifts
-const gifts = [
-  {
-    id: 1,
-    name: '2 Passagens Aéreas para Lua de Mel',
-    image: '/assets/casamento/presentes/viagem_lua_de_mel_passagem.png',
-    price: 1560.71,
-  },
-  {
-    id: 2,
-    name: 'Abajur Decorativo',
-    image: '/assets/casamento/presentes/abajur.jpg',
-    price: 192.49,
-  },
-  {
-    id: 3,
-    name: 'Adega de Vinhos Climatizada',
-    image: '/assets/casamento/presentes/adega.jpg',
-    price: 1268.57,
-  },
-  {
-    id: 4,
-    name: 'Jogo de 24 peças Louça de Jantar',
-    image: '/assets/casamento/presentes/jogodejantar.jpg',
-    price: 1325.69,
-  },
-  {
-    id: 5,
-    name: 'Aparador em Madeira Maciça',
-    image: '/assets/casamento/presentes/aparador.jpg',
-    price: 967.45,
-  },
-  {
-    id: 6,
-    name: 'Aparelho de Fondue Preto',
-    image: '/assets/casamento/presentes/fondue.jpg',
-    price: 114.99,
-  },
-  {
-    id: 7,
-    name: 'Conjunto de Potes Herméticos',
-    image: '/assets/casamento/presentes/potes.jpg',
-    price: 259.13,
-  },
-  {
-    id: 8,
-    name: 'Ar Condicionado Split Inverter',
-    image: '/assets/casamento/presentes/ar.jpg',
-    price: 1579.8,
-  },
-  {
-    id: 9,
-    name: 'Aspirador de Pó Vertical',
-    image: '/assets/casamento/presentes/aspirador.jpg',
-    price: 582.08,
-  },
-];
 
 export default function WeddingGiftList() {
   const [cartItems, setCartItems] = useState<any[]>([]);
@@ -223,7 +171,7 @@ export default function WeddingGiftList() {
 
           {currentPage === 'list' && (
             <Grid container spacing={3}>
-              {gifts.map((gift) => (
+              {weddingGifts.map((gift) => (
                 <Grid item key={gift.id} xs={12} sm={6} md={4} lg={3}>
                   <StyledCard>
                     <StyledCardMedia image={gift.image} title={gift.name} />
