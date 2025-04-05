@@ -176,7 +176,6 @@ const WeddingConfirmPresence: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Envio dos dados para o Supabase
       const { data, error } = await supabase
         .from('confirmacao_convidado')
         .insert([
@@ -184,7 +183,7 @@ const WeddingConfirmPresence: React.FC = () => {
             nome: formData.name,
             email: formData.email,
             telefone: formData.phone,
-            quantidade_convidado: String(formData.guests), // Convertendo para string conforme esperado
+            quantidade_convidado: String(formData.guests),
             mensagem: formData.message,
             created_at: new Date().toISOString(),
           },
