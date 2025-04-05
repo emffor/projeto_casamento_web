@@ -5,45 +5,6 @@ import SimpleLayout from '../layouts/simple';
 import CompactLayout from '../layouts/compact';
 //
 import {
-  // Marketing
-  MarketingBlogPage,
-  MarketingPostPage,
-  MarketingAboutPage,
-  MarketingContactPage,
-  MarketingLandingPage,
-  MarketingServicesPage,
-  MarketingCaseStudyPage,
-  MarketingCaseStudiesPage,
-  // Career
-  CareerJobPage,
-  CareerBlogPage,
-  CareerJobsPage,
-  CareerPostPage,
-  CareerAboutPage,
-  CareerContactPage,
-  CareerLandingPage,
-  // E-Learning
-  ElearningBlogPage,
-  ElearningPostPage,
-  ElearningAboutPage,
-  ElearningCoursePage,
-  ElearningContactPage,
-  ElearningCoursesPage,
-  ElearningLandingPage,
-  // E-Commerce
-  EcommerceCartPage,
-  EcommerceComparePage,
-  EcommerceLandingPage,
-  EcommerceProductPage,
-  EcommerceCheckoutPage,
-  EcommerceProductsPage,
-  EcommerceWishlistPage,
-  EcommerceAccountOrdersPage,
-  EcommerceOrderCompletedPage,
-  EcommerceAccountPaymentPage,
-  EcommerceAccountPersonalPage,
-  EcommerceAccountVouchersPage,
-  EcommerceAccountWishlistPage,
   // Auth
   LoginCoverPage,
   VerifyCodePage,
@@ -99,70 +60,7 @@ export default function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'support', element: <SupportPage /> },
-        // Marketing
-        {
-          path: 'marketing',
-          children: [
-            { path: 'landing', element: <MarketingLandingPage /> },
-            { path: 'services', element: <MarketingServicesPage /> },
-            { path: 'case-studies', element: <MarketingCaseStudiesPage /> },
-            { path: 'case-study', element: <MarketingCaseStudyPage /> },
-            { path: 'posts', element: <MarketingBlogPage /> },
-            { path: 'post', element: <MarketingPostPage /> },
-            { path: 'about', element: <MarketingAboutPage /> },
-            { path: 'contact', element: <MarketingContactPage /> },
-          ],
-        },
-        // Career
-        {
-          path: 'career',
-          children: [
-            { path: 'landing', element: <CareerLandingPage /> },
-            { path: 'jobs', element: <CareerJobsPage /> },
-            { path: 'job', element: <CareerJobPage /> },
-            { path: 'posts', element: <CareerBlogPage /> },
-            { path: 'post', element: <CareerPostPage /> },
-            { path: 'about', element: <CareerAboutPage /> },
-            { path: 'contact', element: <CareerContactPage /> },
-          ],
-        },
-        // E-learning
-        {
-          path: 'e-learning',
-          children: [
-            { path: 'landing', element: <ElearningLandingPage /> },
-            { path: 'courses', element: <ElearningCoursesPage /> },
-            { path: 'course', element: <ElearningCoursePage /> },
-            { path: 'posts', element: <ElearningBlogPage /> },
-            { path: 'post', element: <ElearningPostPage /> },
-            { path: 'about', element: <ElearningAboutPage /> },
-            { path: 'contact', element: <ElearningContactPage /> },
-          ],
-        },
-        // E-commerce
-        {
-          path: 'e-commerce',
-          children: [
-            { path: 'landing', element: <EcommerceLandingPage /> },
-            { path: 'products', element: <EcommerceProductsPage /> },
-            { path: 'product', element: <EcommerceProductPage /> },
-            { path: 'cart', element: <EcommerceCartPage /> },
-            { path: 'checkout', element: <EcommerceCheckoutPage /> },
-            { path: 'order-completed', element: <EcommerceOrderCompletedPage /> },
-            { path: 'wishlist', element: <EcommerceWishlistPage /> },
-            { path: 'compare', element: <EcommerceComparePage /> },
-            {
-              path: 'account',
-              children: [
-                { path: 'personal', element: <EcommerceAccountPersonalPage /> },
-                { path: 'wishlist', element: <EcommerceAccountWishlistPage /> },
-                { path: 'vouchers', element: <EcommerceAccountVouchersPage /> },
-                { path: 'orders', element: <EcommerceAccountOrdersPage /> },
-                { path: 'payment', element: <EcommerceAccountPaymentPage /> },
-              ],
-            },
-          ],
-        },
+
         // Demo Components
         {
           path: 'components',
