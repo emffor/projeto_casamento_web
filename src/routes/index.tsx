@@ -24,22 +24,6 @@ import {
   Pricing02Page,
   ComingSoonPage,
   MaintenancePage,
-  // Components
-  DemoIconsPage,
-  DemoImagePage,
-  DemoLabelPage,
-  ComponentsPage,
-  DemoPlayerPage,
-  DemoAnimatePage,
-  DemoCountUpPage,
-  DemoLightboxPage,
-  DemoMarkdownPage,
-  DemoMegaMenuPage,
-  DemoCarouselsPage,
-  DemoScrollbarPage,
-  DemoTextMaxLinePage,
-  DemoNavigationBarPage,
-  DemoFormValidationPage,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -60,28 +44,6 @@ export default function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'support', element: <SupportPage /> },
-
-        // Demo Components
-        {
-          path: 'components',
-          children: [
-            { element: <ComponentsPage />, index: true },
-            { path: 'animate', element: <DemoAnimatePage /> },
-            { path: 'carousel', element: <DemoCarouselsPage /> },
-            { path: 'count-up', element: <DemoCountUpPage /> },
-            { path: 'form-validation', element: <DemoFormValidationPage /> },
-            { path: 'icons', element: <DemoIconsPage /> },
-            { path: 'image', element: <DemoImagePage /> },
-            { path: 'label', element: <DemoLabelPage /> },
-            { path: 'lightbox', element: <DemoLightboxPage /> },
-            { path: 'markdown', element: <DemoMarkdownPage /> },
-            { path: 'mega-menu', element: <DemoMegaMenuPage /> },
-            { path: 'navigation-bar', element: <DemoNavigationBarPage /> },
-            { path: 'scroll', element: <DemoScrollbarPage /> },
-            { path: 'player', element: <DemoPlayerPage /> },
-            { path: 'text-max-line', element: <DemoTextMaxLinePage /> },
-          ],
-        },
       ],
     },
     // Simple layout
