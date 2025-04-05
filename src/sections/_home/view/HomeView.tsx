@@ -1,20 +1,7 @@
-// _mock
-import { _pricingHome } from 'src/_mock';
 // components
 import ScrollProgress from 'src/components/scroll-progress';
 //
-import PricingHome from '../../pricing/home';
-import {
-  HomeHero,
-  HomeFAQs,
-  HomeNewStart,
-  HomeForDesigner,
-  HomeCombination,
-  HomeAdvertisement,
-  HomeFeatureHighlights,
-  HomeFlexibleComponents,
-  CountdownTimer,
-} from '../components';
+import { HomeHero, CountdownTimer } from '../components';
 import WeddingOurHistory from '../components/casamento/WeddingOurHistory';
 import WeddingConfirm from '../components/casamento/WeddingConfirm';
 import WeddingCeremony from '../components/casamento/WeddingCeremony';
@@ -48,14 +35,6 @@ export default function HomeView() {
       <div id="confirmar-presenca">
         <WeddingConfirmPresence />
       </div>
-      {/* <HomeNewStart /> */}
-      {/* <HomeFlexibleComponents /> */}
-      {/* <HomeFeatureHighlights /> */}
-      {/* <HomeForDesigner /> */}
-      {/* <PricingHome plans={_pricingHome} /> */}
-      {/* <HomeFAQs /> */}
-      {/* <HomeCombination /> */}
-      {/* <HomeAdvertisement /> */}
     </>
   );
 }

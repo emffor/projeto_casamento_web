@@ -39,21 +39,6 @@ export const MarketingServicesPage = Loadable(
   lazy(() => import('../pages/marketing/MarketingServicesPage'))
 );
 
-// TRAVEL
-export const TravelAboutPage = Loadable(lazy(() => import('../pages/travel/TravelAboutPage')));
-export const TravelBlogPage = Loadable(lazy(() => import('../pages/travel/TravelBlogPage')));
-export const TravelCheckoutPage = Loadable(
-  lazy(() => import('../pages/travel/TravelCheckoutPage'))
-);
-export const TravelContactPage = Loadable(lazy(() => import('../pages/travel/TravelContactPage')));
-export const TravelLandingPage = Loadable(lazy(() => import('../pages/travel/TravelLandingPage')));
-export const TravelOrderCompletedPage = Loadable(
-  lazy(() => import('../pages/travel/TravelOrderCompletedPage'))
-);
-export const TravelPostPage = Loadable(lazy(() => import('../pages/travel/TravelPostPage')));
-export const TravelTourPage = Loadable(lazy(() => import('../pages/travel/TravelTourPage')));
-export const TravelToursPage = Loadable(lazy(() => import('../pages/travel/TravelToursPage')));
-
 // CAREER
 export const CareerAboutPage = Loadable(lazy(() => import('../pages/career/CareerAboutPage')));
 export const CareerBlogPage = Loadable(lazy(() => import('../pages/career/CareerBlogPage')));

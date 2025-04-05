@@ -14,16 +14,6 @@ import {
   MarketingServicesPage,
   MarketingCaseStudyPage,
   MarketingCaseStudiesPage,
-  // Travel
-  TravelBlogPage,
-  TravelPostPage,
-  TravelTourPage,
-  TravelAboutPage,
-  TravelToursPage,
-  TravelContactPage,
-  TravelLandingPage,
-  TravelCheckoutPage,
-  TravelOrderCompletedPage,
   // Career
   CareerJobPage,
   CareerBlogPage,
@@ -121,21 +111,6 @@ export default function Router() {
             { path: 'post', element: <MarketingPostPage /> },
             { path: 'about', element: <MarketingAboutPage /> },
             { path: 'contact', element: <MarketingContactPage /> },
-          ],
-        },
-        // Travel
-        {
-          path: 'travel',
-          children: [
-            { path: 'landing', element: <TravelLandingPage /> },
-            { path: 'tours', element: <TravelToursPage /> },
-            { path: 'tour', element: <TravelTourPage /> },
-            { path: 'checkout', element: <TravelCheckoutPage /> },
-            { path: 'order-completed', element: <TravelOrderCompletedPage /> },
-            { path: 'posts', element: <TravelBlogPage /> },
-            { path: 'post', element: <TravelPostPage /> },
-            { path: 'about', element: <TravelAboutPage /> },
-            { path: 'contact', element: <TravelContactPage /> },
           ],
         },
         // Career
