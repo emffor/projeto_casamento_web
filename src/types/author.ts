@@ -1,5 +1,3 @@
-import { ISocialLinks } from './socials';
-
 // ----------------------------------------------------------------------
 
 export type IAuthorProps = {
@@ -12,5 +10,4 @@ export type IAuthorProps = {
   verified?: boolean;
   ratings?: number;
   reviews?: number;
-  socialLinks?: ISocialLinks;
 };
