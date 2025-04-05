@@ -8,10 +8,7 @@ import Scrollbar from '../../scrollbar';
 //
 import { useSettingsContext } from '../SettingsContext';
 import BadgeDot from './components/BadgeDot';
-import ModeOptions from './components/ModeOptions';
 import ToggleButton from './components/ToggleButton';
-import DirectionOptions from './components/DirectionOptions';
-import ColorPresetsOptions from './components/ColorPresetsOptions';
 
 // ----------------------------------------------------------------------
 

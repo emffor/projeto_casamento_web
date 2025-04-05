@@ -1,10 +1,7 @@
 import { useLocation } from 'react-router-dom';
 // @mui
-import { styled } from '@mui/material/styles';
-import { Link, Stack, Divider, Container, Typography, IconButton, Grid } from '@mui/material';
+import { Stack, Divider, Container, Typography, IconButton, Grid } from '@mui/material';
 // hooks
-import useResponsive from 'src/hooks/useResponsive';
-// _mock
 import { _socials } from 'src/_mock';
 // components
 import Logo from 'src/components/logo';
@@ -13,7 +10,6 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function Footer() {
-  const isMdUp = useResponsive('up', 'md');
   const { pathname } = useLocation();
   const isHome = pathname === '/';
   const currentYear = new Date().getFullYear();
