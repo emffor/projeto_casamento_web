@@ -32,9 +32,6 @@ export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/Reset
 export const VerifyCodePage = Loadable(lazy(() => import('../pages/auth/VerifyCodePage')));
 
 // COMMON
-export const ComingSoonPage = Loadable(lazy(() => import('../pages/ComingSoonPage')));
 export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));
-export const MaintenancePage = Loadable(lazy(() => import('../pages/MaintenancePage')));
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 export const Page500 = Loadable(lazy(() => import('../pages/Page500')));
-export const PaymentPage = Loadable(lazy(() => import('../pages/PaymentPage')));

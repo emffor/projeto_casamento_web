@@ -18,9 +18,6 @@ import {
   Page404,
   Page500,
   HomePage,
-  PaymentPage,
-  ComingSoonPage,
-  MaintenancePage,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -44,7 +41,6 @@ export default function Router() {
     {
       element: <SimpleLayout />,
       children: [
-        { path: 'payment', element: <PaymentPage /> },
         {
           path: 'auth',
           children: [
@@ -60,8 +56,6 @@ export default function Router() {
     {
       element: <CompactLayout />,
       children: [
-        { path: 'coming-soon', element: <ComingSoonPage /> },
-        { path: 'maintenance', element: <MaintenancePage /> },
         { path: '500', element: <Page500 /> },
         { path: '404', element: <Page404 /> },
         { path: 'reset-code', element: <ResetPasswordPage /> },
