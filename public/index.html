@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <!-- PWA primary color -->
   <meta name="theme-color" content="#6D8F67" />
-
   <!-- Favicon -->
-
-  <!-- <link rel="icon" type="image/png" sizes="50x50" href="%PUBLIC_URL%/favicon/favicon-50x50.png"> -->
-  <!-- <link rel="icon" type="image/png" sizes="64x64" href="%PUBLIC_URL%/favicon/favicon-64x64.png"> -->
   <link rel="icon" type="image/png" sizes="100x100" href="%PUBLIC_URL%/favicon/favicon-100x100.png">
   <link rel="icon" type="image/png" sizes="192x192" href="%PUBLIC_URL%/favicon/favicon-200x200.png">
-
   <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <title>Eloan & Bruna</title>
-
-  <meta name="description"
-    content="The ZONE is built on top of MUI, a powerful library that provides flexible, customizable, and easy-to-use components." />
-  <meta name="keywords" content="react,material,kit,application,landing & corporate,template" />
-  <meta name="author" content="ZONE UI Kit" />
+  <meta name="description" content="Site de casamento de Eloan e Bruna - 31 de maio de 2025" />
+  <meta name="keywords" content="casamento, Eloan, Bruna, convite, cerimônia" />
+  <meta name="author" content="Eloan e Bruna" />
+  <style>
+    [data-vercel-toolbar],
+    div[class*="vercel-toolbar"],
+    #__vercel {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  </style>
 </head>
-
 <body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <noscript>Por favor, habilite JavaScript para visualizar nosso site de casamento.</noscript>
   <div id="root"></div>
+  <script>
+    window.addEventListener('load', () => {
+      const vercelElements = document.querySelectorAll('[data-vercel-toolbar], #__vercel');
+      vercelElements.forEach(el => el.remove());
+    });
+  </script>
 </body>
-
 </html>
