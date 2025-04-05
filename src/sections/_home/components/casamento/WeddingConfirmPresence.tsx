@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
 import { Icon } from '@iconify/react';
+import { supabase } from 'src/utils/supabaseClient';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -175,15 +176,22 @@ const WeddingConfirmPresence: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Envio dos dados para o Supabase
+      const { data, error } = await supabase
+        .from('confirmacao_convidado')
+        .insert([
+          {
+            nome: formData.name,
+            email: formData.email,
+            telefone: formData.phone,
+            quantidade_convidado: String(formData.guests), // Convertendo para string conforme esperado
+            mensagem: formData.message,
+            created_at: new Date().toISOString(),
+          },
+        ])
+        .select();
 
-      // Aqui entraria a lógica real de envio:
-      // const response = await fetch('/api/confirm-presence', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
-      // if (!response.ok) throw new Error('Falha ao confirmar presença');
+      if (error) throw error;
 
       setAlert({
         open: true,
@@ -199,6 +207,7 @@ const WeddingConfirmPresence: React.FC = () => {
         message: '',
       });
     } catch (error) {
+      console.error('Erro ao salvar dados:', error);
       setAlert({
         open: true,
         message: 'Erro ao confirmar presença. Tente novamente.',
