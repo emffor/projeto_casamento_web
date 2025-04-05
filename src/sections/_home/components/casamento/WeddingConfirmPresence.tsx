@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import {
   Box,
@@ -16,6 +16,7 @@ import {
   InputLabel,
   SelectChangeEvent,
   CircularProgress,
+  InputAdornment,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
 import { Icon } from '@iconify/react';
@@ -95,8 +96,22 @@ const validateEmail = (email: string): boolean => {
 };
 
 const validatePhone = (phone: string): boolean => {
-  const re = /^\(?([0-9]{2})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{4})$/;
+  const re = /^\(\d{2}\) \d{5}-\d{4}$/;
   return re.test(phone);
+};
+
+const formatPhoneNumber = (value: string): string => {
+  if (!value) return '';
+
+  const phoneNumber = value.replace(/\D/g, '');
+
+  if (phoneNumber.length <= 2) {
+    return phoneNumber;
+  }
+  if (phoneNumber.length <= 7) {
+    return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2)}`;
+  }
+  return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2, 7)}-${phoneNumber.slice(7, 11)}`;
 };
 
 const WeddingConfirmPresence: React.FC = () => {
@@ -133,7 +148,7 @@ const WeddingConfirmPresence: React.FC = () => {
     if (!formData.phone.trim()) {
       newErrors.phone = 'Telefone é obrigatório';
     } else if (!validatePhone(formData.phone)) {
-      newErrors.phone = 'Formato: (11) 98765-4321';
+      newErrors.phone = 'Formato inválido';
     }
 
     setErrors(newErrors);
@@ -143,10 +158,19 @@ const WeddingConfirmPresence: React.FC = () => {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
       const { name, value } = e.target;
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
+
+      if (name === 'phone') {
+        const formattedPhone = formatPhoneNumber(value);
+        setFormData((prevState) => ({
+          ...prevState,
+          [name]: formattedPhone,
+        }));
+      } else {
+        setFormData((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
+      }
 
       if (errors[name]) {
         setErrors((prev) => {
@@ -158,6 +182,17 @@ const WeddingConfirmPresence: React.FC = () => {
     },
     [errors]
   );
+
+  const handleKeyPress = useCallback((e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (e.currentTarget.name === 'phone') {
+      const charCode = e.which || e.keyCode;
+      if (charCode < 48 || charCode > 57) {
+        if (!(charCode === 8 || charCode === 46)) {
+          e.preventDefault();
+        }
+      }
+    }
+  }, []);
 
   const handleSelectChange = useCallback((e: SelectChangeEvent<number>): void => {
     setFormData((prevState) => ({
@@ -226,7 +261,6 @@ const WeddingConfirmPresence: React.FC = () => {
       <Container>
         <StyledContent>
           <Title variant="h3">Confirme sua Presença</Title>
-
           <StyledForm elevation={3}>
             <form onSubmit={handleSubmit} noValidate>
               <StyledTextField
@@ -241,7 +275,11 @@ const WeddingConfirmPresence: React.FC = () => {
                 helperText={errors.name}
                 disabled={isSubmitting}
                 InputProps={{
-                  startAdornment: <Icon icon="mdi:account" style={{ marginRight: 8 }} />,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon icon="mdi:account" />
+                    </InputAdornment>
+                  ),
                 }}
               />
 
@@ -260,11 +298,14 @@ const WeddingConfirmPresence: React.FC = () => {
                     helperText={errors.email}
                     disabled={isSubmitting}
                     InputProps={{
-                      startAdornment: <Icon icon="mdi:email" style={{ marginRight: 8 }} />,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Icon icon="mdi:email" />
+                        </InputAdornment>
+                      ),
                     }}
                   />
                 </Grid>
-
                 <Grid item xs={12} sm={6}>
                   <StyledTextField
                     fullWidth
@@ -272,14 +313,22 @@ const WeddingConfirmPresence: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
+                    onKeyDown={handleKeyPress}
                     required
                     variant="outlined"
                     placeholder="(00) 00000-0000"
                     error={!!errors.phone}
                     helperText={errors.phone}
                     disabled={isSubmitting}
+                    inputProps={{
+                      maxLength: 15,
+                    }}
                     InputProps={{
-                      startAdornment: <Icon icon="mdi:phone" style={{ marginRight: 8 }} />,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Icon icon="mdi:phone" />
+                        </InputAdornment>
+                      ),
                     }}
                   />
                 </Grid>
@@ -294,7 +343,11 @@ const WeddingConfirmPresence: React.FC = () => {
                   onChange={handleSelectChange}
                   label="Número de convidados"
                   required
-                  startAdornment={<Icon icon="mdi:account-group" style={{ marginRight: 8 }} />}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <Icon icon="mdi:account-group" />
+                    </InputAdornment>
+                  }
                 >
                   {[1, 2, 3, 4, 5].map((num) => (
                     <MenuItem key={num} value={num}>
@@ -316,10 +369,9 @@ const WeddingConfirmPresence: React.FC = () => {
                 disabled={isSubmitting}
                 InputProps={{
                   startAdornment: (
-                    <Icon
-                      icon="mdi:message"
-                      style={{ marginRight: 8, alignSelf: 'flex-start', marginTop: 12 }}
-                    />
+                    <InputAdornment position="start" sx={{ alignSelf: 'flex-start', mt: 1 }}>
+                      <Icon icon="mdi:message" />
+                    </InputAdornment>
                   ),
                 }}
               />
