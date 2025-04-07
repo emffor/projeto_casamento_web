@@ -270,7 +270,8 @@ export default function WeddingGiftList() {
       return;
     }
     if (!MERCADO_PAGO_ACCESS_TOKEN) {
-      setPaymentError('ERRO DE CONFIGURAÇÃO: Access Token do Mercado Pago não definido.');
+      setPaymentError('ERRO DE CONFIGURAÇÃO: Access Token de Produção não definido.');
+      setIsLoadingPayment(false);
       return;
     }
 
@@ -287,8 +288,16 @@ export default function WeddingGiftList() {
       description: item.name,
     }));
 
+    const buyerEmail = 'email_real_do_comprador@exemplo.com';
+
+    if (buyerEmail === 'email_real_do_comprador@exemplo.com') {
+      console.warn(
+        'ALERTA: Usando email placeholder para o pagador. Substitua por email real em produção!'
+      );
+    }
+
     const payerInfo: PayerInfo = {
-      email: 'TESTUSER2041876861@testuser.com',
+      email: buyerEmail,
     };
 
     try {
@@ -326,19 +335,20 @@ export default function WeddingGiftList() {
         ) {
           errorMessage =
             'Erro: Você está usando credenciais de Teste com um email de pagador inválido ou de produção. Use um email de pagador de Teste (ex: test_user_...@testuser.com).';
+        } else if (response.status === 400 && JSON.stringify(data).includes('payer.email')) {
+          errorMessage += ' Verifique se o email do comprador é válido.';
         }
         throw new Error(errorMessage || 'Não foi possível criar a preferência.');
       }
 
-      if (data.sandbox_init_point) {
-        window.location.href = data.sandbox_init_point;
-      } else if (data.init_point) {
+      if (data.init_point) {
         window.location.href = data.init_point;
       } else {
-        throw new Error('Resposta da API não contém init_point ou sandbox_init_point.');
+        console.error('Erro: init_point não encontrado na resposta da API de produção.', data);
+        throw new Error('Resposta da API de produção não contém init_point.');
       }
     } catch (err: any) {
-      console.error('Erro ao criar preferência diretamente:', err);
+      console.error('Erro ao criar preferência (Produção - Frontend):', err);
       setPaymentError(`Erro ao iniciar pagamento: ${err.message || 'Tente novamente.'}`);
       setIsLoadingPayment(false);
     }

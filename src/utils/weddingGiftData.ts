@@ -46,14 +46,14 @@ export const weddingGifts = [
     id: 8,
     name: 'Ar Condicionado Split Inverter 12000 BTUs',
     image: '/assets/casamento/presentes/ar_condicionado.png',
-    price: 0.5,
+    price: 1975.86,
     category: 'Eletrodomésticos',
   },
   {
     id: 9,
     name: 'Aspirador de Pó Vertical',
     image: '/assets/casamento/presentes/aspirador.png',
-    price: 0.01,
+    price: 182.08,
     category: 'Eletrodomésticos',
   },
   {
