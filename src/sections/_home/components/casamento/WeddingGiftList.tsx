@@ -103,6 +103,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
   fontSize: '0.9rem',
   boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+  whiteSpace: 'nowrap',
   '&:hover': {
     transform: 'translateY(-2px)',
     boxShadow: '0 6px 15px rgba(0,0,0,0.15)',
@@ -117,6 +118,7 @@ const CartButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
   fontSize: '0.9rem',
   width: 'auto',
+  whiteSpace: 'nowrap',
   [theme.breakpoints.down('sm')]: {
     width: '100%',
     marginBottom: theme.spacing(3),
@@ -141,6 +143,7 @@ const LoadMoreButton = styled(Button)(({ theme }) => ({
   fontWeight: 500,
   textTransform: 'none',
   transition: 'all 0.2s',
+  whiteSpace: 'nowrap',
   '&:hover': {
     transform: 'translateY(-2px)',
   },
