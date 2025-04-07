@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Stack, Container, Typography } from '@mui/material';
 import Image from 'src/components/image';
 import { keyframes } from '@emotion/react';
+import MPConfigTest from './casamento/components/MPConfigTest';
 
 const fadeIn = keyframes`
   from {
@@ -166,6 +167,9 @@ export default function HomeHero() {
             31 DE MAIO DE 2025
           </Typography>
         </Stack>
+
+        {/* Teste de confiruacao mercado pago */}
+        {/* <MPConfigTest /> */}
       </Container>
     </StyledRoot>
   );
