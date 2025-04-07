@@ -529,6 +529,7 @@ export default function WeddingGiftList() {
                       color="primary"
                       onClick={handleContinueShopping}
                       startIcon={<Iconify icon="eva:arrow-back-outline" />}
+                      sx={{ width: isMobile ? '100%' : 'auto' }}
                     >
                       Adicionar mais itens
                     </StyledButton>
@@ -544,6 +545,7 @@ export default function WeddingGiftList() {
                           <Iconify icon="mdi:credit-card-check-outline" />
                         )
                       }
+                      sx={{ width: isMobile ? '100%' : 'auto' }}
                     >
                       {isLoadingPayment ? 'Processando...' : 'Ir para Pagamento'}
                     </StyledButton>
