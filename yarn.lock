@@ -1720,6 +1720,18 @@
   resolved "https://registry.npmjs.org/@mapbox/point-geometry/-/point-geometry-0.1.0.tgz"
   integrity sha512-6j56HdLTwWGO0fJPlrZtdU/B13q8Uwmo18Ck2GnGgN9PCFyKTZ3UbXeEdRFh18i9XQ92eH2VdtpJHpBD3aripQ==
 
+"@mercadopago/sdk-js@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@mercadopago/sdk-js/-/sdk-js-0.0.3.tgz#f54eee5faa7d8d7253b5c03b0ef09dcb8229698a"
+  integrity sha512-kO48DNLHdfFAp3on12nuKdqNlEmw1x3+nM6wLd04BdWOXoFcAhkNMQV3AyUIanXdO/bB/dENakdacLT29297EQ==
+
+"@mercadopago/sdk-react@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@mercadopago/sdk-react/-/sdk-react-1.0.2.tgz#deb5a3b80d2ba85959784a0003577b7a06ba303d"
+  integrity sha512-EZa1Jj9RChp4wZxTKHHgF/4zVzgkyGwo8UUYtLveBrVeUcbRK+Nu1aZXgfL2hQeQIGA/nlk1sHtWqMC2f8cMzQ==
+  dependencies:
+    "@mercadopago/sdk-js" "^0.0.3"
+
 "@mui/base@5.0.0-alpha.122":
   version "5.0.0-alpha.122"
   resolved "https://registry.npmjs.org/@mui/base/-/base-5.0.0-alpha.122.tgz"

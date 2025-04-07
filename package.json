@@ -38,6 +38,7 @@
     "@emotion/styled": "^11.10.6",
     "@hookform/resolvers": "^3.0.0",
     "@iconify/react": "^4.1.0",
+    "@mercadopago/sdk-react": "^1.0.2",
     "@mui/lab": "^5.0.0-alpha.124",
     "@mui/material": "^5.11.15",
     "@mui/system": "^5.11.15",
