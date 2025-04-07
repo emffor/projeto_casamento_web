@@ -166,9 +166,6 @@ interface MercadoPagoItem {
 
 interface PayerInfo {
   email: string;
-  // Adicione outros campos se necessário e se for coletá-los do usuário
-  // name?: string;
-  // surname?: string;
 }
 
 interface MercadoPagoPreferenceResponse {
@@ -273,7 +270,7 @@ export default function WeddingGiftList() {
       return;
     }
     if (!MERCADO_PAGO_ACCESS_TOKEN) {
-      setPaymentError('ERRO DE CONFIGURAÇÃO: Access Token do Mercado Pago não definido no código.');
+      setPaymentError('ERRO DE CONFIGURAÇÃO: Access Token do Mercado Pago não definido.');
       return;
     }
 
@@ -285,22 +282,19 @@ export default function WeddingGiftList() {
       title: item.name,
       quantity: item.quantity,
       unit_price: item.price,
-      currency_id: 'BRL', // Defina a moeda correta
+      currency_id: 'BRL',
       picture_url: item.image,
       description: item.name,
     }));
 
-    // Você precisará coletar o email do comprador de alguma forma
     const payerInfo: PayerInfo = {
-      email: 'test_user_123456@testuser.com', // !! SUBSTITUA POR UM EMAIL REAL OU COLETADO !!
-      // Se precisar de mais dados do comprador, colete-os e adicione aqui
+      email: 'TESTUSER2041876861@testuser.com',
     };
 
     try {
       const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
         method: 'POST',
         headers: {
-          // !! INSEGURO: Expondo token no frontend !!
           Authorization: `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
           'Content-Type': 'application/json',
         },
@@ -308,11 +302,11 @@ export default function WeddingGiftList() {
           items: itemsToPay,
           payer: payerInfo,
           back_urls: {
-            success: `${window.location.origin}/success`, // Rota no seu app React
-            failure: `${window.location.origin}/failure`, // Rota no seu app React
-            pending: `${window.location.origin}/pending`, // Rota no seu app React
+            success: `${window.location.origin}/success`,
+            failure: `${window.location.origin}/failure`,
+            pending: `${window.location.origin}/pending`,
           },
-          auto_return: 'approved', // Retorna automaticamente após aprovação
+          auto_return: 'approved',
         }),
       });
 
@@ -323,15 +317,25 @@ export default function WeddingGiftList() {
         if (data.message) errorMessage += data.message;
         if (data.error) errorMessage += ` (${JSON.stringify(data.error)})`;
         if (data.cause) errorMessage += ` Causa: ${JSON.stringify(data.cause)}`;
+        if (response.status === 400 && JSON.stringify(data).includes('collector is a test user')) {
+          errorMessage =
+            'Erro: Você está usando credenciais de Produção com um usuário pagador de Teste. Use credenciais de Teste OU um email de pagador real.';
+        } else if (
+          response.status === 400 &&
+          JSON.stringify(data).includes('payer.email must be a real email')
+        ) {
+          errorMessage =
+            'Erro: Você está usando credenciais de Teste com um email de pagador inválido ou de produção. Use um email de pagador de Teste (ex: test_user_...@testuser.com).';
+        }
         throw new Error(errorMessage || 'Não foi possível criar a preferência.');
       }
 
-      if (data.init_point) {
-        window.location.href = data.init_point;
-      } else if (data.sandbox_init_point) {
+      if (data.sandbox_init_point) {
         window.location.href = data.sandbox_init_point;
+      } else if (data.init_point) {
+        window.location.href = data.init_point;
       } else {
-        throw new Error('Resposta da API não contém init_point.');
+        throw new Error('Resposta da API não contém init_point ou sandbox_init_point.');
       }
     } catch (err: any) {
       console.error('Erro ao criar preferência diretamente:', err);
