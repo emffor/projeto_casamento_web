@@ -43,6 +43,7 @@
     "@mui/system": "^5.11.15",
     "@mui/x-date-pickers": "^6.0.3",
     "@supabase/supabase-js": "^2.49.4",
+    "axios": "^1.8.4",
     "date-fns": "^2.29.3",
     "framer-motion": "^10.9.2",
     "google-map-react": "^2.2.0",
