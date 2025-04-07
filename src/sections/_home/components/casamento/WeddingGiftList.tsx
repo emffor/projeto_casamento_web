@@ -23,6 +23,7 @@ import {
   Paper,
   useMediaQuery,
   useTheme,
+  CircularProgress,
 } from '@mui/material';
 import { keyframes } from '@emotion/react';
 import Iconify from 'src/components/iconify';
@@ -44,7 +45,6 @@ const StyledRoot = styled('div')(({ theme }) => ({
     top: 0,
     left: 0,
     right: 0,
-    background: `linear-gradient(to right, ${theme.palette.primary.light}, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
   },
 }));
 
@@ -90,9 +90,9 @@ const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
   backgroundSize: 'contain',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
-  backgroundColor: theme.palette.background.paper,
-  margin: theme.spacing(2, 2, 0, 2),
-  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.grey[200],
+  margin: theme.spacing(1),
+  borderRadius: theme.shape.borderRadius / 2,
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -146,8 +146,42 @@ const LoadMoreButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+}
+
+interface MercadoPagoItem {
+  id: string;
+  title: string;
+  quantity: number;
+  unit_price: number;
+  currency_id?: string;
+  picture_url?: string;
+  description?: string;
+}
+
+interface PayerInfo {
+  email: string;
+  // Adicione outros campos se necessário e se for coletá-los do usuário
+  // name?: string;
+  // surname?: string;
+}
+
+interface MercadoPagoPreferenceResponse {
+  id: string;
+  init_point: string;
+  sandbox_init_point: string;
+  message?: string;
+  error?: any;
+  cause?: any;
+}
+
 export default function WeddingGiftList() {
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [openCartModal, setOpenCartModal] = useState(false);
   const [currentPage, setCurrentPage] = useState('list');
   const [visibleItems, setVisibleItems] = useState(12);
@@ -157,7 +191,13 @@ export default function WeddingGiftList() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  const MERCADO_PAGO_ACCESS_TOKEN = process.env.REACT_APP_MERCADO_PAGO_ACCESS_TOKEN;
+
   const handleAddToCart = (gift: any) => {
+    setPaymentError(null);
     const existingItem = cartItems.find((item) => item.id === gift.id);
     if (existingItem) {
       setCartItems(
@@ -171,6 +211,7 @@ export default function WeddingGiftList() {
   };
 
   const handleRemoveFromCart = (giftId: number) => {
+    setPaymentError(null);
     setCartItems(cartItems.filter((item) => item.id !== giftId));
   };
 
@@ -188,7 +229,7 @@ export default function WeddingGiftList() {
     setOpenGiftModal(false);
   };
 
-  const handleViewCart = () => {
+  const handleGoToCartView = () => {
     setCurrentPage('cart');
     setOpenCartModal(false);
     setOpenGiftModal(false);
@@ -218,7 +259,7 @@ export default function WeddingGiftList() {
     }
   };
 
-  const handleAddToCartAndFinalize = () => {
+  const handleAddToCartAndGoToCartView = () => {
     if (selectedGift) {
       handleAddToCart(selectedGift);
       setOpenGiftModal(false);
@@ -226,7 +267,79 @@ export default function WeddingGiftList() {
     }
   };
 
-  // Exibe apenas os itens visíveis
+  const handleProceedToPayment = async () => {
+    if (cartItems.length === 0) {
+      setPaymentError('Seu carrinho está vazio.');
+      return;
+    }
+    if (!MERCADO_PAGO_ACCESS_TOKEN) {
+      setPaymentError('ERRO DE CONFIGURAÇÃO: Access Token do Mercado Pago não definido no código.');
+      return;
+    }
+
+    setIsLoadingPayment(true);
+    setPaymentError(null);
+
+    const itemsToPay: MercadoPagoItem[] = cartItems.map((item) => ({
+      id: String(item.id),
+      title: item.name,
+      quantity: item.quantity,
+      unit_price: item.price,
+      currency_id: 'BRL', // Defina a moeda correta
+      picture_url: item.image,
+      description: item.name,
+    }));
+
+    // Você precisará coletar o email do comprador de alguma forma
+    const payerInfo: PayerInfo = {
+      email: 'test_user_123456@testuser.com', // !! SUBSTITUA POR UM EMAIL REAL OU COLETADO !!
+      // Se precisar de mais dados do comprador, colete-os e adicione aqui
+    };
+
+    try {
+      const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+        method: 'POST',
+        headers: {
+          // !! INSEGURO: Expondo token no frontend !!
+          Authorization: `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: itemsToPay,
+          payer: payerInfo,
+          back_urls: {
+            success: `${window.location.origin}/success`, // Rota no seu app React
+            failure: `${window.location.origin}/failure`, // Rota no seu app React
+            pending: `${window.location.origin}/pending`, // Rota no seu app React
+          },
+          auto_return: 'approved', // Retorna automaticamente após aprovação
+        }),
+      });
+
+      const data: MercadoPagoPreferenceResponse = await response.json();
+
+      if (!response.ok || data.error) {
+        let errorMessage = `Erro ${response.status}: `;
+        if (data.message) errorMessage += data.message;
+        if (data.error) errorMessage += ` (${JSON.stringify(data.error)})`;
+        if (data.cause) errorMessage += ` Causa: ${JSON.stringify(data.cause)}`;
+        throw new Error(errorMessage || 'Não foi possível criar a preferência.');
+      }
+
+      if (data.init_point) {
+        window.location.href = data.init_point;
+      } else if (data.sandbox_init_point) {
+        window.location.href = data.sandbox_init_point;
+      } else {
+        throw new Error('Resposta da API não contém init_point.');
+      }
+    } catch (err: any) {
+      console.error('Erro ao criar preferência diretamente:', err);
+      setPaymentError(`Erro ao iniciar pagamento: ${err.message || 'Tente novamente.'}`);
+      setIsLoadingPayment(false);
+    }
+  };
+
   const displayedGifts = weddingGifts.slice(0, visibleItems);
   const hasMoreItems = visibleItems < weddingGifts.length;
 
@@ -234,7 +347,7 @@ export default function WeddingGiftList() {
     <StyledRoot>
       <Container>
         <StyledContent>
-          <Title variant="h3">Lista de Presentes</Title>
+          <Title variant={isMobile ? 'h4' : 'h3'}>Nossa Lista de Presentes</Title>
 
           <CartButtonContainer>
             <CartButton
@@ -242,28 +355,43 @@ export default function WeddingGiftList() {
               startIcon={<Iconify icon="eva:shopping-cart-fill" />}
               onClick={handleOpenCart}
               fullWidth={isMobile}
+              size={isMobile ? 'medium' : 'large'}
             >
-              Ver carrinho ({cartItems.length})
+              Ver carrinho ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
             </CartButton>
           </CartButtonContainer>
 
           {currentPage === 'list' && (
             <>
-              <Grid container spacing={3}>
+              <Grid container spacing={isMobile ? 2 : 3}>
                 {displayedGifts.map((gift) => (
                   <Grid item key={gift.id} xs={12} sm={6} md={4} lg={3}>
                     <StyledCard>
                       <StyledCardMedia image={gift.image} title={gift.name} />
-                      <CardContent sx={{ flexGrow: 1, py: 1.5 }}>
+                      <CardContent sx={{ flexGrow: 1, p: 1.5 }}>
                         <Typography
                           gutterBottom
-                          variant="subtitle2"
+                          variant="body1"
                           component="div"
-                          sx={{ height: 40, fontSize: '0.85rem' }}
+                          sx={{
+                            height: '3.2em',
+                            lineHeight: '1.6em',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            fontWeight: 500,
+                            mb: 0.5,
+                          }}
                         >
                           {gift.name}
                         </Typography>
-                        <Typography variant="body1" color="primary" sx={{ fontWeight: 600 }}>
+                        <Typography
+                          variant="h6"
+                          color="primary"
+                          sx={{ fontWeight: 600, fontSize: '1.1rem' }}
+                        >
                           R$ {gift.price.toFixed(2)}
                         </Typography>
                       </CardContent>
@@ -272,6 +400,7 @@ export default function WeddingGiftList() {
                           variant="contained"
                           color="primary"
                           onClick={() => handleOpenGiftModal(gift)}
+                          size="small"
                         >
                           Presentear
                         </StyledButton>
@@ -288,6 +417,7 @@ export default function WeddingGiftList() {
                     color="primary"
                     onClick={handleLoadMore}
                     startIcon={<Iconify icon="eva:refresh-outline" />}
+                    size="large"
                   >
                     Carregar mais presentes
                   </LoadMoreButton>
@@ -297,47 +427,66 @@ export default function WeddingGiftList() {
           )}
 
           {currentPage === 'cart' && (
-            <Paper sx={{ p: 3, mb: 3, maxWidth: 900, mx: 'auto' }}>
+            <Paper sx={{ p: isMobile ? 2 : 3, mb: 3, maxWidth: 900, mx: 'auto' }}>
               <Typography variant="h5" sx={{ mb: 3 }}>
                 Meu carrinho
               </Typography>
 
+              {paymentError && (
+                <Typography color="error" sx={{ mb: 2, textAlign: 'center' }}>
+                  {paymentError}
+                </Typography>
+              )}
+
               {cartItems.length > 0 ? (
                 <>
                   <TableContainer component={Paper} variant="outlined">
-                    <Table>
+                    <Table sx={{ minWidth: isMobile ? 300 : 650 }}>
                       <TableHead>
                         <TableRow>
-                          <TableCell>Descrição do presente</TableCell>
-                          <TableCell align="right">Valor</TableCell>
+                          <TableCell>Presente</TableCell>
+                          <TableCell align="right">Valor Unit.</TableCell>
+                          <TableCell align="center">Qtd.</TableCell>
+                          <TableCell align="right">Subtotal</TableCell>
                           <TableCell align="center">Ações</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {cartItems.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell>
+                            <TableCell component="th" scope="row">
                               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Box
                                   component="img"
                                   src={item.image}
                                   alt={item.name}
-                                  sx={{ width: 60, height: 60, mr: 2, objectFit: 'contain' }}
+                                  sx={{
+                                    width: 50,
+                                    height: 50,
+                                    mr: 2,
+                                    objectFit: 'contain',
+                                    borderRadius: 1,
+                                  }}
                                 />
-                                <Typography variant="body1">{item.name}</Typography>
+                                <Typography variant="body2" sx={{ fontSize: '0.9rem' }}>
+                                  {item.name}
+                                </Typography>
                               </Box>
                             </TableCell>
+                            <TableCell align="right">R$ {item.price.toFixed(2)}</TableCell>
+                            <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="right">
-                              <Typography variant="body1">R$ {item.price.toFixed(2)}</Typography>
+                              R$ {(item.price * item.quantity).toFixed(2)}
                             </TableCell>
                             <TableCell align="center">
-                              <Button
+                              <IconButton
                                 color="error"
+                                size="small"
                                 onClick={() => handleRemoveFromCart(item.id)}
-                                sx={{ textTransform: 'none' }}
+                                title="Remover item"
                               >
-                                Remover
-                              </Button>
+                                <Iconify icon="eva:trash-2-outline" />
+                              </IconButton>
                             </TableCell>
                           </TableRow>
                         ))}
@@ -349,16 +498,37 @@ export default function WeddingGiftList() {
                     <Typography variant="h6">Total: R$ {getTotalPrice().toFixed(2)}</Typography>
                   </Box>
 
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: isMobile ? 'center' : 'space-between',
+                      flexDirection: isMobile ? 'column' : 'row',
+                      gap: 2,
+                      mt: 3,
+                    }}
+                  >
                     <StyledButton
                       variant="outlined"
                       color="primary"
                       onClick={handleContinueShopping}
+                      startIcon={<Iconify icon="eva:arrow-back-outline" />}
                     >
                       Adicionar mais itens
                     </StyledButton>
-                    <StyledButton variant="contained" color="primary">
-                      Continuar compra
+                    <StyledButton
+                      variant="contained"
+                      color="primary"
+                      onClick={handleProceedToPayment}
+                      disabled={isLoadingPayment}
+                      startIcon={
+                        isLoadingPayment ? (
+                          <CircularProgress size={20} color="inherit" />
+                        ) : (
+                          <Iconify icon="mdi:credit-card-check-outline" />
+                        )
+                      }
+                    >
+                      {isLoadingPayment ? 'Processando...' : 'Ir para Pagamento'}
                     </StyledButton>
                   </Box>
                 </>
@@ -380,6 +550,7 @@ export default function WeddingGiftList() {
                     variant="contained"
                     color="primary"
                     onClick={handleContinueShopping}
+                    startIcon={<Iconify icon="eva:gift-outline" />}
                   >
                     Ver lista de presentes
                   </StyledButton>
@@ -390,69 +561,82 @@ export default function WeddingGiftList() {
         </StyledContent>
       </Container>
 
-      <Dialog open={openGiftModal} onClose={handleCloseGiftModal} maxWidth="sm" fullWidth>
-        <DialogContent>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Dialog open={openGiftModal} onClose={handleCloseGiftModal} maxWidth="xs" fullWidth>
+        <DialogContent sx={{ textAlign: 'center', p: isMobile ? 2 : 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: -1, mt: -1, mr: -1 }}>
             <IconButton onClick={handleCloseGiftModal} edge="end">
               <Iconify icon="eva:close-fill" />
             </IconButton>
           </Box>
 
           {selectedGift && (
-            <Box sx={{ textAlign: 'center', py: 2 }}>
+            <>
               <Box
                 component="img"
                 src={selectedGift.image}
                 alt={selectedGift.name}
-                sx={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain', mb: 3 }}
+                sx={{ maxWidth: '150px', maxHeight: '150px', objectFit: 'contain', mb: 2 }}
               />
-              <Typography variant="h5" sx={{ mb: 2 }}>
+              <Typography variant="h6" sx={{ mb: 1 }}>
                 {selectedGift.name}
               </Typography>
-              <Typography variant="h6" color="primary" sx={{ mb: 3 }}>
+              <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
                 R$ {selectedGift.price.toFixed(2)}
               </Typography>
 
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-                Você deseja adicionar este presente ao seu carrinho?
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Adicionar este presente ao carrinho?
               </Typography>
-            </Box>
+            </>
           )}
         </DialogContent>
-        <DialogActions sx={{ justifyContent: 'center', px: 3, pb: 3 }}>
+        <DialogActions
+          sx={{
+            justifyContent: 'center',
+            p: 2,
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: 1,
+          }}
+        >
           <StyledButton
             variant="outlined"
             color="primary"
             onClick={handleAddToCartAndClose}
-            sx={{ mr: 2 }}
+            fullWidth={isMobile}
+            size="medium"
           >
-            Continuar comprando
+            Continuar vendo a lista
           </StyledButton>
-          <StyledButton variant="contained" color="primary" onClick={handleAddToCartAndFinalize}>
-            Finalizar compra
+          <StyledButton
+            variant="contained"
+            color="primary"
+            onClick={handleAddToCartAndGoToCartView}
+            fullWidth={isMobile}
+            size="medium"
+          >
+            Adicionar e ver carrinho
           </StyledButton>
         </DialogActions>
       </Dialog>
 
       <Dialog open={openCartModal} onClose={handleCloseCart} maxWidth="md" fullWidth>
-        <DialogContent>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <DialogContent sx={{ p: isMobile ? 2 : 3 }}>
+          <Box
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}
+          >
+            <Typography variant="h5">Meu carrinho</Typography>
             <IconButton onClick={handleCloseCart} edge="end">
               <Iconify icon="eva:close-fill" />
             </IconButton>
           </Box>
 
-          <Typography variant="h5" sx={{ mb: 3 }}>
-            Meu carrinho
-          </Typography>
-
           {cartItems.length > 0 ? (
             <>
-              <TableContainer component={Paper} variant="outlined">
+              <TableContainer component={Paper} variant="outlined" sx={{ mb: 3 }}>
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Descrição do presente</TableCell>
+                      <TableCell>Presente</TableCell>
                       <TableCell align="right">Valor</TableCell>
                       <TableCell align="center">Ações</TableCell>
                     </TableRow>
@@ -461,27 +645,29 @@ export default function WeddingGiftList() {
                     {cartItems.map((item) => (
                       <TableRow key={item.id}>
                         <TableCell>
-                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                             <Box
                               component="img"
                               src={item.image}
                               alt={item.name}
-                              sx={{ width: 60, height: 60, mr: 2, objectFit: 'contain' }}
+                              sx={{ width: 45, height: 45, objectFit: 'contain', borderRadius: 1 }}
                             />
-                            <Typography variant="body1">{item.name}</Typography>
+                            <Typography variant="body2">
+                              {item.name} (x{item.quantity})
+                            </Typography>
                           </Box>
                         </TableCell>
                         <TableCell align="right">
-                          <Typography variant="body1">R$ {item.price.toFixed(2)}</Typography>
+                          R$ {(item.price * item.quantity).toFixed(2)}
                         </TableCell>
                         <TableCell align="center">
-                          <Button
+                          <IconButton
                             color="error"
+                            size="small"
                             onClick={() => handleRemoveFromCart(item.id)}
-                            sx={{ textTransform: 'none' }}
                           >
-                            Remover
-                          </Button>
+                            <Iconify icon="eva:trash-2-outline" />
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -489,7 +675,7 @@ export default function WeddingGiftList() {
                 </Table>
               </TableContainer>
 
-              <Box sx={{ textAlign: 'right', mt: 3 }}>
+              <Box sx={{ textAlign: 'right', mb: 3 }}>
                 <Typography variant="h6">Total: R$ {getTotalPrice().toFixed(2)}</Typography>
               </Box>
             </>
@@ -497,25 +683,27 @@ export default function WeddingGiftList() {
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <Iconify
                 icon="eva:shopping-cart-outline"
-                width={60}
-                height={60}
-                sx={{ mb: 2, color: 'text.secondary' }}
+                width={50}
+                height={50}
+                sx={{ mb: 1.5, color: 'text.secondary' }}
               />
-              <Typography variant="h6" sx={{ mb: 2 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
                 Seu carrinho está vazio
               </Typography>
-              <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary' }}>
-                Adicione presentes à sua lista para presentear os noivos
+              <Typography variant="body2" color="text.secondary">
+                Continue navegando pela lista!
               </Typography>
             </Box>
           )}
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 3 }}>
-          <Button variant="outlined" onClick={handleCloseCart} sx={{ mr: 1 }}>
+        <DialogActions
+          sx={{ px: isMobile ? 2 : 3, pb: isMobile ? 2 : 3, justifyContent: 'space-between' }}
+        >
+          <Button variant="outlined" onClick={handleCloseCart}>
             Continuar comprando
           </Button>
           {cartItems.length > 0 && (
-            <StyledButton variant="contained" color="primary" onClick={handleViewCart}>
+            <StyledButton variant="contained" color="primary" onClick={handleGoToCartView}>
               Finalizar compra
             </StyledButton>
           )}
