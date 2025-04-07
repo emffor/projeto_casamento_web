@@ -24,7 +24,7 @@ export default function Header({ isOffset }: Props) {
   const theme = useTheme();
 
   return (
-    <AppBar color="transparent" sx={{ boxShadow: 'none' }}>
+    <AppBar color="transparent" sx={{ boxShadow: 'none', paddingLeft: 2, paddingRight: 2 }}>
       <Toolbar
         disableGutters
         sx={{
@@ -49,11 +49,11 @@ export default function Header({ isOffset }: Props) {
         <Logo />
 
         <Stack spacing={1} direction="row" alignItems="center">
-          <SettingsDrawer />
+          {/* <SettingsDrawer /> */}
 
-          <Link to={paths.support} component={RouterLink} variant="subtitle2" color="inherit">
+          {/* <Link to={paths.support} component={RouterLink} variant="subtitle2" color="inherit">
             Need Help?
-          </Link>
+          </Link> */}
         </Stack>
       </Toolbar>
 

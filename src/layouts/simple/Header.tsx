@@ -47,11 +47,11 @@ export default function Header({ isOffset }: Props) {
         <Logo />
 
         <Stack spacing={1} direction="row" alignItems="center">
-          <SettingsDrawer />
+          {/* <SettingsDrawer /> */}
 
-          <Link to={paths.support} component={RouterLink} variant="subtitle2" color="inherit">
+          {/* <Link to={paths.support} component={RouterLink} variant="subtitle2" color="inherit">
             Need Help?
-          </Link>
+          </Link> */}
         </Stack>
       </Toolbar>
 
