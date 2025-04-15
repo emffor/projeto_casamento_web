@@ -65,7 +65,7 @@ export default function HomeHero() {
         <Stack spacing={2} alignItems="center" textAlign="center">
           <ImageContainer>
             <Image
-              alt="Eloan e Bruna"
+              alt="Bruna e Eloan"
               src="/assets/casamento/foto_capa5.png"
               sx={{
                 width: '100%',
@@ -96,7 +96,7 @@ export default function HomeHero() {
               fontWeight={500}
               letterSpacing={1}
             >
-              Eloan
+              Bruna
             </Typography>
             <Typography
               sx={(theme) => ({
@@ -120,7 +120,7 @@ export default function HomeHero() {
               fontWeight={400}
               letterSpacing={1}
             >
-              Bruna
+              Eloan
             </Typography>
           </Stack>
           <Typography
@@ -138,7 +138,7 @@ export default function HomeHero() {
             fontWeight={400}
             letterSpacing={1}
           >
-            Eloan
+            Bruna
             <Box
               component="span"
               sx={(theme) => ({
@@ -149,7 +149,7 @@ export default function HomeHero() {
             >
               +
             </Box>
-            Bruna
+            Eloan
           </Typography>
 
           <Typography

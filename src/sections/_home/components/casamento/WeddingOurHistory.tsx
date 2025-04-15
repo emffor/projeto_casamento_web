@@ -142,7 +142,7 @@ export default function WeddingOurHistory() {
                     <Icon icon="mdi:heart" width={32} />
                   </HeartIcon>
                   <Image
-                    alt="Eloan e Bruna"
+                    alt="Bruna e Eloan"
                     src="/assets/casamento/amor_left.jpeg"
                     sx={{
                       width: '100%',
@@ -160,7 +160,7 @@ export default function WeddingOurHistory() {
               <Grid item xs={5.5}>
                 <ImageBox>
                   <Image
-                    alt="Eloan e Bruna"
+                    alt="Bruna e Eloan"
                     src="/assets/casamento/amor_right.jpeg"
                     sx={{
                       width: '100%',
