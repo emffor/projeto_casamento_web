@@ -7,6 +7,7 @@ import WeddingConfirm from '../components/casamento/WeddingConfirm';
 import WeddingCeremony from '../components/casamento/WeddingCeremony';
 import WeddingGiftList from '../components/casamento/WeddingGiftList';
 import WeddingConfirmPresence from '../components/casamento/WeddingConfirmPresence';
+import WeddingMessages from '../components/casamento/WeddingMessages';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,9 @@ export default function HomeView() {
       </div>
       <div id="confirmar-presenca">
         <WeddingConfirmPresence />
+      </div>
+      <div id="mensagens">
+        <WeddingMessages />
       </div>
     </>
   );

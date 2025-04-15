@@ -30,6 +30,7 @@ const WEDDING_NAV_CONFIG = [
   { title: 'Cerimônia', path: '#cerimonia', icon: 'mdi:church' },
   { title: 'Presentes', path: '#presentes', icon: 'mdi:gift-outline' },
   // { title: 'Confirme sua Presença', path: '#confirmar-presenca', icon: 'mdi:account-check' },
+  { title: 'Mensagens', path: '#mensagens', icon: 'mdi:message-text-outline' },
 ];
 
 function ScrollToTop() {
