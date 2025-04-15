@@ -315,7 +315,7 @@ export default function WeddingCeremony() {
             <Title variant="h3">Cerimônia & Recepção</Title>
             <Image
               alt="Cerimônia de Casamento"
-              src="/assets/casamento/igrejinha01.jpeg"
+              src="/assets/casamento/igrejinha03.jpeg"
               ratio="21/9"
               sx={{
                 borderRadius: 2,
