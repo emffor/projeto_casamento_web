@@ -26,7 +26,7 @@ function Logo({ single = false, sx }: LogoProps) {
           ...sx,
         }}
       >
-        <img src="/assets/casamento/E&b.svg" alt="E&B Logo" width="100%" height="100%" />
+        <img src="/assets/casamento/E&b2.png" alt="E&B Logo" width="100%" height="100%" />
       </Box>
     </Link>
   );
