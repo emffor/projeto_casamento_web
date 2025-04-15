@@ -1,5 +1,4 @@
 // ----------------------------------------------------------------------
-
 export function remToPx(value: string) {
   return Math.round(parseFloat(value) * 16);
 }
@@ -28,11 +27,10 @@ declare module '@mui/material/styles' {
   }
 }
 
-const primaryFont = 'Public Sans, sans-serif';
-const secondaryFont = 'Barlow, sans-serif';
+const primaryFont = 'Roboto, sans-serif';
+const secondaryFont = 'Roboto, sans-serif';
 
 // ----------------------------------------------------------------------
-
 const typography = {
   fontFamily: primaryFont,
   fontWeightRegular: 400,
