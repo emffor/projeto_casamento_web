@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Stack, Container, Typography, Paper, Grid, Box } from '@mui/material';
 import { keyframes } from '@emotion/react';
 
-const WEDDING_DATE = '2025-05-31T19:00:00';
+const WEDDING_DATE = process.env.REACT_APP_WEDDING_DATE;
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -134,7 +134,10 @@ export default function WeddingCountDownTimer() {
   });
 
   const calculateTimeLeft = (): TimeLeft => {
-    const difference = +new Date(WEDDING_DATE) - +new Date();
+    if (!WEDDING_DATE) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+    const difference = +new Date(WEDDING_DATE as string) - +new Date();
     let timeLeftData = { days: 0, hours: 0, minutes: 0, seconds: 0 };
 
     if (difference > 0) {
@@ -168,7 +171,7 @@ export default function WeddingCountDownTimer() {
   );
 
   const weddingDateFormatted = useMemo(() => {
-    const date = new Date(WEDDING_DATE);
+    const date = new Date(WEDDING_DATE ?? '');
     return new Intl.DateTimeFormat('pt-BR', {
       day: 'numeric',
       month: 'long',

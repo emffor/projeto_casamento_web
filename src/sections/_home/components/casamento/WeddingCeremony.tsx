@@ -348,21 +348,7 @@ export default function WeddingCeremony() {
                 especial.
               </Typography>
               <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
-                {new Date(
-                  process.env.REACT_APP_WEDDING_DATE || '2025-05-31T19:00:00'
-                ).toLocaleDateString('pt-BR', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
-                , às{' '}
-                {new Date(
-                  process.env.REACT_APP_WEDDING_DATE || '2025-05-31T19:00:00'
-                ).toLocaleTimeString('pt-BR', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  hour12: false,
-                })}
+                {process.env.REACT_APP_WEDDING_DATE}, às {process.env.REACT_APP_WEDDING_TIME}
               </Typography>
               <Typography variant="body2" sx={{ mt: 1, color: theme.palette.text.secondary }}>
                 Centro Educacional da Juventude Padre João Piamarta
