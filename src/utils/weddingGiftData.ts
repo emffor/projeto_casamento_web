@@ -270,7 +270,7 @@ export const weddingGifts = [
     id: 48,
     name: 'Jogo Toalha de Banho Azul - 4 Peças',
     image: '/assets/casamento/presentes/toalhas.png',
-    price: 150.0, // Aumentado do original (126.45)
+    price: 150.0,
     category: 'Cama, Mesa e Banho',
   },
   {
@@ -291,7 +291,7 @@ export const weddingGifts = [
     id: 52,
     name: 'Lixeira Inox 3 litros',
     image: '/assets/casamento/presentes/lixeira.png',
-    price: 150.0, // Aumentado do original (105.00)
+    price: 150.0,
     category: 'Utilidades Domésticas',
   },
   {
@@ -319,7 +319,7 @@ export const weddingGifts = [
     id: 56,
     name: 'Pipoqueira Elétrica sem Óleo',
     image: '/assets/casamento/presentes/pipoqueira.png',
-    price: 150.0, // Aumentado do original (149.99)
+    price: 150.0,
     category: 'Eletrodomésticos',
   },
   {
