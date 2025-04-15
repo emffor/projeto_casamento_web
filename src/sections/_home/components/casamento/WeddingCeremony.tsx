@@ -24,10 +24,10 @@ const MAP_CONFIG = {
   MAX_ZOOM: 20,
   MIN_ZOOM: 10,
   LOCATION: {
-    lat: -3.759428819872061,
-    lng: -38.52312468872212,
-    name: 'Centro Educacional Padre João Piamarta',
-    address: 'Av. Aguanambi, 2479, Aeroporto, Fortaleza - CE, 60415-390',
+    lat: -3.733829,
+    lng: -38.508755,
+    name: 'Igreja das Irmãs Missionárias',
+    address: 'Av. Rui Barbosa, 1246A - Aldeota, Fortaleza - CE, 60150-140',
   },
   API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
 };
@@ -315,7 +315,7 @@ export default function WeddingCeremony() {
             <Title variant="h3">Cerimônia & Recepção</Title>
             <Image
               alt="Cerimônia de Casamento"
-              src="/assets/casamento/igrejapiamarta.png"
+              src="/assets/casamento/igrejinha01.jpeg"
               ratio="21/9"
               sx={{
                 borderRadius: 2,
@@ -337,8 +337,8 @@ export default function WeddingCeremony() {
             <TextContent>
               <Typography variant="body1" paragraph>
                 Gostaríamos muito de contar com a presença de todos vocês no momento em que nossa
-                união será abençoada diante de Deus. A cerimônia será realizada na Capela Nossa
-                Senhora da Assunção do Piamarta.
+                união será abençoada diante de Deus. A cerimônia será realizada na Igreja das Irmãs
+                Missionárias.
               </Typography>
               <Typography
                 variant="body1"
@@ -348,14 +348,25 @@ export default function WeddingCeremony() {
                 especial.
               </Typography>
               <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
-                {process.env.REACT_APP_WEDDING_DATE}, às {process.env.REACT_APP_WEDDING_TIME}
+                {process.env.REACT_APP_WEDDING_DATE
+                  ? (() => {
+                      const date = new Date(process.env.REACT_APP_WEDDING_DATE as string);
+                      const day = date.toLocaleDateString('pt-BR', { day: '2-digit' });
+                      const month = date.toLocaleDateString('pt-BR', { month: 'long' });
+                      const year = date.toLocaleDateString('pt-BR', { year: 'numeric' });
+                      const hour = date.toLocaleTimeString('pt-BR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      });
+                      return `${day} de ${month} de ${year} às ${hour}`;
+                    })()
+                  : ''}
               </Typography>
               <Typography variant="body2" sx={{ mt: 1, color: theme.palette.text.secondary }}>
-                Centro Educacional da Juventude Padre João Piamarta
+                Igreja das Irmãs Missionárias
                 <br />
-                Avenida Aguanambi, 2479, Bairro Aeroporto
+                Av. Rui Barbosa, 1246A - Aldeota, Fortaleza - CE
                 <br />
-                Fortaleza - CE, 60415-390
               </Typography>
             </TextContent>
 

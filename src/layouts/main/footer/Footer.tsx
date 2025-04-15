@@ -18,7 +18,7 @@ export default function Footer() {
     <Container sx={{ py: 8, textAlign: 'center' }}>
       <Logo single />
       <Typography variant="caption" component="div" sx={{ color: 'text.secondary' }}>
-        © {currentYear} | Eloan & Bruna | Todos os direitos reservados
+        © {currentYear} | Bruna & Eloan | Todos os direitos reservados
       </Typography>
     </Container>
   );
@@ -38,7 +38,7 @@ export default function Footer() {
               <Stack alignItems="flex-start" spacing={3}>
                 <Logo />
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Casamento de Eloan & Bruna
+                  Casamento de Bruna & Eloan
                 </Typography>
               </Stack>
               <Stack spacing={2}>
@@ -64,7 +64,7 @@ export default function Footer() {
           sx={{ py: 3, textAlign: 'center' }}
         >
           <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-            © {currentYear} | Eloan & Bruna | Todos os direitos reservados
+            © {currentYear} | Bruna & Eloan | Todos os direitos reservados
           </Typography>
         </Stack>
       </Container>

@@ -196,7 +196,7 @@ export default function WeddingOurHistory() {
 
                 {/* <Divider sx={{ my: 3 }} /> */}
 
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+                {/* <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
                   <Button
                     variant="outlined"
                     color="primary"
@@ -212,7 +212,7 @@ export default function WeddingOurHistory() {
                   >
                     Ver mais fotos
                   </Button>
-                </Box>
+                </Box> */}
               </TextContent>
             </Grid>
           </Grid>

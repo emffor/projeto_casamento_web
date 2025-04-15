@@ -8,7 +8,7 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Eloan & Bruna</title>
+        <title>Bruna & Eloan</title>
       </Helmet>
 
       <HomeView />
