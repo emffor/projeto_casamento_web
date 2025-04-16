@@ -28,8 +28,8 @@ const WEDDING_NAV_CONFIG = [
   { title: 'Confirmação', path: '#confirmacao', icon: 'mdi:check-circle-outline' },
   { title: 'O Casal', path: '#casal', icon: 'mdi:heart' },
   { title: 'Cerimônia', path: '#cerimonia', icon: 'mdi:church' },
+  { title: 'Recepção', path: '#recepcao', icon: 'mdi:glass-cocktail' },
   { title: 'Presentes', path: '#presentes', icon: 'mdi:gift-outline' },
-  // { title: 'Confirme sua Presença', path: '#confirmar-presenca', icon: 'mdi:account-check' },
   { title: 'Mensagens', path: '#mensagens', icon: 'mdi:message-text-outline' },
 ];
 

@@ -1,4 +1,3 @@
-// src/components/casamento/WeddingCeremony.tsx
 import React, { useState, useMemo, useCallback } from 'react';
 import { styled } from '@mui/material/styles';
 import {
@@ -20,19 +19,18 @@ import { keyframes } from '@emotion/react';
 import GoogleMapReact from 'google-map-react';
 import { Icon } from '@iconify/react';
 
-const MAP_CONFIG = {
+const MAP_CONFIG_RECEPTION = {
   INITIAL_ZOOM: 15,
   MAX_ZOOM: 20,
   MIN_ZOOM: 10,
   LOCATION: {
-    lat: -3.733829,
-    lng: -38.508755,
-    name: 'Igreja das Irmãs Missionárias',
-    address: 'Av. Rui Barbosa, 1246A - Aldeota, Fortaleza - CE, 60150-140',
+    lat: -3.73,
+    lng: -38.503,
+    name: 'Josephine Patisserie',
+    address: 'R. Norvinda Píres, 22 - Aldeota, Fortaleza - CE, 60125-280',
   },
   API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
 };
-
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -42,10 +40,9 @@ const pulseAnimation = keyframes`
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 `;
-
 const StyledRoot = styled('div')(({ theme }) => ({
   padding: theme.spacing(10, 2),
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.palette.background.paper,
 }));
 const StyledContent = styled(Box)({
   textAlign: 'center',
@@ -149,7 +146,6 @@ const LayersButton = styled(IconButton)(({ theme }) => ({
   boxShadow: theme.shadows[2],
   '&:hover': { backgroundColor: theme.palette.background.default },
 }));
-
 interface LocationMarkerProps {
   lat: number;
   lng: number;
@@ -171,31 +167,29 @@ const LocationMarker: React.FC<LocationMarkerProps> = () => (
     style={{
       position: 'absolute',
       transform: 'translate(-50%, -100%)',
-      animation: `${pulseAnimation} 2s infinite ease-in-out`,
+      animation: `${pulseAnimation} 2s infinite.ease`,
     }}
   >
     <Icon icon="mdi:map-marker" style={{ fontSize: 40, color: 'red' }} />
   </div>
 );
-
-export default function WeddingCeremony() {
+export default function WeddingReception() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [zoom, setZoom] = useState(MAP_CONFIG.INITIAL_ZOOM);
+  const [zoom, setZoom] = useState(MAP_CONFIG_RECEPTION.INITIAL_ZOOM);
   const [mapType, setMapType] = useState<MapTypeId>('roadmap');
   const [layersAnchorEl, setLayersAnchorEl] = useState<null | HTMLElement>(null);
   const layersMenuOpen = Boolean(layersAnchorEl);
   const mapCenter = useMemo(
-    () => ({ lat: MAP_CONFIG.LOCATION.lat, lng: MAP_CONFIG.LOCATION.lng }),
+    () => ({ lat: MAP_CONFIG_RECEPTION.LOCATION.lat, lng: MAP_CONFIG_RECEPTION.LOCATION.lng }),
     []
   );
-
   const handleZoomIn = useCallback(
-    () => setZoom((prev) => Math.min(prev + 1, MAP_CONFIG.MAX_ZOOM)),
+    () => setZoom((prev) => Math.min(prev + 1, MAP_CONFIG_RECEPTION.MAX_ZOOM)),
     []
   );
   const handleZoomOut = useCallback(
-    () => setZoom((prev) => Math.max(prev - 1, MAP_CONFIG.MIN_ZOOM)),
+    () => setZoom((prev) => Math.max(prev - 1, MAP_CONFIG_RECEPTION.MIN_ZOOM)),
     []
   );
   const handleExpandMap = useCallback(
@@ -248,18 +242,18 @@ export default function WeddingCeremony() {
     }),
     [mapType]
   );
-  const isGoogleMapsEnabled = Boolean(MAP_CONFIG.API_KEY);
+  const isGoogleMapsEnabled = Boolean(MAP_CONFIG_RECEPTION.API_KEY);
 
   return (
     <StyledRoot>
       <Container maxWidth="md">
         <Fade in timeout={800}>
           <StyledContent>
-            <LeafIcon src="/assets/casamento/cerimonia2.png" alt="Decoração Cerimônia" />
-            <Title variant="h3">Cerimônia</Title>
+            <LeafIcon src="/assets/casamento/josephine.png" alt="Decoração Recepção" />
+            <Title variant="h3">Recepção</Title>
             <Image
-              alt="Cerimônia de Casamento"
-              src="/assets/casamento/igrejinha03.jpeg"
+              alt="Recepção Casamento"
+              src="/assets/casamento/josephine.png"
               ratio="21/9"
               sx={{
                 borderRadius: 2,
@@ -275,32 +269,21 @@ export default function WeddingCeremony() {
             />
             <TextContent>
               <Typography variant="body1" paragraph>
-                Gostaríamos muito de contar com a presença de todos vocês no momento em que nossa
-                união será abençoada diante de Deus. A cerimônia será realizada na Igreja das Irmãs
-                Missionárias.
+                Após a cerimônia, celebraremos nossa recepção na Josephine Patisserie.
               </Typography>
               <Typography
                 variant="body1"
                 sx={{ fontWeight: 500, color: theme.palette.primary.main }}
               >
-                Seremos extremamente pontuais e contamos com sua participação neste momento
-                especial.
+                Venha comemorar conosco este momento especial!
               </Typography>
               <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
-                {process.env.REACT_APP_WEDDING_DATE
-                  ? new Date(process.env.REACT_APP_WEDDING_DATE).toLocaleString('pt-BR', {
-                      day: '2-digit',
-                      month: 'long',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })
-                  : ''}
+                31 de maio de 2025 às 10:00
               </Typography>
               <Typography variant="body2" sx={{ mt: 1, color: theme.palette.text.secondary }}>
-                Igreja das Irmãs Missionárias
+                Josephine Patisserie
                 <br />
-                Av. Rui Barbosa, 1246A - Aldeota, Fortaleza - CE
+                R. Norvinda Píres, 22 - Aldeota, Fortaleza - CE, 60125-280
               </Typography>
             </TextContent>
 
@@ -311,10 +294,10 @@ export default function WeddingCeremony() {
                     variant="subtitle1"
                     sx={{ fontWeight: 600, color: theme.palette.primary.main }}
                   >
-                    {MAP_CONFIG.LOCATION.name}
+                    {MAP_CONFIG_RECEPTION.LOCATION.name}
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 0.5 }}>
-                    {MAP_CONFIG.LOCATION.address}
+                    {MAP_CONFIG_RECEPTION.LOCATION.address}
                   </Typography>
                   <Button
                     size="small"
@@ -381,7 +364,7 @@ export default function WeddingCeremony() {
                   </IconButton>
                 )}
                 <GoogleMapReact
-                  bootstrapURLKeys={{ key: MAP_CONFIG.API_KEY }}
+                  bootstrapURLKeys={{ key: MAP_CONFIG_RECEPTION.API_KEY }}
                   center={mapCenter}
                   zoom={zoom}
                   options={mapOptions}
