@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Container, Typography, Grid, Button, Divider } from '@mui/material';
+import { Box, Container, Typography, Grid } from '@mui/material';
 import Image from 'src/components/image';
 import { keyframes } from '@emotion/react';
 import { Icon } from '@iconify/react';

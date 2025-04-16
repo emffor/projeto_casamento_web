@@ -2,7 +2,7 @@ import React from 'react';
 import { m } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { Box, Button, Typography, Container } from '@mui/material';
+import { Button, Typography, Container } from '@mui/material';
 
 import Iconify from 'src/components/iconify';
 import { MotionContainer, varFade } from 'src/components/animate';
