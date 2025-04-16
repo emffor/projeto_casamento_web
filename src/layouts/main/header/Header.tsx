@@ -1,14 +1,17 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
-  Box,
-  Stack,
-  Button,
   AppBar,
   Toolbar,
   Container,
+  Box,
   IconButton,
-  Tooltip,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
   useScrollTrigger,
   Zoom,
   Fab,
@@ -19,225 +22,163 @@ import useResponsive from 'src/hooks/useResponsive';
 import { bgBlur } from 'src/utils/cssStyles';
 import { HEADER } from 'src/config-global';
 import Logo from 'src/components/logo';
-import { NavMobile, NavDesktop } from '../nav';
 import HeaderShadow from '../../components/HeaderShadow';
 
-const WEDDING_NAV_CONFIG = [
-  { title: 'Início', path: '#hero', icon: 'mdi:home' },
-  { title: 'Contagem', path: '#contagem', icon: 'mdi:clock-outline' },
-  { title: 'Confirmação', path: '#confirmacao', icon: 'mdi:check-circle-outline' },
-  { title: 'O Casal', path: '#casal', icon: 'mdi:heart' },
-  { title: 'Cerimônia', path: '#cerimonia', icon: 'mdi:church' },
-  { title: 'Recepção', path: '#recepcao', icon: 'mdi:glass-cocktail' },
-  { title: 'Presentes', path: '#presentes', icon: 'mdi:gift-outline' },
-  { title: 'Mensagens', path: '#mensagens', icon: 'mdi:message-text-outline' },
+const NAV_ITEMS = [
+  { label: 'Início', id: 'hero', icon: 'mdi:home' },
+  { label: 'Contagem', id: 'contagem', icon: 'mdi:clock-outline' },
+  { label: 'Confirmação', id: 'confirmacao', icon: 'mdi:check-circle-outline' },
+  { label: 'O Casal', id: 'casal', icon: 'mdi:heart' },
+  { label: 'Cerimônia', id: 'cerimonia', icon: 'mdi:church' },
+  { label: 'Recepção', id: 'recepcao', icon: 'mdi:glass-cocktail' },
+  { label: 'Presentes', id: 'presentes', icon: 'mdi:gift-outline' },
+  { label: 'Mensagens', id: 'mensagens', icon: 'mdi:message-text-outline' },
 ];
 
-function ScrollToTop() {
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 100,
-  });
-
-  const handleClick = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
-
-  return (
-    <Zoom in={trigger}>
-      <Box
-        onClick={handleClick}
-        role="presentation"
-        sx={{
-          position: 'fixed',
-          bottom: 16,
-          right: 16,
-          zIndex: 9,
-        }}
-      >
-        <Fab color="primary" size="small" aria-label="scroll back to top">
-          <Icon icon="mdi:arrow-up" width={24} />
-        </Fab>
-      </Box>
-    </Zoom>
-  );
-}
-
-interface HeaderProps {
-  headerOnDark: boolean;
-}
-
-export default function Header({ headerOnDark }: HeaderProps) {
+export default function Header({ headerOnDark }: { headerOnDark?: boolean }) {
   const theme = useTheme();
   const isMdUp = useResponsive('up', 'md');
   const isOffset = useOffSetTop();
-  const [activeSection, setActiveSection] = useState<string>('hero');
+  const [activeSection, setActiveSection] = useState('hero');
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  React.useEffect(() => {
-    const handleScroll = () => {
-      const sections = WEDDING_NAV_CONFIG.map((item) => item.path.substring(1));
-
-      let current = '';
-      let minDistance = Number.MAX_VALUE;
-
-      sections.forEach((section) => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const distance = Math.abs(rect.top);
-
-          if (distance < minDistance) {
-            minDistance = distance;
-            current = section;
+  // Handle scroll for active link
+  useEffect(() => {
+    const onScroll = () => {
+      let closest = activeSection;
+      let minDist = Infinity;
+      NAV_ITEMS.forEach(({ id }) => {
+        const el = document.getElementById(id);
+        if (el) {
+          const dist = Math.abs(el.getBoundingClientRect().top);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = id;
           }
         }
       });
-
-      if (current && current !== activeSection) {
-        setActiveSection(current);
-      }
+      if (closest !== activeSection) setActiveSection(closest);
     };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, [activeSection]);
 
-  const scrollToSection = useCallback(
-    (sectionId: string) => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        const headerOffset = isMdUp ? HEADER.H_MAIN_DESKTOP : HEADER.H_MOBILE;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth',
-        });
-      }
+  const scrollTo = useCallback(
+    (id: string) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const offset = isMdUp ? HEADER.H_MAIN_DESKTOP : HEADER.H_MOBILE;
+      const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+      setDrawerOpen(false);
     },
     [isMdUp]
   );
 
-  const appBarStyle = useMemo(() => {
-    return {
+  const appBarSx = useMemo(
+    () => ({
       boxShadow: 'none',
+      transition: theme.transitions.create(['background-color', 'height'], {
+        duration: theme.transitions.duration.shortest,
+      }),
       ...(isOffset && {
         ...bgBlur({ color: theme.palette.background.default }),
-        backdropFilter: 'blur(8px)',
+        backdropFilter: 'blur(6px)',
       }),
-    };
-  }, [isOffset, theme]);
+    }),
+    [isOffset, theme]
+  );
 
   return (
     <>
-      <AppBar color="transparent" sx={appBarStyle}>
+      <AppBar position="fixed" color="transparent" sx={appBarSx}>
         <Toolbar
           disableGutters
           sx={{
-            height: {
-              xs: HEADER.H_MOBILE,
-              md: HEADER.H_MAIN_DESKTOP,
-            },
-            transition: theme.transitions.create(['height', 'background-color'], {
-              easing: theme.transitions.easing.easeInOut,
-              duration: theme.transitions.duration.shorter,
-            }),
-            ...(headerOnDark && {
-              color: 'common.white',
-            }),
-            ...(isOffset && {
-              color: 'text.primary',
-              height: {
-                md: HEADER.H_MAIN_DESKTOP - 16,
-              },
-            }),
+            px: 2,
+            height: { xs: HEADER.H_MOBILE, md: HEADER.H_MAIN_DESKTOP },
+            ...(headerOnDark && { color: '#fff' }),
+            ...(isOffset && { color: theme.palette.text.primary }),
           }}
         >
-          <Container sx={{ height: 1, display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ lineHeight: 0, position: 'relative' }}>
+          <Container
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Logo />
             </Box>
 
-            {isMdUp && (
-              <NavDesktop
-                data={WEDDING_NAV_CONFIG.map((item) => ({
-                  ...item,
-                  active: `#${activeSection}` === item.path,
-                  icon: <Icon icon={item.icon} />,
-                }))}
-              />
-            )}
-
-            <Stack
-              spacing={2}
-              flexGrow={1}
-              direction="row"
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              {isMdUp && (
-                <>
-                  <Tooltip title="Lista de Presentes">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => scrollToSection('presentes')}
-                      startIcon={<Icon icon="mdi:gift" />}
-                      sx={{
-                        borderRadius: '20px',
-                        transition: 'all 0.2s',
-                        '&:hover': {
-                          transform: 'translateY(-3px)',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-                        },
-                      }}
-                    >
-                      Lista de Presentes
-                    </Button>
-                  </Tooltip>
-
-                  <Tooltip title="Confirmar Presença">
-                    <IconButton
-                      color="primary"
-                      onClick={() => scrollToSection('confirmar-presenca')}
-                      sx={{
-                        backgroundColor: theme.palette.background.paper,
-                        boxShadow: theme.shadows[1],
-                        '&:hover': {
-                          backgroundColor: theme.palette.primary.lighter,
-                        },
-                      }}
-                    >
-                      <Icon icon="mdi:calendar-check" width={24} />
-                    </IconButton>
-                  </Tooltip>
-                </>
-              )}
-            </Stack>
-            {!isMdUp && (
-              <NavMobile
-                data={WEDDING_NAV_CONFIG.map((item) => ({
-                  ...item,
-                  active: `#${activeSection}` === item.path,
-                  icon: <Icon icon={item.icon} />,
-                }))}
-              />
+            {isMdUp ? (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                {NAV_ITEMS.map(({ label, id, icon }) => (
+                  <Button
+                    key={id}
+                    onClick={() => scrollTo(id)}
+                    sx={{
+                      position: 'relative',
+                      textTransform: 'none',
+                      '&.active::after': {
+                        content: "''",
+                        position: 'absolute',
+                        bottom: -4,
+                        left: 0,
+                        width: '100%',
+                        height: 2,
+                        bgcolor: 'primary.main',
+                        borderRadius: 1,
+                        transition: 'width 0.3s ease',
+                      },
+                    }}
+                    className={activeSection === id ? 'active' : ''}
+                    startIcon={<Icon icon={icon} width={20} />}
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </Box>
+            ) : (
+              <IconButton onClick={() => setDrawerOpen(true)}>
+                <Icon icon="mdi:menu" />
+              </IconButton>
             )}
           </Container>
         </Toolbar>
-
         {isOffset && <HeaderShadow />}
       </AppBar>
 
+      {/* Mobile Drawer */}
+      <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <Box sx={{ width: 240 }} role="presentation" onClick={() => setDrawerOpen(false)}>
+          <List>
+            {NAV_ITEMS.map(({ label, id }) => (
+              <ListItem key={id} disablePadding>
+                <ListItemButton onClick={() => scrollTo(id)} selected={activeSection === id}>
+                  <ListItemText primary={label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+
+      {/* Scroll to Top */}
       <ScrollToTop />
     </>
+  );
+}
+
+function ScrollToTop() {
+  const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 200 });
+  return (
+    <Zoom in={trigger}>
+      <Fab
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        size="small"
+      >
+        <Icon icon="mdi:arrow-up" />
+      </Fab>
+    </Zoom>
   );
 }

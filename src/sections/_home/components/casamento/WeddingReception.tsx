@@ -249,7 +249,6 @@ export default function WeddingReception() {
       <Container maxWidth="md">
         <Fade in timeout={800}>
           <StyledContent>
-            <LeafIcon src="/assets/casamento/josephine.png" alt="Decoração Recepção" />
             <Title variant="h3">Recepção</Title>
             <Image
               alt="Recepção Casamento"
