@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import { Box, Stack, Container, Typography } from '@mui/material';
 import Image from 'src/components/image';
 import { keyframes } from '@emotion/react';
-import MPConfigTest from './casamento/components/MPConfigTest';
 
 const fadeIn = keyframes`
   from {
