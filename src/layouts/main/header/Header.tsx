@@ -37,6 +37,7 @@ const NAV_ITEMS = [
 
 export default function Header({ headerOnDark }: { headerOnDark?: boolean }) {
   const theme = useTheme();
+  const isSmUp = useResponsive('up', 'sm');
   const isMdUp = useResponsive('up', 'md');
   const isOffset = useOffSetTop();
   const [activeSection, setActiveSection] = useState('hero');
@@ -90,27 +91,65 @@ export default function Header({ headerOnDark }: { headerOnDark?: boolean }) {
     [isOffset, theme]
   );
 
+  // Determinar se deve mostrar todos os botões ou usar o modo compacto
+  const showFullNav = isMdUp;
+  const showCompactNav = isSmUp && !isMdUp;
+
   return (
     <>
-      <AppBar position="fixed" color="transparent" sx={appBarSx}>
+      <AppBar
+        position="fixed"
+        color="transparent"
+        sx={{
+          ...appBarSx,
+          height: {
+            xs: HEADER.H_MOBILE,
+            sm: HEADER.H_MOBILE + 10,
+            md: HEADER.H_MAIN_DESKTOP,
+          },
+        }}
+      >
         <Toolbar
           disableGutters
           sx={{
-            px: 2,
-            height: { xs: HEADER.H_MOBILE, md: HEADER.H_MAIN_DESKTOP },
+            px: { xs: 1, sm: 2 },
+            height: {
+              xs: HEADER.H_MOBILE,
+              sm: HEADER.H_MOBILE + 10,
+              md: HEADER.H_MAIN_DESKTOP,
+            },
             ...(headerOnDark && { color: '#fff' }),
             ...(isOffset && { color: theme.palette.text.primary }),
           }}
         >
           <Container
-            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              maxWidth: { xs: '100%', sm: '100%', md: '1200px' },
+            }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                flexShrink: 0,
+              }}
+            >
               <Logo />
             </Box>
 
-            {isMdUp ? (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+            {showFullNav && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: { md: 1, lg: 2 },
+                  flexWrap: 'nowrap',
+                  ml: 2,
+                }}
+              >
                 {NAV_ITEMS.map(({ label, id, icon }) => (
                   <Button
                     key={id}
@@ -118,6 +157,10 @@ export default function Header({ headerOnDark }: { headerOnDark?: boolean }) {
                     sx={{
                       position: 'relative',
                       textTransform: 'none',
+                      padding: { md: '4px 8px', lg: '6px 12px' },
+                      minWidth: 'auto',
+                      fontSize: { md: '0.75rem', lg: '0.875rem' },
+                      whiteSpace: 'nowrap',
                       '&.active::after': {
                         content: "''",
                         position: 'absolute',
@@ -127,17 +170,56 @@ export default function Header({ headerOnDark }: { headerOnDark?: boolean }) {
                         height: 2,
                         bgcolor: 'primary.main',
                         borderRadius: 1,
-                        transition: 'width 0.3s ease',
                       },
                     }}
                     className={activeSection === id ? 'active' : ''}
-                    startIcon={<Icon icon={icon} width={20} />}
+                    startIcon={<Icon icon={icon} width={16} />}
                   >
                     {label}
                   </Button>
                 ))}
               </Box>
-            ) : (
+            )}
+
+            {showCompactNav && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-end',
+                  ml: 2,
+                }}
+              >
+                {NAV_ITEMS.map(({ id, icon }) => (
+                  <IconButton
+                    key={id}
+                    onClick={() => scrollTo(id)}
+                    sx={{
+                      position: 'relative',
+                      padding: '6px',
+                      color: activeSection === id ? 'primary.main' : 'inherit',
+                      '&.active::after': {
+                        content: "''",
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        height: 2,
+                        bgcolor: 'primary.main',
+                        borderRadius: 1,
+                      },
+                    }}
+                    className={activeSection === id ? 'active' : ''}
+                  >
+                    <Icon icon={icon} width={20} />
+                  </IconButton>
+                ))}
+              </Box>
+            )}
+
+            {!isSmUp && (
               <IconButton onClick={() => setDrawerOpen(true)}>
                 <Icon icon="mdi:menu" />
               </IconButton>
@@ -149,11 +231,12 @@ export default function Header({ headerOnDark }: { headerOnDark?: boolean }) {
 
       {/* Mobile Drawer */}
       <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <Box sx={{ width: 240 }} role="presentation" onClick={() => setDrawerOpen(false)}>
+        <Box sx={{ width: 240 }} role="presentation">
           <List>
-            {NAV_ITEMS.map(({ label, id }) => (
+            {NAV_ITEMS.map(({ label, id, icon }) => (
               <ListItem key={id} disablePadding>
                 <ListItemButton onClick={() => scrollTo(id)} selected={activeSection === id}>
+                  <Icon icon={icon} style={{ marginRight: 8 }} />
                   <ListItemText primary={label} />
                 </ListItemButton>
               </ListItem>
