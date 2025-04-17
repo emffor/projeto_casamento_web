@@ -50,11 +50,7 @@ const StyledContent = styled(Box)({
   maxWidth: 1000,
   margin: '0 auto',
 });
-const LeafIcon = styled('img')({
-  width: 100,
-  marginBottom: 16,
-  animation: `${pulseAnimation} 5s infinite ease-in-out`,
-});
+
 const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(4),
