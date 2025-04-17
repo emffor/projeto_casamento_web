@@ -248,7 +248,7 @@ export default function WeddingReception() {
             <Title variant="h3">Recepção</Title>
             <Image
               alt="Recepção Casamento"
-              src="/assets/casamento/josephine.png"
+              src="/assets/casamento/josephine1.png"
               ratio="21/9"
               sx={{
                 borderRadius: 2,
