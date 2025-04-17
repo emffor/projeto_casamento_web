@@ -1,50 +1,36 @@
 import React from 'react';
-import { styled } from '@mui/material/styles';
-import { Box, Stack, Container, Typography } from '@mui/material';
+import { styled, keyframes } from '@mui/material/styles';
+import { Box, Container, Typography, Stack } from '@mui/material';
 import Image from 'src/components/image';
-import { keyframes } from '@emotion/react';
 
+// Keyframes for animations
 const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 `;
 
 const slideUp = keyframes`
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);      opacity: 1; }
 `;
 
 const scaleUp = keyframes`
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+  from { transform: scale(0.8); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 `;
 
-const StyledRoot = styled('div')(({ theme }) => ({
+// Root container
+const StyledRoot = styled('section')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   minHeight: '100vh',
-  background: theme.palette.grey[100],
+  backgroundColor: theme.palette.grey[100],
   padding: theme.spacing(5, 0),
 }));
 
-const ImageContainer = styled(Box)(({ theme }) => ({
+// Animated wrapper for the image
+const AnimatedImage = styled(Box)(({ theme }) => ({
   maxWidth: 450,
   margin: theme.spacing(3, 'auto'),
   position: 'relative',
@@ -52,123 +38,82 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   opacity: 0,
   animationFillMode: 'forwards',
   transition: 'transform 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'scale(1.05)',
-  },
+  '&:hover': { transform: 'scale(1.05)' },
+}));
+
+// A reusable animated typography component
+interface AnimatedTypographyProps {
+  delay?: number;
+}
+const AnimatedTypography = styled(
+  ({ delay, ...other }: AnimatedTypographyProps & React.ComponentProps<typeof Typography>) => (
+    <Typography {...other} />
+  )
+)(({ theme, delay = 0 }) => ({
+  opacity: 0,
+  animation: `${fadeIn} 1s ease-in-out ${delay}s, ${slideUp} 1s ease-in-out ${delay}s`,
+  animationFillMode: 'forwards',
 }));
 
 export default function HomeHero() {
   return (
     <StyledRoot>
       <Container maxWidth="md">
-        <Stack spacing={2} alignItems="center" textAlign="center">
-          <ImageContainer>
+        <Stack spacing={4} alignItems="center" textAlign="center">
+          {/* Hero Image */}
+          <AnimatedImage>
             <Image
-              alt="Bruna e Eloan"
               src="/assets/casamento/foto_capa5.png"
-              sx={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-              }}
+              alt="Bruna e Eloan"
+              sx={{ width: '100%', height: 'auto', display: 'block' }}
             />
-          </ImageContainer>
-          <Stack
-            spacing={0}
-            alignItems="center"
-            sx={(theme) => ({
-              animation: `${fadeIn} 1s ease-in-out 0.5s, ${slideUp} 1s ease-in-out 0.5s`,
-              opacity: 0,
-              animationFillMode: 'forwards',
-              [theme.breakpoints.up('sm')]: {
-                display: 'none',
-              },
-            })}
-          >
-            <Typography
-              sx={(theme) => ({
-                fontSize: 50,
-                fontWeight: 400,
-                color: theme.palette.primary.dark,
-                lineHeight: 1.1,
-              })}
+          </AnimatedImage>
+
+          {/* Names: Unified into a single row */}
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
+            <AnimatedTypography
+              variant="h2"
+              color="primary.dark"
               fontWeight={500}
               letterSpacing={1}
+              delay={0.5}
             >
               Bruna
-            </Typography>
-            <Typography
-              sx={(theme) => ({
-                fontSize: 50,
-                fontWeight: 400,
-                color: theme.palette.primary.light,
-                lineHeight: 1.1,
-              })}
+            </AnimatedTypography>
+
+            <AnimatedTypography
+              variant="h2"
+              color="primary.light"
               fontWeight={500}
               letterSpacing={1}
+              delay={0.5}
             >
               +
-            </Typography>
-            <Typography
-              sx={(theme) => ({
-                fontSize: 50,
-                fontWeight: 400,
-                color: theme.palette.primary.dark,
-                lineHeight: 1.1,
-              })}
-              fontWeight={400}
+            </AnimatedTypography>
+
+            <AnimatedTypography
+              variant="h2"
+              color="primary.dark"
+              fontWeight={500}
               letterSpacing={1}
+              delay={0.5}
             >
               Eloan
-            </Typography>
+            </AnimatedTypography>
           </Stack>
-          <Typography
-            sx={(theme) => ({
-              fontSize: { xs: 0, sm: 48, md: 64 },
-              color: theme.palette.primary.dark,
-              animation: `${fadeIn} 1s ease-in-out 0.5s, ${slideUp} 1s ease-in-out 0.5s`,
-              opacity: 0,
-              animationFillMode: 'forwards',
-              display: 'none',
-              [theme.breakpoints.up('sm')]: {
-                display: 'block',
-              },
-            })}
-            fontWeight={400}
-            letterSpacing={1}
-          >
-            Bruna
-            <Box
-              component="span"
-              sx={(theme) => ({
-                color: theme.palette.primary.light,
-                marginX: theme.spacing(2),
-                fontWeight: 400,
-              })}
-            >
-              +
-            </Box>
-            Eloan
-          </Typography>
 
-          <Typography
-            sx={(theme) => ({
-              fontSize: { xs: 20, sm: 20, md: 24 },
-              color: theme.palette.grey[600],
-              textTransform: 'uppercase',
-              animation: `${fadeIn} 1s ease-in-out 1s, ${slideUp} 1s ease-in-out 1s`,
-              opacity: 0,
-              animationFillMode: 'forwards',
-              fontWeight: 500,
-              letterSpacing: 1,
-            })}
+          {/* Date */}
+          <AnimatedTypography
+            variant="subtitle1"
+            color="textSecondary"
+            letterSpacing={2}
+            fontWeight={500}
+            textTransform="uppercase"
+            delay={1}
           >
-            31 DE MAIO DE 2025
-          </Typography>
+            31 de Maio de 2025
+          </AnimatedTypography>
         </Stack>
-
-        {/* Teste de confiruacao mercado pago */}
-        {/* <MPConfigTest /> */}
       </Container>
     </StyledRoot>
   );
