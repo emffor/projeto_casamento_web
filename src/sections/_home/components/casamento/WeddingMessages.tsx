@@ -1,21 +1,21 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Box,
-  Container,
-  Typography,
-  Paper,
-  CircularProgress,
-  Alert,
-  List,
-  Divider,
-  Avatar,
-  Fade,
-} from '@mui/material';
 import { keyframes } from '@emotion/react';
 import { Icon } from '@iconify/react';
+import {
+  Alert,
+  Avatar,
+  Box,
+  CircularProgress,
+  Container,
+  Divider,
+  Fade,
+  List,
+  Paper,
+  Typography,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react';
 import { supabase } from 'src/utils/supabaseClient';
 
 const fadeIn = keyframes`
@@ -54,8 +54,6 @@ const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
   position: 'relative',
   display: 'inline-block',
-  letterSpacing: 1,
-  textShadow: '0 2px 8px rgba(0,0,0,0.08)',
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -65,7 +63,6 @@ const Title = styled(Typography)(({ theme }) => ({
     width: '80px',
     height: '3px',
     backgroundColor: theme.palette.primary.light,
-    borderRadius: 2,
   },
 }));
 

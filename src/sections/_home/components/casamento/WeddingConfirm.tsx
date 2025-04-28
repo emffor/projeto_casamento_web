@@ -1,19 +1,19 @@
-import React, { useState, useCallback } from 'react';
-import { styled } from '@mui/material/styles';
+import { keyframes } from '@emotion/react';
 import {
   Box,
-  Container,
-  Typography,
   Button,
-  Dialog,
-  TextField,
-  Grid,
-  FormControlLabel,
   Checkbox,
+  Container,
+  Dialog,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { keyframes } from '@emotion/react';
+import { styled } from '@mui/material/styles';
+import React, { useCallback, useState } from 'react';
 import Iconify from 'src/components/iconify';
 import { HEADER } from 'src/config-global';
 
@@ -34,7 +34,6 @@ const StyledRoot = styled('div')(({ theme }) => ({
     left: 0,
     right: 0,
     height: '5px',
-    background: `linear-gradient(to right, ${theme.palette.primary.light}, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
   },
 }));
 
@@ -50,7 +49,7 @@ const ContentWrapper = styled(Box)(({ theme }) => ({
 const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(4),
-  fontWeight: 500,
+  fontWeight: 600,
   position: 'relative',
   display: 'inline-block',
   '&::after': {
@@ -60,7 +59,7 @@ const Title = styled(Typography)(({ theme }) => ({
     left: '50%',
     transform: 'translateX(-50%)',
     width: '80px',
-    height: '2px',
+    height: '3px',
     backgroundColor: theme.palette.primary.light,
   },
 }));

@@ -1,24 +1,24 @@
 // src/components/casamento/WeddingCeremony.tsx
-import React, { useState, useMemo, useCallback } from 'react';
-import { styled } from '@mui/material/styles';
+import { keyframes } from '@emotion/react';
+import { Icon } from '@iconify/react';
 import {
   Box,
-  Container,
-  Typography,
   Button,
-  IconButton,
-  Paper,
-  Tooltip,
+  Container,
   Fade,
-  useMediaQuery,
-  useTheme,
+  IconButton,
   Menu,
   MenuItem,
+  Paper,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import Image from 'src/components/image';
-import { keyframes } from '@emotion/react';
+import { styled } from '@mui/material/styles';
 import GoogleMapReact from 'google-map-react';
-import { Icon } from '@iconify/react';
+import React, { useCallback, useMemo, useState } from 'react';
+import Image from 'src/components/image';
 
 const MAP_CONFIG = {
   INITIAL_ZOOM: 15,

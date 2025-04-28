@@ -1,25 +1,25 @@
-import React, { useState, useCallback } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Box,
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-  Paper,
-  Snackbar,
-  Alert,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  SelectChangeEvent,
-  CircularProgress,
-  InputAdornment,
-} from '@mui/material';
 import { keyframes } from '@emotion/react';
 import { Icon } from '@iconify/react';
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  FormControl,
+  Grid,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Snackbar,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import React, { useCallback, useState } from 'react';
 import { supabase } from 'src/utils/supabaseClient';
 
 const fadeIn = keyframes`
@@ -42,7 +42,7 @@ const StyledContent = styled(Box)(({ theme }) => ({
 const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(4),
-  fontWeight: 500,
+  fontWeight: 600,
   position: 'relative',
   display: 'inline-block',
   '&::after': {
@@ -52,7 +52,7 @@ const Title = styled(Typography)(({ theme }) => ({
     left: '50%',
     transform: 'translateX(-50%)',
     width: '80px',
-    height: '2px',
+    height: '3px',
     backgroundColor: theme.palette.primary.light,
   },
 }));
