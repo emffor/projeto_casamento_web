@@ -1,9 +1,8 @@
+import { Box, Container, Stack, Typography } from '@mui/material';
+import { keyframes, styled } from '@mui/material/styles';
 import React from 'react';
-import { styled, keyframes } from '@mui/material/styles';
-import { Box, Container, Typography, Stack } from '@mui/material';
 import Image from 'src/components/image';
 
-// Keyframes for animations
 const fadeIn = keyframes`
   from { opacity: 0; }
   to   { opacity: 1; }
@@ -19,7 +18,6 @@ const scaleUp = keyframes`
   to   { transform: scale(1);   opacity: 1; }
 `;
 
-// Root container
 const StyledRoot = styled('section')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -27,9 +25,12 @@ const StyledRoot = styled('section')(({ theme }) => ({
   minHeight: '100vh',
   backgroundColor: theme.palette.grey[100],
   padding: theme.spacing(5, 0),
+  marginTop: theme.spacing(2), //
+  [theme.breakpoints.up('md')]: {
+    marginTop: theme.spacing(10),
+  },
 }));
 
-// Animated wrapper for the image
 const AnimatedImage = styled(Box)(({ theme }) => ({
   maxWidth: 450,
   margin: theme.spacing(3, 'auto'),
@@ -37,11 +38,13 @@ const AnimatedImage = styled(Box)(({ theme }) => ({
   animation: `${fadeIn} 1s ease-in-out, ${scaleUp} 1s ease-in-out`,
   opacity: 0,
   animationFillMode: 'forwards',
-  transition: 'transform 0.3s ease-in-out',
-  '&:hover': { transform: 'scale(1.05)' },
+  transition: 'transform 0.3s, box-shadow 0.3s, border-color 0.3s',
+  borderRadius: theme.spacing(3),
+  overflow: 'hidden',
+  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+  border: `4px solid ${theme.palette.primary.contrastText}`,
 }));
 
-// A reusable animated typography component
 interface AnimatedTypographyProps {
   delay?: number;
 }
@@ -60,12 +63,27 @@ export default function HomeHero() {
     <StyledRoot>
       <Container maxWidth="md">
         <Stack spacing={4} alignItems="center" textAlign="center">
-          {/* Hero Image */}
           <AnimatedImage>
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,192,203,0.15) 100%)',
+                zIndex: 1,
+                pointerEvents: 'none',
+              }}
+            />
             <Image
-              src="/assets/casamento/foto_capa5.png"
+              src="/assets/casamento/Foto-72.jpg"
               alt="Bruna e Eloan"
-              sx={{ width: '100%', height: 'auto', display: 'block' }}
+              sx={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                position: 'relative',
+                zIndex: 2,
+              }}
             />
           </AnimatedImage>
 
