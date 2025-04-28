@@ -1,5 +1,5 @@
 import { keyframes } from '@emotion/react';
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'src/components/image';
 
@@ -74,8 +74,6 @@ const TextContent = styled(Box)(({ theme }) => ({
 }));
 
 export default function WeddingOurHistory() {
-  const theme = useTheme();
-
   return (
     <StyledRoot>
       <Container>
