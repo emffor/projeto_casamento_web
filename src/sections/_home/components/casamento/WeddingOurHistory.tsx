@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
-import { styled } from '@mui/material/styles';
-import { Box, Container, Typography, Grid } from '@mui/material';
-import Image from 'src/components/image';
 import { keyframes } from '@emotion/react';
 import { Icon } from '@iconify/react';
+import { Box, Container, Grid, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { useEffect, useRef } from 'react';
+import Image from 'src/components/image';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -26,8 +26,8 @@ const float = keyframes`
 `;
 
 const StyledRoot = styled('div')(({ theme }) => ({
-  padding: theme.spacing(10, 2),
-  backgroundColor: theme.palette.background.neutral,
+  padding: theme.spacing(12, 2, 14, 2),
+  background: `linear-gradient(to bottom, ${theme.palette.background.neutral}, ${theme.palette.background.paper})`,
   position: 'relative',
   overflow: 'hidden',
   '&::before': {
@@ -36,8 +36,8 @@ const StyledRoot = styled('div')(({ theme }) => ({
     top: 0,
     left: 0,
     right: 0,
-    // height: '5px',
-    // background: `linear-gradient(to right, ${theme.palette.primary.light}, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+    height: '3px',
+    background: `linear-gradient(to right, transparent, ${theme.palette.primary.light}, transparent)`,
   },
 }));
 
@@ -49,47 +49,75 @@ const StyledContent = styled(Box)(({ theme }) => ({
 
 const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
-  marginBottom: theme.spacing(4),
-  fontWeight: 500,
+  marginBottom: theme.spacing(6),
+  fontWeight: 600,
   position: 'relative',
   display: 'inline-block',
   '&::after': {
     content: '""',
     position: 'absolute',
-    bottom: -10,
+    bottom: -12,
     left: '50%',
     transform: 'translateX(-50%)',
-    width: '80px',
-    height: '2px',
-    backgroundColor: theme.palette.primary.light,
+    width: '60px',
+    height: '3px',
+    backgroundColor: theme.palette.primary.main,
+    borderRadius: '3px',
   },
 }));
 
 const ImageBox = styled(Box)(({ theme }) => ({
   margin: theme.spacing(2, 0),
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: '12px',
   overflow: 'hidden',
-  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-  transition: 'all 0.3s ease',
+  boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
+  transition: 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)',
   animation: `${fadeIn} 0.8s ease-out forwards`,
   position: 'relative',
   '&:hover': {
-    transform: 'translateY(-10px)',
-    boxShadow: '0 15px 35px rgba(0,0,0,0.15)',
+    transform: 'translateY(-12px) scale(1.02)',
+    boxShadow: '0 20px 50px rgba(0,0,0,0.2)',
+  },
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(to top, rgba(0,0,0,0.2) 0%, transparent 40%)',
+    zIndex: 1,
+    opacity: 0.7,
+    transition: 'opacity 0.3s ease',
+  },
+  '&:hover::before': {
+    opacity: 0.4,
   },
 }));
 
 const TextContent = styled(Box)(({ theme }) => ({
   animation: `${fadeIn} 1s ease-out forwards`,
-  textAlign: 'justify',
-  padding: theme.spacing(3),
+  textAlign: 'left',
+  padding: theme.spacing(4, 4, 4, 5),
   backgroundColor: theme.palette.background.paper,
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+  borderRadius: '12px',
+  boxShadow: '0 8px 25px rgba(0,0,0,0.06)',
+  position: 'relative',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 30,
+    bottom: 30,
+    left: 0,
+    width: '4px',
+    borderRadius: '4px',
+    backgroundColor: theme.palette.primary.light,
+  },
   '& p': {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2.5),
     lineHeight: 1.8,
     color: theme.palette.text.secondary,
+    fontSize: '1.05rem',
   },
 }));
 
@@ -98,88 +126,128 @@ const HeartIcon = styled(Box)(({ theme }) => ({
   position: 'absolute',
   animation: `${heartbeat} 2s infinite`,
   zIndex: 2,
-  opacity: 0.8,
+  opacity: 0.9,
+  filter: 'drop-shadow(0 2px 5px rgba(0,0,0,0.2))',
 }));
 
 const FloatingElement = styled(Box)(({ theme }) => ({
   position: 'absolute',
   animation: `${float} 6s ease-in-out infinite`,
-  opacity: 0.1,
+  opacity: 0.08,
   zIndex: 0,
   color: theme.palette.primary.main,
+  filter: 'blur(1px)',
+}));
+
+const ImageOverlay = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(3),
+  left: theme.spacing(3),
+  right: theme.spacing(3),
+  padding: theme.spacing(2),
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  backdropFilter: 'blur(5px)',
+  borderRadius: '8px',
+  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+  zIndex: 2,
+  opacity: 0,
+  transform: 'translateY(20px)',
+  transition: 'all 0.4s ease',
+  '.image-container:hover &': {
+    opacity: 1,
+    transform: 'translateY(0)',
+  },
 }));
 
 export default function WeddingOurHistory() {
+  const textContentRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = textContentRef.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
   return (
     <StyledRoot>
       {/* Elementos decorativos flutuantes */}
-      <FloatingElement sx={{ top: '10%', left: '5%', fontSize: '4rem' }}>
-        <Icon icon="mdi:heart" width={64} />
+      <FloatingElement sx={{ top: '10%', left: '5%', fontSize: '4.5rem' }}>
+        <Icon icon="mdi:heart" width={80} />
       </FloatingElement>
-      <FloatingElement sx={{ top: '30%', right: '8%', fontSize: '3rem' }}>
-        <Icon icon="mdi:flower" width={48} />
+      <FloatingElement sx={{ top: '35%', right: '7%', fontSize: '3.5rem' }}>
+        <Icon icon="mdi:flower-tulip" width={60} />
       </FloatingElement>
-      <FloatingElement sx={{ bottom: '15%', left: '15%', fontSize: '3.5rem' }}>
-        <Icon icon="mdi:ring" width={56} />
+      <FloatingElement sx={{ bottom: '15%', left: '15%', fontSize: '4rem' }}>
+        <Icon icon="mdi:ring" width={65} />
+      </FloatingElement>
+      <FloatingElement sx={{ bottom: '30%', right: '15%', fontSize: '3rem' }}>
+        <Icon icon="mdi:flower-outline" width={50} />
       </FloatingElement>
 
       <Container>
         <StyledContent>
-          <Title variant="h3">Nossa História</Title>
+          <Title variant="h3" sx={{ fontFamily: 'Playfair Display, serif' }}>
+            Nossa História
+          </Title>
 
-          <Grid container spacing={5} alignItems="center">
-            <Grid
-              item
-              container
-              xs={12}
-              md={6}
-              spacing={3}
-              sx={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <Grid item xs={5.5}>
-                <ImageBox>
-                  <HeartIcon sx={{ top: 10, right: 10 }}>
-                    <Icon icon="mdi:heart" width={32} />
+          <Grid container spacing={6} alignItems="center">
+            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Box className="image-container" sx={{ position: 'relative', width: '100%' }}>
+                <ImageBox sx={{ width: '100%' }}>
+                  <HeartIcon sx={{ top: 20, right: 20 }}>
+                    <Icon icon="mdi:cards-heart" width={36} />
                   </HeartIcon>
                   <Image
                     alt="Bruna e Eloan"
-                    src="/assets/casamento/amor_left.jpeg"
+                    src="/assets/casamento/Foto-185.jpg"
                     sx={{
                       width: '100%',
-                      height: 340,
+                      height: { xs: 380, md: 480 },
                       objectFit: 'cover',
-                      borderRadius: 1,
-                      transition: 'transform 0.5s ease',
+                      borderRadius: '12px',
+                      transition: 'transform 0.7s ease',
                       '&:hover': {
-                        transform: 'scale(1.05)',
+                        transform: 'scale(1.08)',
                       },
                     }}
                   />
                 </ImageBox>
-              </Grid>
-              <Grid item xs={5.5}>
-                <ImageBox>
-                  <Image
-                    alt="Bruna e Eloan"
-                    src="/assets/casamento/amor_right.jpeg"
-                    sx={{
-                      width: '100%',
-                      height: 340,
-                      objectFit: 'cover',
-                      borderRadius: 1,
-                      transition: 'transform 0.5s ease',
-                      '&:hover': {
-                        transform: 'scale(1.05)',
-                      },
-                    }}
-                  />
-                </ImageBox>
-              </Grid>
+              </Box>
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <TextContent>
-                <Typography variant="h5" color="primary.main" gutterBottom sx={{ fontWeight: 500 }}>
+              <TextContent ref={textContentRef}>
+                <Typography
+                  variant="h4"
+                  color="primary.main"
+                  gutterBottom
+                  sx={{
+                    fontWeight: 600,
+                    fontFamily: 'Playfair Display, serif',
+                    mb: 3,
+                    borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+                    pb: 2,
+                  }}
+                >
                   O Nosso Amor
                 </Typography>
 
@@ -193,26 +261,6 @@ export default function WeddingOurHistory() {
                   Vamos nos casar! Estamos preparando tudo com muito carinho para curtirmos cada
                   momento com nossos amigos e familiares queridos!
                 </Typography>
-
-                {/* <Divider sx={{ my: 3 }} /> */}
-
-                {/* <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<Icon icon="mdi:calendar-heart" />}
-                    sx={{
-                      borderRadius: 20,
-                      px: 3,
-                      '&:hover': {
-                        transform: 'translateY(-3px)',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                      },
-                    }}
-                  >
-                    Ver mais fotos
-                  </Button>
-                </Box> */}
               </TextContent>
             </Grid>
           </Grid>
