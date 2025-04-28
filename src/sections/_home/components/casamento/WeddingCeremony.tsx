@@ -1,4 +1,3 @@
-// src/components/casamento/WeddingCeremony.tsx
 import { keyframes } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import {
@@ -30,7 +29,7 @@ const MAP_CONFIG = {
     name: 'Igreja das Irmãs Missionárias',
     address: 'Av. Rui Barbosa, 1246A - Aldeota, Fortaleza - CE, 60150-140',
   },
-  API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
+  API_KEY: process.env.REACT_APP_Maps_API_KEY || '',
 };
 
 const fadeIn = keyframes`
@@ -142,7 +141,6 @@ const RotasButton = styled(ActionButton)(({ theme }) => ({
 const LayersButton = styled(IconButton)(({ theme }) => ({
   position: 'absolute',
   top: 10,
-  right: 100,
   zIndex: 10,
   backgroundColor: theme.palette.background.paper,
   color: theme.palette.text.primary,
@@ -201,18 +199,20 @@ export default function WeddingCeremony() {
   const handleExpandMap = useCallback(
     () =>
       window.open(
-        `https://www.google.com/maps/search/?api=1&query=${mapCenter.lat},${mapCenter.lng}`,
+        `https://www.google.com/maps/search/?api=1&query=${MAP_CONFIG.LOCATION.lat},${MAP_CONFIG.LOCATION.lng}&z=${zoom}`,
         '_blank'
       ),
-    [mapCenter]
+    [zoom]
   );
   const handleOpenRoutes = useCallback(
     () =>
       window.open(
-        `https://www.google.com/maps/dir/?api=1&destination=${mapCenter.lat},${mapCenter.lng}`,
+        `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+          MAP_CONFIG.LOCATION.address
+        )}`,
         '_blank'
       ),
-    [mapCenter]
+    []
   );
   const handleLayersClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => setLayersAnchorEl(e.currentTarget),
@@ -325,12 +325,18 @@ export default function WeddingCeremony() {
                     Mapa ampliado
                   </Button>
                 </MapInfoCard>
+
                 <Tooltip title="Camadas" placement="left">
                   <LayersButton
                     size="small"
                     onClick={handleLayersClick}
                     aria-label="Camadas"
-                    sx={{ [theme.breakpoints.down('sm')]: { right: 60 } }}
+                    sx={{
+                      right: 100,
+                      [theme.breakpoints.down('sm')]: {
+                        right: 70,
+                      },
+                    }}
                   >
                     <Icon icon="mdi:layers" />
                   </LayersButton>
@@ -353,6 +359,7 @@ export default function WeddingCeremony() {
                     </MenuItem>
                   ))}
                 </Menu>
+
                 {!isMobile ? (
                   <RotasButton
                     size="small"
@@ -380,11 +387,14 @@ export default function WeddingCeremony() {
                     <Icon icon="mdi:directions" />
                   </IconButton>
                 )}
+
                 <GoogleMapReact
                   bootstrapURLKeys={{ key: MAP_CONFIG.API_KEY }}
                   center={mapCenter}
                   zoom={zoom}
                   options={mapOptions}
+                  yesIWantToUseGoogleMapApiInternals
+                  onGoogleApiLoaded={({ map, maps }) => {}}
                 >
                   <LocationMarker lat={mapCenter.lat} lng={mapCenter.lng} />
                 </GoogleMapReact>
@@ -416,7 +426,26 @@ export default function WeddingCeremony() {
                 elevation={3}
                 sx={{ p: 3, mt: 4, maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}
               >
-                ...
+                <Typography variant="body1">Mapa indisponível no momento.</Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {MAP_CONFIG.LOCATION.name}
+                  <br />
+                  {MAP_CONFIG.LOCATION.address}
+                </Typography>
+                <Button
+                  sx={{ mt: 2 }}
+                  onClick={() =>
+                    window.open(
+                      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        MAP_CONFIG.LOCATION.address
+                      )}`,
+                      '_blank'
+                    )
+                  }
+                  startIcon={<Icon icon="mdi:map-search-outline" />}
+                >
+                  Ver no Google Maps
+                </Button>
               </Paper>
             )}
           </StyledContent>
