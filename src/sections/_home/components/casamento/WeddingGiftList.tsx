@@ -36,7 +36,7 @@ const fadeIn = keyframes`
 
 const StyledRoot = styled('div')(({ theme }) => ({
   padding: theme.spacing(10, 2),
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.palette.grey[100],
   position: 'relative',
   overflow: 'hidden',
   '&::before': {
@@ -90,7 +90,7 @@ const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
   backgroundSize: 'contain',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
-  backgroundColor: theme.palette.grey[200],
+  // backgroundColor: theme.palette.grey[200],
   margin: theme.spacing(1),
   borderRadius: theme.shape.borderRadius / 2,
 }));

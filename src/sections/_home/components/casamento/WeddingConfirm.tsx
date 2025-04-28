@@ -24,7 +24,7 @@ const fadeIn = keyframes`
 
 const StyledRoot = styled('div')(({ theme }) => ({
   padding: theme.spacing(10, 2),
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.grey[100],
   position: 'relative',
   overflow: 'hidden',
   '&::before': {

@@ -44,7 +44,7 @@ const pulseAnimation = keyframes`
 
 const StyledRoot = styled('div')(({ theme }) => ({
   padding: theme.spacing(10, 2),
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.palette.grey[100],
 }));
 const StyledContent = styled(Box)({
   textAlign: 'center',
