@@ -100,53 +100,66 @@ export default function WeddingOurHistory() {
 
             <Grid item xs={12} md={6}>
               <TextContent>
-                <Typography
+                {/* <Typography
                   variant="h5"
                   color="primary.dark"
                   gutterBottom
                   sx={{ fontWeight: 500, mb: 2 }}
                 >
                   Como Tudo Começou
+                </Typography> */}
+
+                <Typography
+                  variant="body1"
+                  sx={{
+                    mb: 2,
+                    lineHeight: 1.7,
+                    color: 'text.secondary',
+                    fontSize: '1rem',
+                  }}
+                >
+                  Nos conhecemos em 2008 e, desde o início, construímos uma amizade especial. A vida
+                  acabou nos afastando por alguns anos, mas no fim de 2020, uma simples mensagem
+                  pelas redes sociais reacendeu o contato — e parecia que o tempo nunca tivesse
+                  passado.
                 </Typography>
 
                 <Typography
                   variant="body1"
                   sx={{
                     mb: 2,
-                    lineHeight: 1.5,
+                    lineHeight: 1.7,
                     color: 'text.secondary',
                     fontSize: '1rem',
                   }}
                 >
-                  Histórias de amor realmente existem. Muitas vezes, estão mais próximas do que
-                  imaginamos e mais entrelaçadas do que jamais poderíamos prever. A nossa história
-                  não foi diferente. Desde o instante em que trocamos o primeiro olhar, sentimos uma
-                  conexão inexplicável, profunda e intensa. Foi como se naquele breve segundo todo o
-                  universo conspirasse para unir nossos caminhos, marcando o início de uma linda
-                  jornada a dois. O brilho apaixonado daquele momento especial permanece vivo em nós
-                  até hoje, iluminando nossos dias e reafirmando constantemente o motivo pelo qual
-                  decidimos caminhar lado a lado. Cada sorriso trocado, cada desafio superado e cada
-                  conquista celebrada juntos fortaleceu ainda mais esse amor que cresceu e
-                  amadureceu com o passar do tempo.
+                  No dia 24 de fevereiro de 2021, marcamos um café. Desde então, não nos separamos
+                  mais.
                 </Typography>
 
                 <Typography
                   variant="body1"
                   sx={{
-                    lineHeight: 1.5,
+                    mb: 2,
+                    lineHeight: 1.7,
                     color: 'text.secondary',
                     fontSize: '1rem',
                   }}
                 >
-                  E agora, com o coração cheio de alegria e ansiedade, finalmente vamos oficializar
-                  essa união! O grande dia está chegando, e estamos preparando cada detalhe com um
-                  carinho imenso, cuidado especial e muita dedicação. Queremos que essa celebração
-                  seja inesquecível não apenas para nós, mas para todos aqueles que fazem parte da
-                  nossa história. Mal podemos esperar para vivenciar e curtir intensamente cada
-                  instante deste momento mágico ao lado das pessoas que amamos tanto. Amigos e
-                  familiares queridos, vocês são parte essencial desta celebração, e é com enorme
-                  felicidade que contamos os minutos para compartilhar toda essa emoção, amor e
-                  gratidão ao lado de vocês!
+                  Jamais imaginamos que aquela amizade se transformaria em amor e nos traria até
+                  aqui, prestes a formar uma família. Mas hoje sabemos: Deus já havia preparado tudo
+                  com carinho.
+                </Typography>
+
+                <Typography
+                  variant="body1"
+                  sx={{
+                    lineHeight: 1.7,
+                    color: 'text.secondary',
+                    fontSize: '1rem',
+                  }}
+                >
+                  Estamos felizes, gratos e prontos para nos escolhermos todos os dias.
                 </Typography>
               </TextContent>
             </Grid>
