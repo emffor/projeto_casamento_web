@@ -36,6 +36,7 @@ const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 `;
+
 const pulseAnimation = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
@@ -46,23 +47,31 @@ const StyledRoot = styled('div')(({ theme }) => ({
   padding: theme.spacing(10, 2),
   backgroundColor: theme.palette.grey[100],
 }));
+
 const StyledContent = styled(Box)({
   textAlign: 'center',
-  justifyItems: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
   maxWidth: 1000,
   margin: '0 auto',
 });
+
 const LeafIcon = styled('img')({
   width: 100,
-  marginBottom: 16,
+  display: 'block',
+  position: 'relative',
+  margin: '0 auto 16px',
   animation: `${pulseAnimation} 5s infinite ease-in-out`,
 });
+
 const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(4),
   fontWeight: 600,
   position: 'relative',
-  display: 'inline-block',
+  width: '100%',
+  textAlign: 'center',
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -74,6 +83,7 @@ const Title = styled(Typography)(({ theme }) => ({
     backgroundColor: theme.palette.primary.light,
   },
 }));
+
 const TextContent = styled(Paper)(({ theme }) => ({
   animation: `${fadeIn} 1s ease-out forwards`,
   maxWidth: 1000,
@@ -83,6 +93,7 @@ const TextContent = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   '& p': { lineHeight: 1.8, color: theme.palette.text.secondary },
 }));
+
 const MapContainer = styled(Box)(({ theme }) => ({
   height: 400,
   width: '100%',
@@ -95,6 +106,7 @@ const MapContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   [theme.breakpoints.down('sm')]: { height: 280 },
 }));
+
 const MapInfoCard = styled(Paper)(({ theme }) => ({
   position: 'absolute',
   top: 10,
@@ -108,6 +120,7 @@ const MapInfoCard = styled(Paper)(({ theme }) => ({
   '&:hover': { boxShadow: theme.shadows[6], transform: 'translateY(-3px)' },
   '& p': { margin: 0, fontSize: '0.875rem' },
 }));
+
 const MapControls = styled(Paper)(({ theme }) => ({
   position: 'absolute',
   bottom: 10,
@@ -119,6 +132,7 @@ const MapControls = styled(Paper)(({ theme }) => ({
   overflow: 'hidden',
   boxShadow: theme.shadows[3],
 }));
+
 const ActionButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
   fontWeight: 600,
@@ -128,6 +142,7 @@ const ActionButton = styled(Button)(({ theme }) => ({
   '&:hover': { transform: 'translateY(-2px)', boxShadow: theme.shadows[2] },
   '& .MuiButton-startIcon': { marginRight: theme.spacing(0.5) },
 }));
+
 const RotasButton = styled(ActionButton)(({ theme }) => ({
   position: 'absolute',
   top: 10,
@@ -138,6 +153,7 @@ const RotasButton = styled(ActionButton)(({ theme }) => ({
   boxShadow: theme.shadows[2],
   '&:hover': { backgroundColor: theme.palette.primary.dark },
 }));
+
 const LayersButton = styled(IconButton)(({ theme }) => ({
   position: 'absolute',
   top: 10,
@@ -152,18 +168,22 @@ interface LocationMarkerProps {
   lat: number;
   lng: number;
 }
+
 type MapTypeId = 'roadmap' | 'satellite' | 'hybrid' | 'terrain';
+
 interface MapTypeOption {
   id: MapTypeId;
   label: string;
   icon: string;
 }
+
 const MAP_TYPE_OPTIONS: MapTypeOption[] = [
   { id: 'roadmap', label: 'Mapa', icon: 'mdi:map' },
   { id: 'satellite', label: 'Satélite', icon: 'mdi:satellite' },
   { id: 'hybrid', label: 'Híbrido', icon: 'mdi:layers' },
   { id: 'terrain', label: 'Terreno', icon: 'mdi:terrain' },
 ];
+
 const LocationMarker: React.FC<LocationMarkerProps> = () => (
   <div
     style={{
@@ -183,6 +203,7 @@ export default function WeddingCeremony() {
   const [mapType, setMapType] = useState<MapTypeId>('roadmap');
   const [layersAnchorEl, setLayersAnchorEl] = useState<null | HTMLElement>(null);
   const layersMenuOpen = Boolean(layersAnchorEl);
+
   const mapCenter = useMemo(
     () => ({ lat: MAP_CONFIG.LOCATION.lat, lng: MAP_CONFIG.LOCATION.lng }),
     []
@@ -192,10 +213,12 @@ export default function WeddingCeremony() {
     () => setZoom((prev) => Math.min(prev + 1, MAP_CONFIG.MAX_ZOOM)),
     []
   );
+
   const handleZoomOut = useCallback(
     () => setZoom((prev) => Math.max(prev - 1, MAP_CONFIG.MIN_ZOOM)),
     []
   );
+
   const handleExpandMap = useCallback(
     () =>
       window.open(
@@ -204,6 +227,7 @@ export default function WeddingCeremony() {
       ),
     [zoom]
   );
+
   const handleOpenRoutes = useCallback(
     () =>
       window.open(
@@ -214,11 +238,14 @@ export default function WeddingCeremony() {
       ),
     []
   );
+
   const handleLayersClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => setLayersAnchorEl(e.currentTarget),
     []
   );
+
   const handleLayersClose = useCallback(() => setLayersAnchorEl(null), []);
+
   const handleMapTypeChange = useCallback(
     (type: MapTypeId) => {
       setMapType(type);
@@ -226,6 +253,7 @@ export default function WeddingCeremony() {
     },
     [handleLayersClose]
   );
+
   const mapOptions = useMemo(
     () => ({
       fullscreenControl: false,
@@ -248,6 +276,7 @@ export default function WeddingCeremony() {
     }),
     [mapType]
   );
+
   const isGoogleMapsEnabled = Boolean(MAP_CONFIG.API_KEY);
 
   return (
@@ -255,7 +284,17 @@ export default function WeddingCeremony() {
       <Container maxWidth="md">
         <Fade in timeout={800}>
           <StyledContent>
-            <LeafIcon src="/assets/casamento/cerimonia2.png" alt="Decoração Cerimônia" />
+            <Box
+              sx={{
+                position: 'relative',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                mb: 2,
+              }}
+            >
+              <LeafIcon src="/assets/casamento/cerimonia2.png" alt="Decoração Cerimônia" />
+            </Box>
             <Title variant="h3">Cerimônia</Title>
             <Image
               alt="Cerimônia de Casamento"
@@ -303,7 +342,6 @@ export default function WeddingCeremony() {
                 Av. Rui Barbosa, 1246A - Aldeota, Fortaleza - CE
               </Typography>
             </TextContent>
-
             {isGoogleMapsEnabled ? (
               <MapContainer>
                 <MapInfoCard elevation={3}>
@@ -325,7 +363,6 @@ export default function WeddingCeremony() {
                     Mapa ampliado
                   </Button>
                 </MapInfoCard>
-
                 <Tooltip title="Camadas" placement="left">
                   <LayersButton
                     size="small"
@@ -359,7 +396,6 @@ export default function WeddingCeremony() {
                     </MenuItem>
                   ))}
                 </Menu>
-
                 {!isMobile ? (
                   <RotasButton
                     size="small"
@@ -387,7 +423,6 @@ export default function WeddingCeremony() {
                     <Icon icon="mdi:directions" />
                   </IconButton>
                 )}
-
                 <GoogleMapReact
                   bootstrapURLKeys={{ key: MAP_CONFIG.API_KEY }}
                   center={mapCenter}
