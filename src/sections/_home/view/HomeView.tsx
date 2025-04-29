@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ScrollProgress from 'src/components/scroll-progress';
-import useResponsive from 'src/hooks/useResponsive';
 import { HEADER } from 'src/config-global';
-import { HomeHero, CountdownTimer } from '../components';
-import WeddingOurHistory from '../components/casamento/WeddingOurHistory';
-import WeddingConfirm from '../components/casamento/WeddingConfirm';
-import WeddingGiftList from '../components/casamento/WeddingGiftList';
-import WeddingConfirmPresence from '../components/casamento/WeddingConfirmPresence';
-import WeddingMessages from '../components/casamento/WeddingMessages';
-import WeddingReception from '../components/casamento/WeddingReception';
+import useResponsive from 'src/hooks/useResponsive';
+import { CountdownTimer, HomeHero } from '../components';
 import WeddingCeremony from '../components/casamento/WeddingCeremony';
+import WeddingConfirm from '../components/casamento/WeddingConfirm';
+import WeddingConfirmPresence from '../components/casamento/WeddingConfirmPresence';
+import WeddingDressCode from '../components/casamento/WeddingDressCode';
+import WeddingGiftList from '../components/casamento/WeddingGiftList';
+import WeddingMessages from '../components/casamento/WeddingMessages';
+import WeddingOurHistory from '../components/casamento/WeddingOurHistory';
+import WeddingReception from '../components/casamento/WeddingReception';
 
 export default function HomeView() {
   const isMdUp = useResponsive('up', 'md');
@@ -50,6 +51,9 @@ export default function HomeView() {
       </div>
       <div id="presentes">
         <WeddingGiftList />
+      </div>
+      <div id="traje">
+        <WeddingDressCode />
       </div>
       <div id="confirmar-presenca">
         <WeddingConfirmPresence />

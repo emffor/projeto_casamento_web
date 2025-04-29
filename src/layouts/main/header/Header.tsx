@@ -1,27 +1,27 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { Icon } from '@iconify/react';
 import {
   AppBar,
-  Toolbar,
-  Container,
   Box,
-  IconButton,
   Button,
+  Container,
   Drawer,
+  Fab,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
+  Toolbar,
   useScrollTrigger,
   Zoom,
-  Fab,
 } from '@mui/material';
-import { Icon } from '@iconify/react';
+import { useTheme } from '@mui/material/styles';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import Logo from 'src/components/logo';
+import { HEADER } from 'src/config-global';
 import useOffSetTop from 'src/hooks/useOffSetTop';
 import useResponsive from 'src/hooks/useResponsive';
 import { bgBlur } from 'src/utils/cssStyles';
-import { HEADER } from 'src/config-global';
-import Logo from 'src/components/logo';
 import HeaderShadow from '../../components/HeaderShadow';
 
 const NAV_ITEMS = [
@@ -32,6 +32,7 @@ const NAV_ITEMS = [
   { label: 'Cerimônia', id: 'cerimonia', icon: 'mdi:church' },
   { label: 'Recepção', id: 'recepcao', icon: 'mdi:glass-cocktail' },
   { label: 'Presentes', id: 'presentes', icon: 'mdi:gift-outline' },
+  { label: 'Traje', id: 'traje', icon: 'mdi:tshirt-crew' },
   { label: 'Mensagens', id: 'mensagens', icon: 'mdi:message-text-outline' },
 ];
 
@@ -43,7 +44,6 @@ export default function Header({ headerOnDark }: { headerOnDark?: boolean }) {
   const [activeSection, setActiveSection] = useState('hero');
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // Handle scroll for active link
   useEffect(() => {
     const onScroll = () => {
       let closest = activeSection;
@@ -91,7 +91,6 @@ export default function Header({ headerOnDark }: { headerOnDark?: boolean }) {
     [isOffset, theme]
   );
 
-  // Determinar se deve mostrar todos os botões ou usar o modo compacto
   const showFullNav = isMdUp;
   const showCompactNav = isSmUp && !isMdUp;
 
