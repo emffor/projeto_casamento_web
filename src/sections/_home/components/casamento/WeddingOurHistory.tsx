@@ -88,7 +88,8 @@ export default function WeddingOurHistory() {
                   src="/assets/casamento/Foto-185.jpg"
                   sx={{
                     width: '100%',
-                    height: { xs: 350, md: 450 },
+                    // height: { xs: 350, md: 450 },
+                    height: 'auto',
                     objectFit: 'cover',
                     display: 'block',
                     borderRadius: '12px',
@@ -112,28 +113,40 @@ export default function WeddingOurHistory() {
                   variant="body1"
                   sx={{
                     mb: 2,
-                    lineHeight: 1.7,
+                    lineHeight: 1.5,
                     color: 'text.secondary',
                     fontSize: '1rem',
                   }}
                 >
-                  Histórias de amor existem e, às vezes, nem nós mesmos imaginamos o quão
-                  entrelaçadas elas já estão. Desde o primeiro olhar, um brilho intenso e apaixonado
-                  nos conectou, e é essa chama que nos lembra o porquê de chegarmos até aqui, com a
-                  sensação de que o tempo voou...
+                  Histórias de amor realmente existem. Muitas vezes, estão mais próximas do que
+                  imaginamos e mais entrelaçadas do que jamais poderíamos prever. A nossa história
+                  não foi diferente. Desde o instante em que trocamos o primeiro olhar, sentimos uma
+                  conexão inexplicável, profunda e intensa. Foi como se naquele breve segundo todo o
+                  universo conspirasse para unir nossos caminhos, marcando o início de uma linda
+                  jornada a dois. O brilho apaixonado daquele momento especial permanece vivo em nós
+                  até hoje, iluminando nossos dias e reafirmando constantemente o motivo pelo qual
+                  decidimos caminhar lado a lado. Cada sorriso trocado, cada desafio superado e cada
+                  conquista celebrada juntos fortaleceu ainda mais esse amor que cresceu e
+                  amadureceu com o passar do tempo.
                 </Typography>
 
                 <Typography
                   variant="body1"
                   sx={{
-                    lineHeight: 1.7,
+                    lineHeight: 1.5,
                     color: 'text.secondary',
                     fontSize: '1rem',
                   }}
                 >
-                  Agora, vamos nos casar! Estamos preparando cada detalhe com imenso carinho para
-                  celebrar e curtir cada momento precioso ao lado de nossos amigos e familiares
-                  queridos!
+                  E agora, com o coração cheio de alegria e ansiedade, finalmente vamos oficializar
+                  essa união! O grande dia está chegando, e estamos preparando cada detalhe com um
+                  carinho imenso, cuidado especial e muita dedicação. Queremos que essa celebração
+                  seja inesquecível não apenas para nós, mas para todos aqueles que fazem parte da
+                  nossa história. Mal podemos esperar para vivenciar e curtir intensamente cada
+                  instante deste momento mágico ao lado das pessoas que amamos tanto. Amigos e
+                  familiares queridos, vocês são parte essencial desta celebração, e é com enorme
+                  felicidade que contamos os minutos para compartilhar toda essa emoção, amor e
+                  gratidão ao lado de vocês!
                 </Typography>
               </TextContent>
             </Grid>
