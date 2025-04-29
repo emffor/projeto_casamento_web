@@ -218,7 +218,7 @@ export default function WeddingConfirm() {
             variant="h5"
             sx={{
               my: 4,
-              color: 'primary.dark',
+              color: 'primary.main',
               fontWeight: 400,
             }}
           >
