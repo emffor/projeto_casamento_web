@@ -29,7 +29,7 @@ const MAP_CONFIG = {
     name: 'Igreja das Irmãs Missionárias',
     address: 'Av. Rui Barbosa, 1246A - Aldeota, Fortaleza - CE, 60150-140',
   },
-  API_KEY: process.env.REACT_APP_Maps_API_KEY || '',
+  API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
 };
 
 const fadeIn = keyframes`
