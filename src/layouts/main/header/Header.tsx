@@ -27,7 +27,7 @@ import useResponsive from 'src/hooks/useResponsive';
 import { bgBlur } from 'src/utils/cssStyles';
 import HeaderShadow from '../../components/HeaderShadow';
 
-// Itens agrupados em categorias para melhor organização
+// Itens de navegação atualizados conforme solicitado
 const NAV_ITEMS = [
   { label: 'Início', id: 'hero', icon: 'mdi:home' },
   {
@@ -36,18 +36,12 @@ const NAV_ITEMS = [
     children: [
       { label: 'Contagem', id: 'contagem', icon: 'mdi:clock-outline' },
       { label: 'O Casal', id: 'casal', icon: 'mdi:heart' },
-      { label: 'Cerimônia', id: 'cerimonia', icon: 'mdi:church' },
-      { label: 'Recepção', id: 'recepcao', icon: 'mdi:glass-cocktail' },
     ],
   },
-  {
-    label: 'Detalhes',
-    icon: 'mdi:cards',
-    children: [
-      { label: 'Presentes', id: 'presentes', icon: 'mdi:gift-outline' },
-      { label: 'Traje', id: 'traje', icon: 'mdi:tshirt-crew' },
-    ],
-  },
+  { label: 'Cerimônia', id: 'cerimonia', icon: 'mdi:church' },
+  { label: 'Recepção', id: 'recepcao', icon: 'mdi:glass-cocktail' },
+  { label: 'Presentes', id: 'presentes', icon: 'mdi:gift-outline' },
+  { label: 'Traje', id: 'traje', icon: 'mdi:tshirt-crew' },
   { label: 'Confirmação', id: 'confirmacao', icon: 'mdi:check-circle-outline' },
   { label: 'Mensagens', id: 'mensagens', icon: 'mdi:message-text-outline' },
 ];
