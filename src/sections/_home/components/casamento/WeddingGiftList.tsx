@@ -58,9 +58,10 @@ const StyledContent = styled(Box)(({ theme }) => ({
 const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(4),
-  fontWeight: 500,
+  fontWeight: 600,
   position: 'relative',
-  display: 'inline-block',
+  width: '100%',
+  textAlign: 'center',
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -68,7 +69,7 @@ const Title = styled(Typography)(({ theme }) => ({
     left: '50%',
     transform: 'translateX(-50%)',
     width: '80px',
-    height: '2px',
+    height: '3px',
     backgroundColor: theme.palette.primary.light,
   },
 }));

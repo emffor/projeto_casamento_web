@@ -1,6 +1,15 @@
 import { keyframes } from '@emotion/react';
 import { Icon } from '@iconify/react';
-import { Box, Container, Grid, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const fadeIn = keyframes`
@@ -9,16 +18,17 @@ const fadeIn = keyframes`
 `;
 
 const StyledRoot = styled('div')(({ theme }) => ({
-  padding: theme.spacing(10, 2),
+  padding: theme.spacing(12, 2),
   backgroundColor: theme.palette.background.default,
   position: 'relative',
 }));
 
 const StyledContent = styled(Box)(({ theme }) => ({
   textAlign: 'center',
-  maxWidth: 900,
+  maxWidth: 1100,
   margin: '0 auto',
   animation: `${fadeIn} 1s ease-out`,
+  paddingBottom: theme.spacing(6),
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
@@ -26,7 +36,8 @@ const Title = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(4),
   fontWeight: 600,
   position: 'relative',
-  display: 'inline-block',
+  width: '100%',
+  textAlign: 'center',
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -39,95 +50,196 @@ const Title = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const DressCodeCard = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  height: '100%',
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
-  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  '&:hover': {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 12px 28px rgba(0,0,0,0.12)',
-  },
+const DicasContainer = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(3, 0),
+  textAlign: 'left',
 }));
 
-const IconWrapper = styled(Box)(({ theme }) => ({
-  fontSize: '3rem',
-  color: theme.palette.primary.main,
-  marginBottom: theme.spacing(2),
-}));
-
-const DressCodeTitle = styled(Typography)(({ theme }) => ({
+const SectionTitle = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
-  marginBottom: theme.spacing(1),
+  marginTop: theme.spacing(3),
+  marginBottom: theme.spacing(2),
   color: theme.palette.primary.dark,
-}));
-
-const DressCodeDescription = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  fontSize: '0.95rem',
-  lineHeight: 1.6,
-}));
-
-const ExampleText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  fontSize: '0.9rem',
-  marginTop: theme.spacing(1),
-  fontStyle: 'italic',
+  fontSize: '1.3rem',
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
 }));
 
 const Note = styled(Typography)(({ theme }) => ({
-  marginTop: theme.spacing(4),
+  marginTop: theme.spacing(6),
   color: theme.palette.text.secondary,
   fontStyle: 'italic',
   maxWidth: 650,
-  margin: '0 auto',
+  margin: `${theme.spacing(6)} auto 0`,
+  lineHeight: 1.7,
+  textAlign: 'center',
+}));
+
+const BulletIcon = () => (
+  <ListItemIcon sx={{ minWidth: 'auto', marginRight: 1.5, color: 'primary.main' }}>
+    <Icon icon="mdi:check-circle-outline" fontSize="1.2rem" />
+  </ListItemIcon>
+);
+
+const StyledDressCodeImage = styled('img')(({ theme }) => ({
+  display: 'block',
+  width: '100%',
+  maxWidth: '380px',
+  height: 'auto',
+  borderRadius: theme.shape.borderRadius,
 }));
 
 export default function WeddingDressCode() {
-  const dressCodeInfo = [
-    {
-      title: 'Traje Esporte Fino',
-      description:
-        'Pedimos que os convidados venham com traje esporte fino, apropriado para uma cerimônia diurna.',
-      examples:
-        'Homens: Camisa social, calça, sapato social. Mulheres: Vestido midi, conjunto ou macacão elegante.',
-      icon: 'mdi:tshirt-crew',
-    },
-    {
-      title: 'Cores Sugeridas',
-      description:
-        'Sugerimos tons pastéis, neutros ou claros que combinam com a paleta de cores da cerimônia.',
-      examples: 'Bege, azul claro, verde menta, rosa antigo, cinza claro.',
-      icon: 'mdi:palette-outline',
-    },
-  ];
+  const imagePath = '/assets/casamento/foto_trajes.png';
 
   return (
     <StyledRoot>
       <Container>
         <StyledContent>
-          <Title variant="h3">Traje</Title>
+          <Title variant="h3">Trajes</Title>
 
-          <Grid container spacing={3} sx={{ mt: 1 }}>
-            {dressCodeInfo.map((item, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <DressCodeCard elevation={2}>
-                  <IconWrapper>
-                    <Icon icon={item.icon} />
-                  </IconWrapper>
-                  <DressCodeTitle variant="h5">{item.title}</DressCodeTitle>
-                  <DressCodeDescription>{item.description}</DressCodeDescription>
-                  <ExampleText>Exemplo: {item.examples}</ExampleText>
-                </DressCodeCard>
+          <Typography
+            variant="body1"
+            sx={{
+              mt: 2,
+              mb: 5,
+              color: 'text.secondary',
+              lineHeight: 1.7,
+              maxWidth: 800,
+              mx: 'auto',
+            }}
+          >
+            O dress code é <strong>esporte fino</strong>, que combina elegância e conforto, sem
+            formalidades exageradas. Esperamos vê-los prontos para celebrar este dia único com
+            estilo e alegria!
+          </Typography>
+
+          <Box sx={{ maxWidth: '950px', mx: 'auto' }}>
+            <Grid
+              container
+              spacing={1}
+              sx={{ mt: 4, alignItems: 'flex-start', justifyContent: 'center' }}
+            >
+              <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Box sx={{ width: '100%', maxWidth: '420px' }}>
+                  <DicasContainer>
+                    <Typography
+                      variant="h5"
+                      sx={{ fontWeight: 'bold', mb: 3, color: 'text.primary' }}
+                    >
+                      Dicas:
+                    </Typography>
+
+                    <SectionTitle variant="h6">
+                      <Icon icon="mdi:face-man" />
+                      Homens:
+                    </SectionTitle>
+                    <List dense disablePadding>
+                      <ListItem disableGutters>
+                        <BulletIcon />
+                        <ListItemText
+                          primary={
+                            <>
+                              <strong>Camisa:</strong> social
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      <ListItem disableGutters>
+                        <BulletIcon />
+                        <ListItemText
+                          primary={
+                            <>
+                              <strong>Calça:</strong> alfaiataria ou chino
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      <ListItem disableGutters>
+                        <BulletIcon />
+                        <ListItemText
+                          primary={
+                            <>
+                              <strong>Sapato:</strong> social ou mocassin
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      <ListItem disableGutters>
+                        <BulletIcon />
+                        <ListItemText
+                          primary={
+                            <>
+                              <strong>Blazer:</strong> opcional
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      <ListItem disableGutters>
+                        <BulletIcon />
+                        <ListItemText
+                          primary={
+                            <>
+                              <strong>Gravata:</strong> opcional
+                            </>
+                          }
+                        />
+                      </ListItem>
+                    </List>
+
+                    <SectionTitle variant="h6">
+                      <Icon icon="mdi:face-woman" />
+                      Mulheres:
+                    </SectionTitle>
+                    <List dense disablePadding>
+                      <ListItem disableGutters>
+                        <BulletIcon />
+                        <ListItemText
+                          primary={
+                            <>
+                              <strong>Vestido:</strong> leve e fluido, como modelos midi ou longos
+                            </>
+                          }
+                          secondary="Tecidos sugeridos: chiffon, seda, algodão."
+                        />
+                      </ListItem>
+                      <ListItem disableGutters>
+                        <BulletIcon />
+                        <ListItemText
+                          primary={
+                            <>
+                              <strong>Cor:</strong> lisa ou estampas discretas
+                            </>
+                          }
+                          secondary="Importante: O branco é exclusivo da noiva :)"
+                        />
+                      </ListItem>
+                    </List>
+                  </DicasContainer>
+                </Box>
               </Grid>
-            ))}
-          </Grid>
 
-          <Note sx={{ mt: 4 }}>
+              <Grid item xs={12} md={6}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                    height: '100%',
+                    mt: 4, // <<< Reduzido o marginTop para subir a imagem
+                  }}
+                >
+                  <StyledDressCodeImage
+                    src={imagePath}
+                    alt="Exemplo de trajes esporte fino para casamento"
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Note>
             Nosso maior desejo é que você se sinta confortável para celebrar conosco esse momento
             especial. Caso tenha dúvidas sobre o traje, não hesite em nos contatar.
           </Note>
