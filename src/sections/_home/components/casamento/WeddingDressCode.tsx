@@ -104,13 +104,6 @@ export default function WeddingDressCode() {
       examples: 'Bege, azul claro, verde menta, rosa antigo, cinza claro.',
       icon: 'mdi:palette-outline',
     },
-    {
-      title: 'Evitar',
-      description:
-        'Por gentileza, evitem branco, off-white e preto total por serem cores reservadas aos noivos e padrinhos.',
-      examples: 'Vestidos ou ternos completamente brancos ou pretos.',
-      icon: 'mdi:close-circle-outline',
-    },
   ];
 
   return (
@@ -121,7 +114,7 @@ export default function WeddingDressCode() {
 
           <Grid container spacing={3} sx={{ mt: 1 }}>
             {dressCodeInfo.map((item, index) => (
-              <Grid item xs={12} md={4} key={index}>
+              <Grid item xs={12} md={6} key={index}>
                 <DressCodeCard elevation={2}>
                   <IconWrapper>
                     <Icon icon={item.icon} />
