@@ -4,16 +4,8 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  plugins: ['@typescript-eslint', 'prettier', 'react'],
-  extends: [
-    // 'react-app',
-    'airbnb',
-    'airbnb-typescript',
-    'airbnb/hooks',
-    'prettier',
-    'eslint:recommended',
-    'plugin:prettier/recommended',
-  ],
+  plugins: ['@typescript-eslint', 'prettier'],
+  extends: ['react-app', 'prettier', 'eslint:recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -86,7 +78,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['netlify/functions/**/*.js'],
+      files: ['netlify/functions/**/*.js', '.eslintrc.js'],
       rules: {
         '@typescript-eslint/no-var-requires': 'off',
       },
