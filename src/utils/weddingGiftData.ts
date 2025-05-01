@@ -4,14 +4,14 @@ export const weddingGifts = [
     id: 1,
     name: '2 Passagens Aéreas para a Lua de Mel',
     image: '/assets/casamento/presentes/lua_de_mel_passagem.png',
-    price: 1.0,
+    price: 1119.0,
     category: 'Lua de Mel',
   },
   {
     id: 2,
     name: 'Abajur Decorativo',
     image: '/assets/casamento/presentes/abajur.png',
-    price: 0.05,
+    price: 165.0,
     category: 'Decoração',
   },
   {
@@ -25,7 +25,7 @@ export const weddingGifts = [
     id: 4,
     name: 'Aluguel de Carro para a Lua de Mel',
     image: '/assets/casamento/presentes/aluguel_carro.png',
-    price: 0.12,
+    price: 783.0,
     category: 'Lua de Mel',
   },
   {
