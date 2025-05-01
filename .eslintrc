@@ -4,16 +4,14 @@
     "browser": true,
     "es2021": true
   },
-  "plugins": [
-    "@typescript-eslint",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "airbnb",
     "airbnb-typescript",
     "airbnb/hooks",
     "prettier",
-    "eslint:recommended", "plugin:prettier/recommended"
+    "eslint:recommended",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -53,7 +51,6 @@
     "jsx-a11y/control-has-associated-label": 0,
     "@typescript-eslint/no-use-before-define": 0,
     "no-undef": "off",
-    // "no-irregular-whitespace": "off",
     "react/jsx-no-useless-fragment": [
       1,
       {
@@ -85,5 +82,16 @@
         "ignoreCase": false
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["netlify/functions/**/*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      },
+      "parserOptions": {
+        "project": null
+      }
+    }
+  ]
 }

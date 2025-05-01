@@ -26,7 +26,7 @@ const StripeConfigTest: React.FC = () => {
       <p>
         Status: <strong>{configStatus}</strong>
       </p>
-      <p>Chave Pública: {process.env.REACT_APP_STRIPE_PUBLIC_KEY ? '✓' : '✗'}</p>
+      <p>Chave Pública: {process.env.STRIPE_PUBLIC_KEY ? '✓' : '✗'}</p>
     </div>
   );
 };
