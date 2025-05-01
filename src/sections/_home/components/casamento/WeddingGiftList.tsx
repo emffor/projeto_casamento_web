@@ -27,11 +27,12 @@ import {
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import Iconify from 'src/components/iconify';
+import stripeService from 'src/service/stripeService';
 import { weddingGifts } from 'src/utils/weddingGiftData';
 
 const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+ from { opacity: 0; transform: translateY(20px); }
+ to { opacity: 1; transform: translateY(0); }
 `;
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -91,7 +92,6 @@ const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
   backgroundSize: 'contain',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
-  // backgroundColor: theme.palette.grey[200],
   margin: theme.spacing(1),
   borderRadius: theme.shape.borderRadius / 2,
 }));
@@ -158,29 +158,6 @@ interface CartItem {
   quantity: number;
 }
 
-interface MercadoPagoItem {
-  id: string;
-  title: string;
-  quantity: number;
-  unit_price: number;
-  currency_id?: string;
-  picture_url?: string;
-  description?: string;
-}
-
-interface PayerInfo {
-  email: string;
-}
-
-interface MercadoPagoPreferenceResponse {
-  id: string;
-  init_point: string;
-  sandbox_init_point: string;
-  message?: string;
-  error?: any;
-  cause?: any;
-}
-
 export default function WeddingGiftList() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [openCartModal, setOpenCartModal] = useState(false);
@@ -191,11 +168,8 @@ export default function WeddingGiftList() {
   const itemsPerLoad = 12;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
-
-  const MERCADO_PAGO_ACCESS_TOKEN = process.env.REACT_APP_MERCADO_PAGO_ACCESS_TOKEN;
 
   const handleAddToCart = (gift: any) => {
     setPaymentError(null);
@@ -273,86 +247,29 @@ export default function WeddingGiftList() {
       setPaymentError('Seu carrinho está vazio.');
       return;
     }
-    if (!MERCADO_PAGO_ACCESS_TOKEN) {
-      setPaymentError('ERRO DE CONFIGURAÇÃO: Access Token de Produção não definido.');
-      setIsLoadingPayment(false);
-      return;
-    }
 
     setIsLoadingPayment(true);
     setPaymentError(null);
 
-    const itemsToPay: MercadoPagoItem[] = cartItems.map((item) => ({
-      id: String(item.id),
-      title: item.name,
-      quantity: item.quantity,
-      unit_price: item.price,
-      currency_id: 'BRL',
-      picture_url: item.image,
-      description: item.name,
-    }));
-
-    const buyerEmail = 'email_real_do_comprador@exemplo.com';
-
-    if (buyerEmail === 'email_real_do_comprador@exemplo.com') {
-      console.warn(
-        'ALERTA: Usando email placeholder para o pagador. Substitua por email real em produção!'
-      );
-    }
-
-    const payerInfo: PayerInfo = {
-      email: buyerEmail,
-    };
-
     try {
-      const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: itemsToPay,
-          payer: payerInfo,
-          back_urls: {
-            success: `${window.location.origin}/success`,
-            failure: `${window.location.origin}/failure`,
-            pending: `${window.location.origin}/pending`,
-          },
-          auto_return: 'approved',
-        }),
-      });
+      const items = cartItems.map((item) => ({
+        id: String(item.id),
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+      }));
 
-      const data: MercadoPagoPreferenceResponse = await response.json();
+      // Usando Supabase Functions
+      const checkoutUrl = await stripeService.createCheckoutSession(items);
 
-      if (!response.ok || data.error) {
-        let errorMessage = `Erro ${response.status}: `;
-        if (data.message) errorMessage += data.message;
-        if (data.error) errorMessage += ` (${JSON.stringify(data.error)})`;
-        if (data.cause) errorMessage += ` Causa: ${JSON.stringify(data.cause)}`;
-        if (response.status === 400 && JSON.stringify(data).includes('collector is a test user')) {
-          errorMessage =
-            'Erro: Você está usando credenciais de Produção com um usuário pagador de Teste. Use credenciais de Teste OU um email de pagador real.';
-        } else if (
-          response.status === 400 &&
-          JSON.stringify(data).includes('payer.email must be a real email')
-        ) {
-          errorMessage =
-            'Erro: Você está usando credenciais de Teste com um email de pagador inválido ou de produção. Use um email de pagador de Teste (ex: test_user_...@testuser.com).';
-        } else if (response.status === 400 && JSON.stringify(data).includes('payer.email')) {
-          errorMessage += ' Verifique se o email do comprador é válido.';
-        }
-        throw new Error(errorMessage || 'Não foi possível criar a preferência.');
-      }
-
-      if (data.init_point) {
-        window.location.href = data.init_point;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
       } else {
-        console.error('Erro: init_point não encontrado na resposta da API de produção.', data);
-        throw new Error('Resposta da API de produção não contém init_point.');
+        throw new Error('Não foi possível obter URL de checkout.');
       }
     } catch (err: any) {
-      console.error('Erro ao criar preferência (Produção - Frontend):', err);
+      console.error('Erro ao iniciar pagamento:', err);
       setPaymentError(`Erro ao iniciar pagamento: ${err.message || 'Tente novamente.'}`);
       setIsLoadingPayment(false);
     }
@@ -366,7 +283,6 @@ export default function WeddingGiftList() {
       <Container>
         <StyledContent>
           <Title variant={isMobile ? 'h4' : 'h3'}>Nossa Lista de Presentes</Title>
-
           <CartButtonContainer>
             <CartButton
               variant="outlined"
@@ -378,7 +294,6 @@ export default function WeddingGiftList() {
               Ver carrinho ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
             </CartButton>
           </CartButtonContainer>
-
           {currentPage === 'list' && (
             <>
               <Grid container spacing={isMobile ? 2 : 3}>
@@ -427,7 +342,6 @@ export default function WeddingGiftList() {
                   </Grid>
                 ))}
               </Grid>
-
               {hasMoreItems && (
                 <Box sx={{ textAlign: 'center' }}>
                   <LoadMoreButton
@@ -443,19 +357,16 @@ export default function WeddingGiftList() {
               )}
             </>
           )}
-
           {currentPage === 'cart' && (
             <Paper sx={{ p: isMobile ? 2 : 3, mb: 3, maxWidth: 900, mx: 'auto' }}>
               <Typography variant="h5" sx={{ mb: 3 }}>
                 Meu carrinho
               </Typography>
-
               {paymentError && (
                 <Typography color="error" sx={{ mb: 2, textAlign: 'center' }}>
                   {paymentError}
                 </Typography>
               )}
-
               {cartItems.length > 0 ? (
                 <>
                   <TableContainer component={Paper} variant="outlined">
@@ -511,11 +422,9 @@ export default function WeddingGiftList() {
                       </TableBody>
                     </Table>
                   </TableContainer>
-
                   <Box sx={{ textAlign: 'right', mt: 3, mb: 3 }}>
                     <Typography variant="h6">Total: R$ {getTotalPrice().toFixed(2)}</Typography>
                   </Box>
-
                   <Box
                     sx={{
                       display: 'flex',
@@ -580,7 +489,6 @@ export default function WeddingGiftList() {
           )}
         </StyledContent>
       </Container>
-
       <Dialog open={openGiftModal} onClose={handleCloseGiftModal} maxWidth="xs" fullWidth>
         <DialogContent sx={{ textAlign: 'center', p: isMobile ? 2 : 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: -1, mt: -1, mr: -1 }}>
@@ -588,7 +496,6 @@ export default function WeddingGiftList() {
               <Iconify icon="eva:close-fill" />
             </IconButton>
           </Box>
-
           {selectedGift && (
             <>
               <Box
@@ -603,7 +510,6 @@ export default function WeddingGiftList() {
               <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
                 R$ {selectedGift.price.toFixed(2)}
               </Typography>
-
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                 Adicionar este presente ao carrinho?
               </Typography>
@@ -638,7 +544,6 @@ export default function WeddingGiftList() {
           </StyledButton>
         </DialogActions>
       </Dialog>
-
       <Dialog open={openCartModal} onClose={handleCloseCart} maxWidth="md" fullWidth>
         <DialogContent sx={{ p: isMobile ? 2 : 3 }}>
           <Box
@@ -649,7 +554,6 @@ export default function WeddingGiftList() {
               <Iconify icon="eva:close-fill" />
             </IconButton>
           </Box>
-
           {cartItems.length > 0 ? (
             <>
               <TableContainer component={Paper} variant="outlined" sx={{ mb: 3 }}>
@@ -694,7 +598,6 @@ export default function WeddingGiftList() {
                   </TableBody>
                 </Table>
               </TableContainer>
-
               <Box sx={{ textAlign: 'right', mb: 3 }}>
                 <Typography variant="h6">Total: R$ {getTotalPrice().toFixed(2)}</Typography>
               </Box>
