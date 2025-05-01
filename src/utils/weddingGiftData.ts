@@ -18,7 +18,7 @@ export const weddingGifts = [
     id: 3,
     name: 'Adega de Vinhos Climatizada',
     image: '/assets/casamento/presentes/adega.png',
-    price: 0.6,
+    price: 0.4,
     category: 'Eletrodomésticos',
   },
   {

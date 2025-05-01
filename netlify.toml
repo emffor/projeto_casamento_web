@@ -12,5 +12,5 @@
   STRIPE_SECRET_KEY = "sk_test_…"
 
 [context.production.environment]
-  URL_STRIPE = "https://brunaeeloan.com.br/"
+  URL_STRIPE = "https://brunaeeloan.com.br"
   STRIPE_SECRET_KEY = "sk_live_…"
