@@ -1,13 +1,13 @@
 import { useRef } from 'react';
 // @mui
-import { alpha, useTheme, styled } from '@mui/material/styles';
-import { Box, Card, Typography, IconButton } from '@mui/material';
+import { Box, Card, IconButton, Typography } from '@mui/material';
+import { alpha, styled, useTheme } from '@mui/material/styles';
 // utils
 import { bgBlur } from 'src/utils/cssStyles';
 // components
-import Image from 'src/components/image';
-import Iconify from 'src/components/iconify';
 import Carousel, { CarouselArrows } from 'src/components/carousel';
+import Iconify from 'src/components/iconify';
+import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ type Props = {
 export default function CarouselBasic4({ data }: Props) {
   const theme = useTheme();
 
-  const carouselRef = useRef<Carousel | null>(null);
+  const carouselRef = useRef<any | null>(null);
 
   const carouselSettings = {
     dots: false,

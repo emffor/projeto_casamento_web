@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 // @mui
+import { Box, CardContent, Link, Paper } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Box, Paper, Link, CardContent } from '@mui/material';
 // utils
 import { bgGradient } from 'src/utils/cssStyles';
 // components
-import Image from 'src/components/image';
-import Iconify from 'src/components/iconify';
-import TextMaxLine from 'src/components/text-max-line';
 import Carousel, { CarouselArrows } from 'src/components/carousel';
+import Iconify from 'src/components/iconify';
+import Image from 'src/components/image';
+import TextMaxLine from 'src/components/text-max-line';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ type Props = {
 };
 
 export default function CarouselCenterMode({ data }: Props) {
-  const carouselRef = useRef<Carousel | null>(null);
+  const carouselRef = useRef<any | null>(null);
 
   const theme = useTheme();
 

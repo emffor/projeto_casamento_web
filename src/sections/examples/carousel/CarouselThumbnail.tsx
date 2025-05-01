@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // @mui
-import { styled, alpha } from '@mui/material/styles';
 import { Box } from '@mui/material';
+import { alpha, styled } from '@mui/material/styles';
 // utils
 import { bgGradient } from 'src/utils/cssStyles';
 // components
-import Image from 'src/components/image';
 import Carousel, { CarouselArrowIndex } from 'src/components/carousel';
+import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
@@ -79,13 +79,13 @@ const StyledThumbnailsContainer = styled('div', {
 export default function CarouselThumbnail({ data }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [nav1, setNav1] = useState<Carousel | undefined>(undefined);
+  const [nav1, setNav1] = useState<any | undefined>(undefined);
 
-  const [nav2, setNav2] = useState<Carousel | undefined>(undefined);
+  const [nav2, setNav2] = useState<any | undefined>(undefined);
 
-  const carousel1 = useRef<Carousel | null>(null);
+  const carousel1 = useRef<any | null>(null);
 
-  const carousel2 = useRef<Carousel | null>(null);
+  const carousel2 = useRef<any | null>(null);
 
   const carouselSettings1 = {
     dots: false,

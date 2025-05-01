@@ -1,21 +1,21 @@
 import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { useTheme } from '@mui/material/styles';
 import { Box, Link } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 // types
 import { MenuCarouselProps } from './types';
 //
+import Carousel, { CarouselArrows, CarouselDots } from '../carousel';
 import Image from '../image';
 import TextMaxLine from '../text-max-line';
-import Carousel, { CarouselDots, CarouselArrows } from '../carousel';
 
 // ----------------------------------------------------------------------
 
 export default function MenuCarousel({ products, numberShow, sx }: MenuCarouselProps) {
   const theme = useTheme();
 
-  const carouselRef = useRef<Carousel | null>(null);
+  const carouselRef = useRef<any | null>(null);
 
   const carouselSettings = {
     dots: true,

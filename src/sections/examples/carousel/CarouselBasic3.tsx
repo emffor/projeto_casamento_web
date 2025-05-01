@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 // @mui
-import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 // components
+import Carousel, { CarouselArrows, CarouselDots } from 'src/components/carousel';
 import Image from 'src/components/image';
-import Carousel, { CarouselDots, CarouselArrows } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ type Props = {
 export default function CarouselBasic3({ data }: Props) {
   const theme = useTheme();
 
-  const carouselRef = useRef<Carousel | null>(null);
+  const carouselRef = useRef<any | null>(null);
 
   const carouselSettings = {
     dots: true,

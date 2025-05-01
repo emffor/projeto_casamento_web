@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 // @mui
-import { useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 // components
-import Image from 'src/components/image';
 import Carousel, { CarouselArrowIndex } from 'src/components/carousel';
+import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ type Props = {
 export default function CarouselBasic1({ data }: Props) {
   const theme = useTheme();
 
-  const carouselRef = useRef<Carousel | null>(null);
+  const carouselRef = useRef<any | null>(null);
 
   const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? data.length - 1 : 0);
 

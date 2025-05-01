@@ -1,14 +1,14 @@
 import { m } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 // @mui
+import { Box, Button, Card, CardContent, Paper, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Box, Card, Paper, Button, Typography, CardContent } from '@mui/material';
 // utils
 import { bgGradient } from 'src/utils/cssStyles';
 // components
-import Image from 'src/components/image';
 import { MotionContainer, varFade } from 'src/components/animate';
 import Carousel, { CarouselArrowIndex } from 'src/components/carousel';
+import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ type Props = {
 export default function CarouselAnimation({ data }: Props) {
   const theme = useTheme();
 
-  const carouselRef = useRef<Carousel | null>(null);
+  const carouselRef = useRef<any | null>(null);
 
   const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? data.length - 1 : 0);
 
