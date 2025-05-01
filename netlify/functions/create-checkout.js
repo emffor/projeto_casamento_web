@@ -5,30 +5,28 @@ exports.handler = async (event) => {
   try {
     const { items } = JSON.parse(event.body);
 
-    const lineItems = items.map((item) => {
-      // só inclui images se for uma URL válida
-      const images = [];
-      if (item.image && typeof item.image === 'string' && /^https?:\/\//.test(item.image)) {
-        images.push(item.image);
-      }
-
-      return {
-        price_data: {
-          currency: 'brl',
-          product_data: {
-            name: item.name,
-            // adiciona images só quando existir URL válida
-            ...(images.length > 0 ? { images } : {}),
-          },
-          unit_amount: Math.round(item.price * 100),
+    const line_items = items.map((item) => ({
+      price_data: {
+        currency: 'brl',
+        product_data: {
+          name: item.name,
+          ...(item.image?.startsWith('http') ? { images: [item.image] } : {}),
         },
-        quantity: item.quantity,
-      };
-    });
+        unit_amount: Math.round(item.price * 100),
+      },
+      quantity: item.quantity,
+    }));
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: lineItems,
+      payment_method_options: {
+        card: {
+          installments: {
+            enabled: true,
+          },
+        },
+      },
+      line_items,
       mode: 'payment',
       success_url: `${process.env.URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.URL}/failure`,
