@@ -15,6 +15,11 @@
     "re-start": "rm -rf build node_modules && yarn install && yarn start",
     "re-build": "rm -rf build node_modules && yarn install && yarn build"
   },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -40,6 +45,7 @@
     "@stripe/react-stripe-js": "^3.6.0",
     "@stripe/stripe-js": "^7.2.0",
     "@supabase/supabase-js": "^2.49.4",
+    "stripe": "^12.16.0",
     "axios": "^1.8.4",
     "date-fns": "^2.29.3",
     "framer-motion": "^10.9.2",
@@ -60,7 +66,6 @@
     "react-slick": "^0.29.0",
     "simplebar-react": "^3.2.3",
     "slick-carousel": "^1.8.1",
-    "stripe": "^12.16.0",
     "stylis": "^4.1.1",
     "stylis-plugin-rtl": "^2.0.2",
     "web-vitals": "^3.3.0",
