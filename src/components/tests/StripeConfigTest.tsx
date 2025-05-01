@@ -22,7 +22,6 @@ const StripeConfigTest: React.FC = () => {
 
   return (
     <div className="stripe-config-test">
-      {/* teste */}
       <h3>Teste de Configuração do Stripe</h3>
       <p>
         Status: <strong>{configStatus}</strong>
