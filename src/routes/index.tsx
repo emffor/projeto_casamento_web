@@ -1,30 +1,33 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
+import CompactLayout from '../layouts/compact';
 import MainLayout from '../layouts/main';
 import SimpleLayout from '../layouts/simple';
-import CompactLayout from '../layouts/compact';
-//
+// elementos importados
 import {
+  FailurePage,
+  // Common
+  HomePage,
+  LoginBackgroundPage,
   // Auth
   LoginCoverPage,
-  VerifyCodePage,
-  RegisterCoverPage,
-  ResetPasswordPage,
-  LoginBackgroundPage,
   LoginIllustrationPage,
-  RegisterBackgroundPage,
-  RegisterIllustrationPage,
-  // Common
   Page404,
   Page500,
-  HomePage,
+  RegisterBackgroundPage,
+  RegisterCoverPage,
+  RegisterIllustrationPage,
+  ResetPasswordPage,
+  // Checkout
+  SuccessPage,
+  VerifyCodePage,
 } from './elements';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   return useRoutes([
-    // Non layout
+    // rotas sem layout
     {
       path: 'auth',
       children: [
@@ -32,12 +35,16 @@ export default function Router() {
         { path: 'register-cover', element: <RegisterCoverPage /> },
       ],
     },
-    // Main layout
+    // Main layout (página principal e as novas /success e /failure)
     {
       element: <MainLayout />,
-      children: [{ element: <HomePage />, index: true }],
+      children: [
+        { element: <HomePage />, index: true },
+        { path: 'success', element: <SuccessPage /> },
+        { path: 'failure', element: <FailurePage /> },
+      ],
     },
-    // Simple layout
+    // Simple layout (outras auth pages)
     {
       element: <SimpleLayout />,
       children: [
@@ -52,7 +59,7 @@ export default function Router() {
         },
       ],
     },
-    // Compact layout
+    // Compact layout (erros e reset)
     {
       element: <CompactLayout />,
       children: [
@@ -69,6 +76,7 @@ export default function Router() {
         },
       ],
     },
+    // fallback
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
