@@ -12,23 +12,6 @@ const Loadable = (Component: ElementType) => (props: any) =>
   );
 
 // ----------------------------------------------------------------------
-// AUTH
-export const LoginBackgroundPage = Loadable(
-  lazy(() => import('../pages/auth/LoginBackgroundPage'))
-);
-export const LoginCoverPage = Loadable(lazy(() => import('../pages/auth/LoginCoverPage')));
-export const LoginIllustrationPage = Loadable(
-  lazy(() => import('../pages/auth/LoginIllustrationPage'))
-);
-export const RegisterBackgroundPage = Loadable(
-  lazy(() => import('../pages/auth/RegisterBackgroundPage'))
-);
-export const RegisterCoverPage = Loadable(lazy(() => import('../pages/auth/RegisterCoverPage')));
-export const RegisterIllustrationPage = Loadable(
-  lazy(() => import('../pages/auth/RegisterIllustrationPage'))
-);
-export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/ResetPasswordPage')));
-export const VerifyCodePage = Loadable(lazy(() => import('../pages/auth/VerifyCodePage')));
 
 // COMMON
 export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));
