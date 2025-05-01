@@ -265,7 +265,7 @@ export default function WeddingReception() {
             />
             <TextContent>
               <Typography variant="body1" paragraph>
-                Após a cerimônia, celebraremos nossa recepção na Josephine Patisserie.
+                Após a cerimônia, receberemos os convidados para um brunch na Josephine Patisserie.
               </Typography>
               <Typography
                 variant="body1"
