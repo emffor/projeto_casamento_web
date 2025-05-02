@@ -631,6 +631,7 @@ export default function WeddingGiftList() {
             </Box>
           )}
         </DialogContent>
+        {/* teste */}
         <DialogActions
           sx={{ px: isMobile ? 2 : 3, pb: isMobile ? 2 : 3, justifyContent: 'space-between' }}
         >
