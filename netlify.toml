@@ -6,11 +6,3 @@
   publish = "build"
   port = 8888
   targetPort = 3000
-  
-[context.development.environment]
-  URL_STRIPE = "http://localhost:8888"
-  STRIPE_SECRET_KEY = "sk_test_…"
-
-[context.production.environment]
-  URL_STRIPE = "https://brunaeeloan.com.br"
-  STRIPE_SECRET_KEY = "sk_live_…"

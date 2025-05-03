@@ -43,9 +43,6 @@ const CheckoutButton: React.FC<Props> = ({ cartItems }) => {
       // redireciona para a página hospedada pelo Stripe
       window.location.href = url;
 
-      // ou, se preferir usar Stripe.js:
-      // const stripe = await getStripe();
-      // await stripe!.redirectToCheckout({ sessionId });
     } catch (err: any) {
       console.error(err);
       setErrorMsg(err.message || 'Erro ao iniciar pagamento');
