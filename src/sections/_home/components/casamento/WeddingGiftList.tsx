@@ -11,7 +11,6 @@ import Iconify from 'src/components/iconify';
 import API_CONFIG from 'src/config/api';
 import { weddingGifts as allWeddingGifts } from 'src/utils/weddingGiftData';
 
-// --- Interfaces ---
 interface CartItem {
   id: number; name: string; price: number; image: string; quantity: number;
 }
@@ -19,7 +18,6 @@ interface Gift {
   id: number; name: string; price: number; image: string;
 }
 
-// --- Styled Components ---
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
