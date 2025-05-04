@@ -1,15 +1,11 @@
 import { Navigate, useRoutes } from 'react-router-dom';
-// layouts
 import CompactLayout from '../layouts/compact';
 import MainLayout from '../layouts/main';
-// elementos importados
 import {
   FailurePage,
-  // Common
   HomePage,
   Page404,
   Page500,
-  // Checkout
   SuccessPage,
 } from './elements';
 
@@ -23,6 +19,7 @@ export default function Router() {
         { element: <HomePage />, index: true },
         { path: 'success', element: <SuccessPage /> },
         { path: 'failure', element: <FailurePage /> },
+        { path: 'canceled', element: <Navigate to="/" replace /> }, 
       ],
     },
 
