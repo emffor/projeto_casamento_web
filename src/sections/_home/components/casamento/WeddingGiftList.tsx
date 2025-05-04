@@ -100,12 +100,11 @@ const LoadMoreButton = styled(Button)(({ theme }) => ({
 
 const initiateCheckout = async (cartItems: CartItem[], totalAmount: number) => {
   try {
-    // Formatação dos itens - convertendo preços para centavos
     const items = cartItems.map(item => ({
       title: item.name,
       description: item.name,
       quantity: item.quantity,
-      unit_price: Math.round(item.price * 100), // Convertendo para centavos
+      unit_price: Math.round(item.price * 100), 
       picture_url: item.image.startsWith('http') ? item.image : `${window.location.origin}${item.image}`
     }));
 
