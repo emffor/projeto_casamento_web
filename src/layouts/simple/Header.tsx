@@ -1,6 +1,6 @@
 // @mui
+import { AppBar, Stack, Toolbar } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Toolbar, Stack } from '@mui/material';
 // config
 import { HEADER } from 'src/config-global';
 // utils
@@ -10,7 +10,6 @@ import { bgBlur } from 'src/utils/cssStyles';
 import Logo from 'src/components/logo';
 import HeaderShadow from '../components/HeaderShadow';
 
-// ----------------------------------------------------------------------
 
 type Props = {
   isOffset: boolean;
