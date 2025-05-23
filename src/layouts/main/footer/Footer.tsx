@@ -1,13 +1,11 @@
 import { useLocation } from 'react-router-dom';
 // @mui
-import { Stack, Divider, Container, Typography, IconButton, Grid } from '@mui/material';
+import { Container, Divider, Grid, IconButton, Stack, Typography } from '@mui/material';
 // hooks
 import { _socials } from 'src/_mock';
 // components
-import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
-
-// ----------------------------------------------------------------------
+import Logo from 'src/components/logo';
 
 export default function Footer() {
   const { pathname } = useLocation();
@@ -19,6 +17,9 @@ export default function Footer() {
       <Logo single />
       <Typography variant="caption" component="div" sx={{ color: 'text.secondary' }}>
         © {currentYear} | Bruna & Eloan | Todos os direitos reservados
+      </Typography>
+      <Typography variant="caption" component="div" sx={{ color: 'text.disabled', mt: 1 }}>
+        Desenvolvido por Eloan Ferreira
       </Typography>
     </Container>
   );
@@ -65,6 +66,9 @@ export default function Footer() {
         >
           <Typography variant="caption" sx={{ color: 'text.secondary' }}>
             © {currentYear} | Bruna & Eloan | Todos os direitos reservados
+          </Typography>
+          <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+            Desenvolvido por Eloan Ferreira
           </Typography>
         </Stack>
       </Container>
